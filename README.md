@@ -22,6 +22,21 @@ Deterministic, fully offline content system for the Japanese iOS logic game **хо
 | Expert | 260 | 4 | 256 |
 | **Total** | **1,000** | **30** | **970** |
 
-The bundled JSON passes exhaustive mechanical validation for unique solutions, reproducible deduction paths, checksums, and structural uniqueness. Release remains on hold until native Japanese editorial review is completed.
+## Content files
+
+The 1,000 cases are stored as 20 complete JSON shards under `data/cases/`. Each shard contains 50 cases and has a SHA-256 entry in `data/cases/index.v1.json`.
+
+Reconstruct the canonical app bundle:
+
+```bash
+python3 tools/assemble_bundle.py
+python3 tools/validate_cases.py
+```
+
+The assembler verifies every shard and reproduces `data/cases.v1.json` with canonical SHA-256:
+
+`8820a9e703255fbaff6e6084eca88e2782c66ac8bd948a5d3e571a5873243ebe`
+
+The bundle passes exhaustive mechanical validation for unique solutions, reproducible deduction paths, checksums, and structural uniqueness. Release remains on hold until native Japanese editorial review is completed.
 
 See `docs/logic-casebook-locked-process-flow.md` for the complete product and technical specification.
