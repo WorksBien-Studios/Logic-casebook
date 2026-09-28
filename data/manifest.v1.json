@@ -1,6 +1,6 @@
 {
   "bundleID": "jp.logic.casebook.v1",
-  "contentVersion": 1,
+  "contentVersion": 2,
   "caseCount": 1000,
   "freeCaseCount": 30,
   "paidCaseCount": 970,
@@ -15,6 +15,6 @@
     "approved": 0
   },
   "structuralSignatureCount": 1000,
-  "sha256": "8820a9e703255fbaff6e6084eca88e2782c66ac8bd948a5d3e571a5873243ebe",
+  "sha256": "88ff76da380a108b28e2de107eb2b6e2ea03259b6f4332ac686f0e6c546ab6d4",
   "releaseReady": false
 }
