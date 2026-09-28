@@ -209,7 +209,19 @@ def main():
     }
     REPORTS.mkdir(parents=True,exist_ok=True)
     (REPORTS/"validation-result.json").write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\n")
-    report = f"""# Logic Casebook Content Validation\n\n**Mechanical validation:** {result['mechanicalValidation']}  \n**Release readiness:** {result['releaseReadiness']}  \n**Cases checked:** {len(cases)}  \n**Unique structural signatures:** {result['uniqueStructuralSignatures']}  \n**Bundle SHA-256:** `{bundle_sha}`\n\n## Allocation\n\n| Difficulty | Total | Free |\n|---|---:|---:|\n| Beginner | {actual_difficulty['beginner']} | {actual_free['beginner']} |\n| Standard | {actual_difficulty['standard']} | {actual_free['standard']} |\n| Advanced | {actual_difficulty['advanced']} | {actual_free['advanced']} |\n| Expert | {actual_difficulty['expert']} | {actual_free['expert']} |\n| **Total** | **{len(cases)}** | **{sum(actual_free.values())}** |\n\n## Gate interpretation\n\nThe mechanical gate exhaustively recomputed every solution, replayed every deduction path, checked every deduced fact, verified content checksums and confirmed 1,000 distinct structural signatures.\n\nRelease remains on **HOLD** because all 1,000 Japanese cases have `pending_native_review` editorial status. Mechanical correctness does not substitute for native Japanese naturalness and ambiguity review.\n\n## Errors\n\n- Bundle errors: {len(errors)}\n- Cases with errors: {len(case_failures)}\n"""
+    pending_review = editorial.get("pending_native_review", 0)
+    if release_ready:
+        gate_note = "All mandatory validation gates pass. The bundle is release ready."
+    elif pending_review:
+        gate_note = (
+            f"Release remains on **HOLD** because {pending_review} case(s) have "
+            "`pending_native_review` editorial status. Mechanical correctness does not "
+            "substitute for native Japanese naturalness and ambiguity review."
+        )
+    else:
+        gate_note = "Release remains on **HOLD** because of the bundle or case errors listed below."
+
+    report = f"""# Logic Casebook Content Validation\n\n**Mechanical validation:** {result['mechanicalValidation']}  \n**Release readiness:** {result['releaseReadiness']}  \n**Cases checked:** {len(cases)}  \n**Unique structural signatures:** {result['uniqueStructuralSignatures']}  \n**Bundle SHA-256:** `{bundle_sha}`\n\n## Allocation\n\n| Difficulty | Total | Free |\n|---|---:|---:|\n| Beginner | {actual_difficulty['beginner']} | {actual_free['beginner']} |\n| Standard | {actual_difficulty['standard']} | {actual_free['standard']} |\n| Advanced | {actual_difficulty['advanced']} | {actual_free['advanced']} |\n| Expert | {actual_difficulty['expert']} | {actual_free['expert']} |\n| **Total** | **{len(cases)}** | **{sum(actual_free.values())}** |\n\n## Gate interpretation\n\nThe mechanical gate exhaustively recomputed every solution, replayed every deduction path, checked every deduced fact, verified content checksums and confirmed 1,000 distinct structural signatures.\n\n{gate_note}\n\n## Errors\n\n- Bundle errors: {len(errors)}\n- Cases with errors: {len(case_failures)}\n"""
     (REPORTS/"validation-report.md").write_text(report,encoding="utf-8")
     print(json.dumps(result,ensure_ascii=False))
     raise SystemExit(0 if result["mechanicalValidation"] == "PASS" else 1)
