@@ -57,6 +57,35 @@ def compile_clue(clue, cat_index, ref):
     return {"id":clue["id"], "type":t, "args":out, "textJA":clue["textJA"]}
 
 
+def validate_clue_refs(clue, cat_index, value_index):
+    """Check that every (category, value) reference in a clue resolves to a
+    real entity, so a dangling reference is reported per-clue instead of
+    crashing compile_clue()'s bare dict lookups."""
+    errors = []
+    def check(value):
+        if not (isinstance(value, list) and len(value) == 2):
+            errors.append(f"clue {clue.get('id','?')} has a malformed reference {value!r}")
+            return
+        cat, val = value
+        if cat not in cat_index:
+            errors.append(f"clue {clue.get('id','?')} references unknown category '{cat}'")
+        elif (cat, val) not in value_index:
+            errors.append(f"clue {clue.get('id','?')} references unknown value '{val}' in category '{cat}'")
+    args = clue.get("args", {})
+    for key, value in args.items():
+        if key == "orderedCategory":
+            if value not in cat_index:
+                errors.append(f"clue {clue.get('id','?')} references unknown orderedCategory '{value}'")
+        elif key == "offset":
+            continue
+        elif key in {"left", "right"} and value and isinstance(value[0], list):
+            for x in value:
+                check(x)
+        elif key in {"left", "right", "subject", "optionA", "optionB"}:
+            check(value)
+    return errors
+
+
 def evaluate(clue, assignment):
     t, a = clue["type"], clue["args"]
     if t == "same":
@@ -106,14 +135,24 @@ def validate_case(case):
     clue_ids = [c["id"] for c in case["clues"]]
     if len(clue_ids) != len(set(clue_ids)):
         errors.append("duplicate clue id")
-    compiled = [compile_clue(c,cat_index,ref) for c in case["clues"]]
+    compiled = []
+    for c in case["clues"]:
+        ref_errors = validate_clue_refs(c, cat_index, value_index)
+        if ref_errors:
+            errors.extend(ref_errors)
+            continue
+        compiled.append(compile_clue(c,cat_index,ref))
     survivors = assignments
     for clue in compiled:
         survivors = [a for a in survivors if evaluate(clue,a)]
-    expected = expected_assignment(case,cat_index,value_index,n,k)
+    try:
+        expected = expected_assignment(case,cat_index,value_index,n,k)
+    except KeyError as exc:
+        errors.append(f"solution references unknown value {exc}")
+        expected = None
     if len(survivors) != 1:
         errors.append(f"solution count {len(survivors)}")
-    elif survivors[0] != expected:
+    elif expected is None or survivors[0] != expected:
         errors.append("stored solution differs from recomputed solution")
 
     current = assignments
@@ -135,7 +174,11 @@ def validate_case(case):
         if step["candidateCountAfter"] != len(current):
             errors.append(f"deduction after-count mismatch at {number}")
         for fact in step["deducedFacts"]:
-            left, right = ref(fact["left"]), ref(fact["right"])
+            try:
+                left, right = ref(fact["left"]), ref(fact["right"])
+            except KeyError as exc:
+                errors.append(f"deduced fact at step {number} references unknown value {exc}")
+                continue
             if not current or any(owner(a,*left) != owner(a,*right) for a in current):
                 errors.append(f"invalid deduced fact at step {number}")
     if len(current) != 1:
@@ -183,9 +226,12 @@ def main():
 
     case_failures = {}
     for index, case in enumerate(cases,1):
-        case_errors = validate_case(case)
+        try:
+            case_errors = validate_case(case)
+        except Exception as exc:
+            case_errors = [f"validator crashed on this case: {type(exc).__name__}: {exc}"]
         if case_errors:
-            case_failures[case["caseID"]] = case_errors
+            case_failures[case.get("caseID", f"index-{index}")] = case_errors
 
     bundle_sha = hashlib.sha256(raw).hexdigest()
     if bundle_sha != manifest["sha256"]: errors.append("bundle SHA-256 differs from manifest")

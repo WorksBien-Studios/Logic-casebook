@@ -280,6 +280,14 @@ def forced_pairs(candidate_mask, n, k):
     return facts
 
 
+# Cap how many clues a single hint step may bundle before it force-closes,
+# even without a newly forced fact. Without this cap, a set of clues that
+# are individually inconclusive but jointly decisive (no fact becomes fully
+# certain until the very last clue) collapses into one all-or-nothing step,
+# so the first hint on such a case would have to reveal the entire solution.
+MAX_PENDING_CLUES = 3
+
+
 def deduction_steps(chosen, assignments, categories, n, k):
     current = (1 << len(assignments)) - 1
     remaining = list(enumerate(chosen))
@@ -299,7 +307,7 @@ def deduction_steps(chosen, assignments, categories, n, k):
         remaining = [(i, c) for i, c in remaining if i != idx]
         pending_ids.append(f"clue-{idx+1:02d}")
         current = filtered
-        if newfacts or not remaining:
+        if newfacts or not remaining or len(pending_ids) >= MAX_PENDING_CLUES:
             known_now = forced_pairs(current, n, k)
             newfacts = known_now - known
             facts = []

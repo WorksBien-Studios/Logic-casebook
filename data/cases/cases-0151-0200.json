@@ -668,10 +668,19 @@
           "clueIDs": [
             "clue-07",
             "clue-01",
-            "clue-04",
-            "clue-03"
+            "clue-04"
           ],
           "candidateCountBefore": 576,
+          "candidateCountAfter": 16,
+          "deducedFacts": [],
+          "explanationJA": "手がかり7、手がかり1、手がかり4を使うと、候補は576通りから16通りに絞れます。"
+        },
+        {
+          "step": 2,
+          "clueIDs": [
+            "clue-03"
+          ],
+          "candidateCountBefore": 16,
           "candidateCountAfter": 8,
           "deducedFacts": [
             {
@@ -687,10 +696,10 @@
               "textJA": "「楓」と「レモネード」は同じ組だと確定します。"
             }
           ],
-          "explanationJA": "手がかり7、手がかり1、手がかり4、手がかり3を使うと、候補は576通りから8通りに絞れます。「楓」と「レモネード」は同じ組だと確定します。"
+          "explanationJA": "手がかり3を使うと、候補は16通りから8通りに絞れます。「楓」と「レモネード」は同じ組だと確定します。"
         },
         {
-          "step": 2,
+          "step": 3,
           "clueIDs": [
             "clue-06"
           ],
@@ -713,7 +722,7 @@
           "explanationJA": "手がかり6を使うと、候補は8通りから4通りに絞れます。「拓海」と「ココア」は同じ組だと確定します。"
         },
         {
-          "step": 3,
+          "step": 4,
           "clueIDs": [
             "clue-05"
           ],
@@ -796,7 +805,7 @@
           "explanationJA": "手がかり5を使うと、候補は4通りから2通りに絞れます。「拓海」と「11時」は同じ組だと確定します。"
         },
         {
-          "step": 4,
+          "step": 5,
           "clueIDs": [
             "clue-02"
           ],
@@ -859,12 +868,12 @@
         "searchSpace": 576,
         "solutionCount": 1,
         "clueCount": 7,
-        "deductionStepCount": 4,
+        "deductionStepCount": 5,
         "requiresGuess": false
       },
       "structuralSignature": "afa968ca25dafb4fa3c8d2311d2db99745eea9c1d8617f2a40d123cfeaf299c3",
       "editorialStatus": "pending_native_review",
-      "checksum": "75b7cff09b6774d0b29a042ede543f357eb677191e2bceb20eeb0bae3e54a794"
+      "checksum": "35e2a027592ff1165a9f1a04c72a37e3b8dd9cd58f546866eb14d2666511934f"
     },
     {
       "schemaVersion": 1,
@@ -1547,10 +1556,19 @@
           "clueIDs": [
             "clue-05",
             "clue-07",
-            "clue-01",
-            "clue-02"
+            "clue-01"
           ],
           "candidateCountBefore": 144,
+          "candidateCountAfter": 5,
+          "deducedFacts": [],
+          "explanationJA": "手がかり5、手がかり7、手がかり1を使うと、候補は144通りから5通りに絞れます。"
+        },
+        {
+          "step": 3,
+          "clueIDs": [
+            "clue-02"
+          ],
+          "candidateCountBefore": 5,
           "candidateCountAfter": 4,
           "deducedFacts": [
             {
@@ -1578,10 +1596,10 @@
               "textJA": "「赤い鞄」と「8時」は同じ組だと確定します。"
             }
           ],
-          "explanationJA": "手がかり5、手がかり7、手がかり1、手がかり2を使うと、候補は144通りから4通りに絞れます。「凛」と「8時」は同じ組だと確定します。"
+          "explanationJA": "手がかり2を使うと、候補は5通りから4通りに絞れます。「凛」と「8時」は同じ組だと確定します。"
         },
         {
-          "step": 3,
+          "step": 4,
           "clueIDs": [
             "clue-06"
           ],
@@ -1628,7 +1646,7 @@
           "explanationJA": "手がかり6を使うと、候補は4通りから2通りに絞れます。「傘」と「10時」は同じ組だと確定します。"
         },
         {
-          "step": 4,
+          "step": 5,
           "clueIDs": [
             "clue-03"
           ],
@@ -1715,12 +1733,12 @@
         "searchSpace": 576,
         "solutionCount": 1,
         "clueCount": 7,
-        "deductionStepCount": 4,
+        "deductionStepCount": 5,
         "requiresGuess": false
       },
       "structuralSignature": "9d5573fc538709b59d6498f0f19f80fbb226fcc8dd56af2b814786887661088b",
       "editorialStatus": "pending_native_review",
-      "checksum": "853cea6b27409e895fb763622de00b4781324297029e8b888a9737ae66b1936f"
+      "checksum": "ef4b3c23d66435beb7f5404bb3ee41ce74ad77255f9f1354db93921718403c8f"
     },
     {
       "schemaVersion": 1,
@@ -6254,10 +6272,19 @@
           "clueIDs": [
             "clue-08",
             "clue-01",
-            "clue-03",
-            "clue-06"
+            "clue-03"
           ],
           "candidateCountBefore": 576,
+          "candidateCountAfter": 36,
+          "deducedFacts": [],
+          "explanationJA": "手がかり8、手がかり1、手がかり3を使うと、候補は576通りから36通りに絞れます。"
+        },
+        {
+          "step": 2,
+          "clueIDs": [
+            "clue-06"
+          ],
+          "candidateCountBefore": 36,
           "candidateCountAfter": 12,
           "deducedFacts": [
             {
@@ -6285,10 +6312,10 @@
               "textJA": "「凛」と「19時」は同じ組だと確定します。"
             }
           ],
-          "explanationJA": "手がかり8、手がかり1、手がかり3、手がかり6を使うと、候補は576通りから12通りに絞れます。「大和」と「20時」は同じ組だと確定します。"
+          "explanationJA": "手がかり6を使うと、候補は36通りから12通りに絞れます。「大和」と「20時」は同じ組だと確定します。"
         },
         {
-          "step": 2,
+          "step": 3,
           "clueIDs": [
             "clue-02"
           ],
@@ -6323,7 +6350,7 @@
           "explanationJA": "手がかり2を使うと、候補は12通りから6通りに絞れます。「拓海」と「21時」は同じ組だと確定します。"
         },
         {
-          "step": 3,
+          "step": 4,
           "clueIDs": [
             "clue-04",
             "clue-05"
@@ -6383,7 +6410,7 @@
           "explanationJA": "手がかり4、手がかり5を使うと、候補は6通りから2通りに絞れます。「拓海」と「土星」は同じ組だと確定します。"
         },
         {
-          "step": 4,
+          "step": 5,
           "clueIDs": [
             "clue-07"
           ],
@@ -6446,12 +6473,12 @@
         "searchSpace": 576,
         "solutionCount": 1,
         "clueCount": 8,
-        "deductionStepCount": 4,
+        "deductionStepCount": 5,
         "requiresGuess": false
       },
       "structuralSignature": "3f859294a8d91c3dfbceeec6a5fa31ab950ba92ce708938e99150882b198fe7f",
       "editorialStatus": "pending_native_review",
-      "checksum": "6ba2f4d6fe641cd6a65e542743f7fc9fecd708643ef723250ddf8175286eb249"
+      "checksum": "42048a27bd77c3d9fb6950dde11eda80fdb0629d22bbb91f7b888e07c9ed686e"
     },
     {
       "schemaVersion": 1,
@@ -6732,10 +6759,19 @@
           "clueIDs": [
             "clue-01",
             "clue-03",
-            "clue-04",
-            "clue-02"
+            "clue-04"
           ],
           "candidateCountBefore": 48,
+          "candidateCountAfter": 6,
+          "deducedFacts": [],
+          "explanationJA": "手がかり1、手がかり3、手がかり4を使うと、候補は48通りから6通りに絞れます。"
+        },
+        {
+          "step": 3,
+          "clueIDs": [
+            "clue-02"
+          ],
+          "candidateCountBefore": 6,
           "candidateCountAfter": 2,
           "deducedFacts": [
             {
@@ -6811,10 +6847,10 @@
               "textJA": "「新聞束」と「10時」は同じ組だと確定します。"
             }
           ],
-          "explanationJA": "手がかり1、手がかり3、手がかり4、手がかり2を使うと、候補は48通りから2通りに絞れます。「颯太」と「古地図」は同じ組だと確定します。"
+          "explanationJA": "手がかり2を使うと、候補は6通りから2通りに絞れます。「颯太」と「古地図」は同じ組だと確定します。"
         },
         {
-          "step": 3,
+          "step": 4,
           "clueIDs": [
             "clue-06"
           ],
@@ -6877,12 +6913,12 @@
         "searchSpace": 576,
         "solutionCount": 1,
         "clueCount": 7,
-        "deductionStepCount": 3,
+        "deductionStepCount": 4,
         "requiresGuess": false
       },
       "structuralSignature": "2c0f341a2eb43500d3c79fe78ae7dffbc7006c6d93752f5e0552c377d949c3e9",
       "editorialStatus": "pending_native_review",
-      "checksum": "99a71096a5b5b972dd756f62a557cc22be609e87de5d169bd127f8500ce554d0"
+      "checksum": "05ef1bda08495242a060eacbbe7a916b683b5e504d26378ae323b5b93d4e5f82"
     },
     {
       "schemaVersion": 1,
@@ -8193,7 +8229,7 @@
       "scenarioJA": "書店にいた4人の記録が混ざってしまいました。手がかりを整理して、予約本、受取時刻の正しい組み合わせを復元してください。",
       "questionJA": "すべての人物について、各項目の正しい組み合わせを特定してください。",
       "difficulty": "standard",
-      "difficultyScore": 9.98,
+      "difficultyScore": 10.23,
       "estimatedMinutes": 7,
       "isFree": false,
       "categories": [
@@ -8419,11 +8455,20 @@
           "clueIDs": [
             "clue-05",
             "clue-02",
-            "clue-03",
+            "clue-03"
+          ],
+          "candidateCountBefore": 576,
+          "candidateCountAfter": 24,
+          "deducedFacts": [],
+          "explanationJA": "手がかり5、手がかり2、手がかり3を使うと、候補は576通りから24通りに絞れます。"
+        },
+        {
+          "step": 2,
+          "clueIDs": [
             "clue-04",
             "clue-06"
           ],
-          "candidateCountBefore": 576,
+          "candidateCountBefore": 24,
           "candidateCountAfter": 6,
           "deducedFacts": [
             {
@@ -8439,10 +8484,10 @@
               "textJA": "「結衣」と「随筆」は同じ組だと確定します。"
             }
           ],
-          "explanationJA": "手がかり5、手がかり2、手がかり3、手がかり4、手がかり6を使うと、候補は576通りから6通りに絞れます。「結衣」と「随筆」は同じ組だと確定します。"
+          "explanationJA": "手がかり4、手がかり6を使うと、候補は24通りから6通りに絞れます。「結衣」と「随筆」は同じ組だと確定します。"
         },
         {
-          "step": 2,
+          "step": 3,
           "clueIDs": [
             "clue-07"
           ],
@@ -8489,7 +8534,7 @@
           "explanationJA": "手がかり7を使うと、候補は6通りから2通りに絞れます。「千尋」と「短編集」は同じ組だと確定します。"
         },
         {
-          "step": 3,
+          "step": 4,
           "clueIDs": [
             "clue-01"
           ],
@@ -8600,12 +8645,12 @@
         "searchSpace": 576,
         "solutionCount": 1,
         "clueCount": 7,
-        "deductionStepCount": 3,
+        "deductionStepCount": 4,
         "requiresGuess": false
       },
       "structuralSignature": "5bccf5d56f220762c763d0d9be743805d49a642bac69bcad8f0d0be3e719bc02",
       "editorialStatus": "pending_native_review",
-      "checksum": "3db005586ddaa63a196b6df30aa10ffc6ed8881c0afbe92ff990da4fb251ef21"
+      "checksum": "b9258859cd22d0d447c018468bd5a4b58e3967bca4e9350434b88d9d390f7492"
     },
     {
       "schemaVersion": 1,
@@ -12726,10 +12771,19 @@
           "clueIDs": [
             "clue-04",
             "clue-01",
-            "clue-02",
-            "clue-06"
+            "clue-02"
           ],
           "candidateCountBefore": 144,
+          "candidateCountAfter": 8,
+          "deducedFacts": [],
+          "explanationJA": "手がかり4、手がかり1、手がかり2を使うと、候補は144通りから8通りに絞れます。"
+        },
+        {
+          "step": 3,
+          "clueIDs": [
+            "clue-06"
+          ],
+          "candidateCountBefore": 8,
           "candidateCountAfter": 4,
           "deducedFacts": [
             {
@@ -12745,10 +12799,10 @@
               "textJA": "「楓」と「15時」は同じ組だと確定します。"
             }
           ],
-          "explanationJA": "手がかり4、手がかり1、手がかり2、手がかり6を使うと、候補は144通りから4通りに絞れます。「楓」と「15時」は同じ組だと確定します。"
+          "explanationJA": "手がかり6を使うと、候補は8通りから4通りに絞れます。「楓」と「15時」は同じ組だと確定します。"
         },
         {
-          "step": 3,
+          "step": 4,
           "clueIDs": [
             "clue-03"
           ],
@@ -12807,7 +12861,7 @@
           "explanationJA": "手がかり3を使うと、候補は4通りから2通りに絞れます。「千尋」と「14時」は同じ組だと確定します。"
         },
         {
-          "step": 4,
+          "step": 5,
           "clueIDs": [
             "clue-05"
           ],
@@ -12894,12 +12948,12 @@
         "searchSpace": 576,
         "solutionCount": 1,
         "clueCount": 7,
-        "deductionStepCount": 4,
+        "deductionStepCount": 5,
         "requiresGuess": false
       },
       "structuralSignature": "c15d1146a92462922315f06968a483e0132f8e89626f9ae83176923203a47d12",
       "editorialStatus": "pending_native_review",
-      "checksum": "455aab74810d8661e7db65da2e4abd0ae387b8d13f57835a387d3b47a8aac243"
+      "checksum": "024d6a9991aa6276c782d881ce408d6552d9513b53e680d94547aad2015db804"
     },
     {
       "schemaVersion": 1,
@@ -15052,7 +15106,7 @@
       "scenarioJA": "地域活動センターにいた4人の記録が混ざってしまいました。手がかりを整理して、担当、開始時刻の正しい組み合わせを復元してください。",
       "questionJA": "すべての人物について、各項目の正しい組み合わせを特定してください。",
       "difficulty": "standard",
-      "difficultyScore": 9.98,
+      "difficultyScore": 10.23,
       "estimatedMinutes": 7,
       "isFree": false,
       "categories": [
@@ -15278,12 +15332,21 @@
           "clueIDs": [
             "clue-01",
             "clue-03",
-            "clue-05",
+            "clue-05"
+          ],
+          "candidateCountBefore": 576,
+          "candidateCountAfter": 68,
+          "deducedFacts": [],
+          "explanationJA": "手がかり1、手がかり3、手がかり5を使うと、候補は576通りから68通りに絞れます。"
+        },
+        {
+          "step": 2,
+          "clueIDs": [
             "clue-06",
             "clue-07",
             "clue-04"
           ],
-          "candidateCountBefore": 576,
+          "candidateCountBefore": 68,
           "candidateCountAfter": 2,
           "deducedFacts": [
             {
@@ -15359,10 +15422,10 @@
               "textJA": "「案内」と「10時」は同じ組だと確定します。"
             }
           ],
-          "explanationJA": "手がかり1、手がかり3、手がかり5、手がかり6、手がかり7、手がかり4を使うと、候補は576通りから2通りに絞れます。「楓」と「記録」は同じ組だと確定します。"
+          "explanationJA": "手がかり6、手がかり7、手がかり4を使うと、候補は68通りから2通りに絞れます。「楓」と「記録」は同じ組だと確定します。"
         },
         {
-          "step": 2,
+          "step": 3,
           "clueIDs": [
             "clue-02"
           ],
@@ -15449,12 +15512,12 @@
         "searchSpace": 576,
         "solutionCount": 1,
         "clueCount": 7,
-        "deductionStepCount": 2,
+        "deductionStepCount": 3,
         "requiresGuess": false
       },
       "structuralSignature": "2879747168caba0c0754393b4478fa857058641f639586da3b8cfc2e145348c8",
       "editorialStatus": "pending_native_review",
-      "checksum": "a5052a7f00ef6a83f3af4d91074c0aeb802b218849c817957108bb507e8cc309"
+      "checksum": "f481edcb19fc82239f7c452874641eb555675aa7eae0abe3ca9bc33cd3c45371"
     },
     {
       "schemaVersion": 1,
@@ -16171,10 +16234,19 @@
           "clueIDs": [
             "clue-01",
             "clue-06",
-            "clue-02",
-            "clue-05"
+            "clue-02"
           ],
           "candidateCountBefore": 48,
+          "candidateCountAfter": 7,
+          "deducedFacts": [],
+          "explanationJA": "手がかり1、手がかり6、手がかり2を使うと、候補は48通りから7通りに絞れます。"
+        },
+        {
+          "step": 4,
+          "clueIDs": [
+            "clue-05"
+          ],
+          "candidateCountBefore": 7,
           "candidateCountAfter": 2,
           "deducedFacts": [
             {
@@ -16250,10 +16322,10 @@
               "textJA": "「手袋」と「15時」は同じ組だと確定します。"
             }
           ],
-          "explanationJA": "手がかり1、手がかり6、手がかり2、手がかり5を使うと、候補は48通りから2通りに絞れます。「翔」と「手袋」は同じ組だと確定します。"
+          "explanationJA": "手がかり5を使うと、候補は7通りから2通りに絞れます。「翔」と「手袋」は同じ組だと確定します。"
         },
         {
-          "step": 4,
+          "step": 5,
           "clueIDs": [
             "clue-04"
           ],
@@ -16316,12 +16388,12 @@
         "searchSpace": 576,
         "solutionCount": 1,
         "clueCount": 7,
-        "deductionStepCount": 4,
+        "deductionStepCount": 5,
         "requiresGuess": false
       },
       "structuralSignature": "a400ba7085e8f4159738832b57b9734b91368d6a43223461e965e58793d4c463",
       "editorialStatus": "pending_native_review",
-      "checksum": "6b8f30bd1a9ee6aa24084b1177b325129dbda8ff492a09b8de38ccb280143b77"
+      "checksum": "26a129f4bdf31445d6971ea07f8951120eac15f4471f266be769bf3428fd4335"
     },
     {
       "schemaVersion": 1,
@@ -16970,10 +17042,19 @@
           "clueIDs": [
             "clue-06",
             "clue-05",
-            "clue-01",
-            "clue-03"
+            "clue-01"
           ],
           "candidateCountBefore": 576,
+          "candidateCountAfter": 12,
+          "deducedFacts": [],
+          "explanationJA": "手がかり6、手がかり5、手がかり1を使うと、候補は576通りから12通りに絞れます。"
+        },
+        {
+          "step": 2,
+          "clueIDs": [
+            "clue-03"
+          ],
+          "candidateCountBefore": 12,
           "candidateCountAfter": 4,
           "deducedFacts": [
             {
@@ -17025,10 +17106,10 @@
               "textJA": "「和紅茶」と「13時」は同じ組だと確定します。"
             }
           ],
-          "explanationJA": "手がかり6、手がかり5、手がかり1、手がかり3を使うと、候補は576通りから4通りに絞れます。「琴音」と「焙じ茶」は同じ組だと確定します。"
+          "explanationJA": "手がかり3を使うと、候補は12通りから4通りに絞れます。「琴音」と「焙じ茶」は同じ組だと確定します。"
         },
         {
-          "step": 2,
+          "step": 3,
           "clueIDs": [
             "clue-02"
           ],
@@ -17087,7 +17168,7 @@
           "explanationJA": "手がかり2を使うと、候補は4通りから2通りに絞れます。「琴音」と「11時」は同じ組だと確定します。"
         },
         {
-          "step": 3,
+          "step": 4,
           "clueIDs": [
             "clue-04"
           ],
@@ -17150,12 +17231,12 @@
         "searchSpace": 576,
         "solutionCount": 1,
         "clueCount": 6,
-        "deductionStepCount": 3,
+        "deductionStepCount": 4,
         "requiresGuess": false
       },
       "structuralSignature": "1c05b220b4706123eae7a54af1e66f6b7606dcb450f87c0c03901581cf506c04",
       "editorialStatus": "pending_native_review",
-      "checksum": "6e8e0b2dc00b4dea619d9d02020d812d3c55bda56db17a4d318129468d2bd01e"
+      "checksum": "b67fdcec7010e037afd684be04877d1b71780772c74207a0ead5e254e76f36ab"
     },
     {
       "schemaVersion": 1,
@@ -19800,7 +19881,7 @@
       "scenarioJA": "写真館にいた4人の記録が混ざってしまいました。手がかりを整理して、撮影内容、撮影時刻の正しい組み合わせを復元してください。",
       "questionJA": "すべての人物について、各項目の正しい組み合わせを特定してください。",
       "difficulty": "standard",
-      "difficultyScore": 10.06,
+      "difficultyScore": 10.31,
       "estimatedMinutes": 7,
       "isFree": false,
       "categories": [
@@ -20051,11 +20132,20 @@
           "clueIDs": [
             "clue-01",
             "clue-02",
-            "clue-03",
+            "clue-03"
+          ],
+          "candidateCountBefore": 576,
+          "candidateCountAfter": 72,
+          "deducedFacts": [],
+          "explanationJA": "手がかり1、手がかり2、手がかり3を使うと、候補は576通りから72通りに絞れます。"
+        },
+        {
+          "step": 2,
+          "clueIDs": [
             "clue-08",
             "clue-06"
           ],
-          "candidateCountBefore": 576,
+          "candidateCountBefore": 72,
           "candidateCountAfter": 16,
           "deducedFacts": [
             {
@@ -20071,10 +20161,10 @@
               "textJA": "「風景写真」と「12時」は同じ組だと確定します。"
             }
           ],
-          "explanationJA": "手がかり1、手がかり2、手がかり3、手がかり8、手がかり6を使うと、候補は576通りから16通りに絞れます。「風景写真」と「12時」は同じ組だと確定します。"
+          "explanationJA": "手がかり8、手がかり6を使うと、候補は72通りから16通りに絞れます。「風景写真」と「12時」は同じ組だと確定します。"
         },
         {
-          "step": 2,
+          "step": 3,
           "clueIDs": [
             "clue-05"
           ],
@@ -20097,7 +20187,7 @@
           "explanationJA": "手がかり5を使うと、候補は16通りから7通りに絞れます。「葵」と「11時」は同じ組だと確定します。"
         },
         {
-          "step": 3,
+          "step": 4,
           "clueIDs": [
             "clue-07"
           ],
@@ -20180,7 +20270,7 @@
           "explanationJA": "手がかり7を使うと、候補は7通りから2通りに絞れます。「明日香」と「証明写真」は同じ組だと確定します。"
         },
         {
-          "step": 4,
+          "step": 5,
           "clueIDs": [
             "clue-04"
           ],
@@ -20243,12 +20333,12 @@
         "searchSpace": 576,
         "solutionCount": 1,
         "clueCount": 8,
-        "deductionStepCount": 4,
+        "deductionStepCount": 5,
         "requiresGuess": false
       },
       "structuralSignature": "689f65db50a1d582290671bf858ba19d0e897bc82d799aa4958135a89455ef86",
       "editorialStatus": "pending_native_review",
-      "checksum": "ba0ec5769436337fc3e701b7bc658a837720b98c70774788f919791f8d92778e"
+      "checksum": "1e50e2330f8fb89e932a88c46261fe0e6da9e0701eefa0fa6067537b45b0c04a"
     },
     {
       "schemaVersion": 1,
@@ -20518,10 +20608,19 @@
           "clueIDs": [
             "clue-03",
             "clue-04",
-            "clue-06",
-            "clue-01"
+            "clue-06"
           ],
           "candidateCountBefore": 48,
+          "candidateCountAfter": 4,
+          "deducedFacts": [],
+          "explanationJA": "手がかり3、手がかり4、手がかり6を使うと、候補は48通りから4通りに絞れます。"
+        },
+        {
+          "step": 3,
+          "clueIDs": [
+            "clue-01"
+          ],
+          "candidateCountBefore": 4,
           "candidateCountAfter": 1,
           "deducedFacts": [
             {
@@ -20645,19 +20744,19 @@
               "textJA": "「案内」と「9時」は同じ組だと確定します。"
             }
           ],
-          "explanationJA": "手がかり3、手がかり4、手がかり6、手がかり1を使うと、候補は48通りから1通りに絞れます。「蓮」と「9時」は同じ組だと確定します。"
+          "explanationJA": "手がかり1を使うと、候補は4通りから1通りに絞れます。「蓮」と「9時」は同じ組だと確定します。"
         }
       ],
       "proofMetrics": {
         "searchSpace": 576,
         "solutionCount": 1,
         "clueCount": 6,
-        "deductionStepCount": 2,
+        "deductionStepCount": 3,
         "requiresGuess": false
       },
       "structuralSignature": "2c556d4b4df9062a01d97ca749a7edf814fff8a48b627cd64716c8031a7806e9",
       "editorialStatus": "pending_native_review",
-      "checksum": "85fc368a3f1e6781fc5db2d4a2e60c8e943c45ca3bfe9a3d32bfd283efad9255"
+      "checksum": "d225338a0ce2435e46a0575fccd4bb9e528d0785fdd84506cde3745bfbcfa934"
     },
     {
       "schemaVersion": 1,
@@ -21316,10 +21415,19 @@
           "clueIDs": [
             "clue-01",
             "clue-03",
-            "clue-04",
-            "clue-02"
+            "clue-04"
           ],
           "candidateCountBefore": 576,
+          "candidateCountAfter": 72,
+          "deducedFacts": [],
+          "explanationJA": "手がかり1、手がかり3、手がかり4を使うと、候補は576通りから72通りに絞れます。"
+        },
+        {
+          "step": 2,
+          "clueIDs": [
+            "clue-02"
+          ],
+          "candidateCountBefore": 72,
           "candidateCountAfter": 48,
           "deducedFacts": [
             {
@@ -21335,10 +21443,10 @@
               "textJA": "「健康教室」と「9時」は同じ組だと確定します。"
             }
           ],
-          "explanationJA": "手がかり1、手がかり3、手がかり4、手がかり2を使うと、候補は576通りから48通りに絞れます。「健康教室」と「9時」は同じ組だと確定します。"
+          "explanationJA": "手がかり2を使うと、候補は72通りから48通りに絞れます。「健康教室」と「9時」は同じ組だと確定します。"
         },
         {
-          "step": 2,
+          "step": 3,
           "clueIDs": [
             "clue-05",
             "clue-07"
@@ -21362,7 +21470,7 @@
           "explanationJA": "手がかり5、手がかり7を使うと、候補は48通りから8通りに絞れます。「蓮」と「12時」は同じ組だと確定します。"
         },
         {
-          "step": 3,
+          "step": 4,
           "clueIDs": [
             "clue-06"
           ],
@@ -21445,7 +21553,7 @@
           "explanationJA": "手がかり6を使うと、候補は8通りから2通りに絞れます。「健太」と「11時」は同じ組だと確定します。"
         },
         {
-          "step": 4,
+          "step": 5,
           "clueIDs": [
             "clue-08"
           ],
@@ -21508,12 +21616,12 @@
         "searchSpace": 576,
         "solutionCount": 1,
         "clueCount": 8,
-        "deductionStepCount": 4,
+        "deductionStepCount": 5,
         "requiresGuess": false
       },
       "structuralSignature": "0e375e08cbecb5c7cab36357d0ba732ad9415c72002c968c909faa6caec73020",
       "editorialStatus": "pending_native_review",
-      "checksum": "62917140111d9e16b94c708869dee391fc1356f9839e99d3e9511d4b89ffdb1b"
+      "checksum": "68fe93f9a6c1243a5bd6af9afc8383dc2ea36d13d2c608410d3dab35e92c47b5"
     }
   ]
 }

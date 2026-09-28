@@ -35,7 +35,7 @@ python3 tools/validate_cases.py
 
 The assembler verifies every shard and reproduces `data/cases.v1.json` with canonical SHA-256:
 
-`37fd713e9b754c5c98fa4981d81d0f9ade46e0cd805033d45a82a84833d58ab3`
+`84eadf989f69cabae16550c42adab9afc0669eda945cf95b73de31e20ab8adc8`
 
 The bundle passes exhaustive mechanical validation for unique solutions, reproducible deduction paths, checksums, and structural uniqueness. Release remains on hold until native Japanese editorial review is completed.
 
