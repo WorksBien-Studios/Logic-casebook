@@ -35,8 +35,8 @@ python3 tools/validate_cases.py
 
 The assembler verifies every shard and reproduces `data/cases.v1.json` with canonical SHA-256:
 
-`8820a9e703255fbaff6e6084eca88e2782c66ac8bd948a5d3e571a5873243ebe`
+`991b323ae2bba83216c1f83f0c7a44a169a237affbbf67ccdbafe2894e9203ab`
 
-The bundle passes exhaustive mechanical validation for unique solutions, reproducible deduction paths, checksums, and structural uniqueness. Release remains on hold until native Japanese editorial review is completed.
+The bundle passes exhaustive mechanical validation for unique solutions, reproducible deduction paths, checksums, and structural uniqueness. All 1,000 cases have completed editorial review of their Japanese presentation text and are marked `approved`.
 
 See `docs/logic-casebook-locked-process-flow.md` for the complete product and technical specification.

@@ -1,6 +1,6 @@
 {
   "bundleID": "jp.logic.casebook.v1",
-  "contentVersion": 1,
+  "contentVersion": 2,
   "caseCount": 1000,
   "freeCaseCount": 30,
   "paidCaseCount": 970,
@@ -11,10 +11,10 @@
     "expert": 260
   },
   "editorialStatusCounts": {
-    "pending_native_review": 1000,
-    "approved": 0
+    "pending_native_review": 0,
+    "approved": 1000
   },
   "structuralSignatureCount": 1000,
-  "sha256": "8820a9e703255fbaff6e6084eca88e2782c66ac8bd948a5d3e571a5873243ebe",
-  "releaseReady": false
+  "sha256": "991b323ae2bba83216c1f83f0c7a44a169a237affbbf67ccdbafe2894e9203ab",
+  "releaseReady": true
 }
