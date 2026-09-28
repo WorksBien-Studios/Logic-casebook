@@ -446,8 +446,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "b748d0e0d1c0133ca7eea69a100a1e02dad3ab4405862138a83c09ebe839053f",
-      "editorialStatus": "pending_native_review",
-      "checksum": "b6e4526c4a455e0aca16c46dff738731ef3631943bec2e8d4ce22540a1956dc9"
+      "editorialStatus": "approved",
+      "checksum": "beb561ff8cdb35fbafdd55546e955716c326825c11e728fa454045fdbc018b31"
     },
     {
       "schemaVersion": 1,
@@ -877,8 +877,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "a20acbd00d75f35256a170da60ea5c2c67231ef88b40da574001b61a6e803f9d",
-      "editorialStatus": "pending_native_review",
-      "checksum": "c4a6805510ec77234a0fc1c1d242a537934abca953dab0931932e556935c8ce5"
+      "editorialStatus": "approved",
+      "checksum": "9e5f9ed55bff94284f30f98da69bbf6e4ac1fc500e0d5a80b61e74063838fdfc"
     },
     {
       "schemaVersion": 1,
@@ -1318,8 +1318,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "95bf27d276269c881e013fe07723533306f500bb8a9a6a1d05f533f8ea626a2f",
-      "editorialStatus": "pending_native_review",
-      "checksum": "0ded7e33239fde1f1a74abf268ac9d0f56bcc829903be0530d73b41e874e6f30"
+      "editorialStatus": "approved",
+      "checksum": "43529fb92d95a9e2018088daf5fc0a28b8503f39273f5cc8a36665053d6850dd"
     },
     {
       "schemaVersion": 1,
@@ -1724,8 +1724,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "19f22dc48deb69d8879324c87df21a90a4556ff77248453daa9a3d73e136fdfb",
-      "editorialStatus": "pending_native_review",
-      "checksum": "23a5f907c8fdcf32f3ed734780bfb981aa0fa86483a03433a2e959d0f58434e5"
+      "editorialStatus": "approved",
+      "checksum": "7fe0f16d018c52edc80d484daea27399d03bede7eee4b56feeeb0fcd03a465a5"
     },
     {
       "schemaVersion": 1,
@@ -2158,8 +2158,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "fac63c6b4d04286fea40324c3b62653fb78402df515c1a6d6846d030667d2133",
-      "editorialStatus": "pending_native_review",
-      "checksum": "66149364f4ae93d3823c009a7a1df133069100fd1e3233a476c3cd106ff5bc23"
+      "editorialStatus": "approved",
+      "checksum": "8aecb62b6a18644bdbb415dc40f8a1373b62bacadb8228fbb775b01682bd665e"
     },
     {
       "schemaVersion": 1,
@@ -2567,8 +2567,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "c96f92d460b544be231aa5898a4fb1de153a76348d15beef08b2c1aa1f2fc4c5",
-      "editorialStatus": "pending_native_review",
-      "checksum": "cc5050886473180232c6dc1d50f9129f1be3a7a66464432a301c008a22a98edc"
+      "editorialStatus": "approved",
+      "checksum": "df0e53db1cb0159d9d49aab1e31f9f1211a3fbfe50008583819e958c5c42782a"
     },
     {
       "schemaVersion": 1,
@@ -2946,8 +2946,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "9a52acc57aa86dfacc21afccf72646fab2e83c79b1ccab64cacadf1edd20c404",
-      "editorialStatus": "pending_native_review",
-      "checksum": "9541056dd8c70bfc277a1db9b5a010aa0b8c40a488c2ff7601ba8bc71c2548d9"
+      "editorialStatus": "approved",
+      "checksum": "c3ddf6128e2b31e29c0bc5f64bb7a0ea30fd67bd1444f65082ca41d6ba1edca7"
     },
     {
       "schemaVersion": 1,
@@ -3401,8 +3401,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "8e6d6dbc42af76c2be82682da12a8529fe2a57b1db10cbafc21961ddef0c7584",
-      "editorialStatus": "pending_native_review",
-      "checksum": "39e431aef0e151b8b7e5e077694e3aa7eb80674984a0d552e1458a4f6f8a115d"
+      "editorialStatus": "approved",
+      "checksum": "eb4aead71bfe6ce153d162d574592277abd54ced81c854d10fe9927ad0311041"
     },
     {
       "schemaVersion": 1,
@@ -3837,8 +3837,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "22ded71d132ccf91e24b990af803f6dbe87bdcc7d470d6b03b3797c4b6270023",
-      "editorialStatus": "pending_native_review",
-      "checksum": "257f391b4e9b58e61dd77011da1049121ec07bcb36d3b2a9792d70529543f94f"
+      "editorialStatus": "approved",
+      "checksum": "f0d050b1f0e4d0fbe84da1522d61da5b7666a203d6c25c0bc62730ff2275dcdc"
     },
     {
       "schemaVersion": 1,
@@ -4260,8 +4260,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "3abe6748439290a8dddf1b3b694882302ff6ea3063ecf6356722e7f6c1c92bfc",
-      "editorialStatus": "pending_native_review",
-      "checksum": "067069155abb0f4d1b5cd504e8b36fa8fbb9f75925e7880421aa8bbbf8cb2313"
+      "editorialStatus": "approved",
+      "checksum": "1f0f4bdbda5bd6bd9b7634308d62c14912d12699a7f8006f9e2e916659fb992e"
     },
     {
       "schemaVersion": 1,
@@ -4718,8 +4718,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "470a4bf521506776cbd04715a6b9034d0300853c60f097ae3e2ccf485e5fed95",
-      "editorialStatus": "pending_native_review",
-      "checksum": "4d61407f41ca2310c88b3b7aaefbb5f9f038656d92ab2a98973f6151bdd46f7a"
+      "editorialStatus": "approved",
+      "checksum": "5e40685f9b80b1c0b3c7a38ccd42517ca5820774a0972b4f72193c56df62a605"
     },
     {
       "schemaVersion": 1,
@@ -5140,8 +5140,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "354ada4d4d30887d72f69371055ddb14dd4d6b05b8504b94e86d3f1bce60bd2e",
-      "editorialStatus": "pending_native_review",
-      "checksum": "5c5b7d56b4022e352c0ef8c54fc4426b586df7f6021609be431c09045380f619"
+      "editorialStatus": "approved",
+      "checksum": "f8b5995a98ab5e5c7e33087112f0676d3d819208ed1b32375609cd294fa57853"
     },
     {
       "schemaVersion": 1,
@@ -5550,8 +5550,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "f3b9ee71679ca9b4d739f1ce2268de5bd2222c671cafc80fba0d67931dcc2e2c",
-      "editorialStatus": "pending_native_review",
-      "checksum": "abb058fb51b19c858710a72634d18f32dba67caec2e33da9da5c605d05056167"
+      "editorialStatus": "approved",
+      "checksum": "d487143b6c9b52d6e5ad352eb6a3af9887bbc7732752ae12c72d53f698ab5135"
     },
     {
       "schemaVersion": 1,
@@ -6021,8 +6021,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "48083f5729b5d53e125abab6d4a29f74dd2585419905b106b1cfe6d1015168f2",
-      "editorialStatus": "pending_native_review",
-      "checksum": "5d09e2c242ddf059b216af81227b4965f698f010c094fac1903a5964b34277ea"
+      "editorialStatus": "approved",
+      "checksum": "7eed9cbbcef5d109db1a47993bf0700d20830c3367e94a049f2afdf2d5f2f0ce"
     },
     {
       "schemaVersion": 1,
@@ -6471,8 +6471,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "511b5eafb5cf02d6c6c8368e3343c05929826cc3ee09e1a22ebc07530197978d",
-      "editorialStatus": "pending_native_review",
-      "checksum": "c829eea57f25bb0d12b57ce8c18ed4a1680805991cf60f2fb2841aeaeab36a3d"
+      "editorialStatus": "approved",
+      "checksum": "67dcc96c200871c903152df441f1e9dd35c0dd81be00af30f912c90c253b6e23"
     },
     {
       "schemaVersion": 1,
@@ -6899,8 +6899,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "902bbe785fd68968b567f6fd9de94b5be3480d58dd62ed452b514b1abb84dc98",
-      "editorialStatus": "pending_native_review",
-      "checksum": "e3d49061ebff9b853a3250c239d9241301ac390af96952f8107f81c9b9c7af14"
+      "editorialStatus": "approved",
+      "checksum": "3bc866a2a277d7c4fbc36e32e4b0f5b649482de817d9741c4be9b7315949739e"
     },
     {
       "schemaVersion": 1,
@@ -7349,8 +7349,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "2c565704df3ca08a347cc9ccc51da5428a7547d348c6740b04c644432e305e04",
-      "editorialStatus": "pending_native_review",
-      "checksum": "faa60be82c36667f01d5d9cd01b3c73058835bb11ebc798741c02df8649ad8e0"
+      "editorialStatus": "approved",
+      "checksum": "03eb0049db267312092bab58b68b0c902b7be60ec0edc6d74211935c474ac8c7"
     },
     {
       "schemaVersion": 1,
@@ -7814,8 +7814,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "5e6c7cb7d5515b54f5fa000ab3761af2d88b69a6d4f10d27418c44fc4be2d781",
-      "editorialStatus": "pending_native_review",
-      "checksum": "51675863ce5972fada50a6d4af76743a159a6932baa76e4c65022165a813be9b"
+      "editorialStatus": "approved",
+      "checksum": "7e52bb75798fcd3767700102db8a38220660cdd0b5f4abfb592dbd9e59242110"
     },
     {
       "schemaVersion": 1,
@@ -8251,8 +8251,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "3e47d85429aa7e776eab028de3d7b9cc795d6bfd0fd5127c11bbb87db4abcabf",
-      "editorialStatus": "pending_native_review",
-      "checksum": "34da7a3297a621da47550b6b9b4da83be5f1671f52f010222da70743006ff0d3"
+      "editorialStatus": "approved",
+      "checksum": "78c089a6b62d008ef30c7a50971253bd1e7753c21566beea05c1499919668558"
     },
     {
       "schemaVersion": 1,
@@ -8708,8 +8708,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "0432ee264fc9d3fdcbb9620bebc0607a90ab981aa22c888659896582338da98b",
-      "editorialStatus": "pending_native_review",
-      "checksum": "8db60f4430009ee163659e377a763841776679a9f74820dc425243679cd4cff5"
+      "editorialStatus": "approved",
+      "checksum": "c0fb75b3ffa63c692f99e94b5e5192815c86fd33a4481a55b181bb85e1bab5e4"
     },
     {
       "schemaVersion": 1,
@@ -9106,8 +9106,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "b32fe98e2e38a12522fd9173bb6c5037505a5da1abcb6646c510d4d0defca5b6",
-      "editorialStatus": "pending_native_review",
-      "checksum": "6c3d31d25562127133578fc0a41dda5796eecdcd7bd1e12e02f630ab0a45f3f5"
+      "editorialStatus": "approved",
+      "checksum": "a3428284ee3aaccf1a01cae62c18e384ffee86196a6585fca9773c8badc6a9ac"
     },
     {
       "schemaVersion": 1,
@@ -9488,8 +9488,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "b033a3443239f65212bf0891349c793ce41f5b1b1c0e88510d7fdb64f8e51e3d",
-      "editorialStatus": "pending_native_review",
-      "checksum": "3dae15ef3ec6608d651dc3dbacc596bd3c0a7a84e3edf25022a4930fc13572da"
+      "editorialStatus": "approved",
+      "checksum": "f819607dd7cf9fd0f8e42e57dc4aecc9cb950e139d69e340cabc64f3b04848a3"
     },
     {
       "schemaVersion": 1,
@@ -9930,8 +9930,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "05fc480cb1748f8da6def9d5892fbbdd07ba9592d6314e137373603490ff0d29",
-      "editorialStatus": "pending_native_review",
-      "checksum": "718a292d80432f6351598375edcbfa2d374d1270960d9b30581abd869f762ffe"
+      "editorialStatus": "approved",
+      "checksum": "4386ab9019d17dd1292b84c5376d59b95d39d6f901a6a510450c707f3677ad21"
     },
     {
       "schemaVersion": 1,
@@ -10363,8 +10363,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "18e8951c5a0acec2eddf8c98867d728bf398a22b8ffff360d54e81e2ad0d9741",
-      "editorialStatus": "pending_native_review",
-      "checksum": "df8a43397bd16c5e9b4d31c0b79cfda7f6fef83bc9d64653401f5875969c2f0a"
+      "editorialStatus": "approved",
+      "checksum": "2f4a1e4485f3d3997a29502da51a6a1d9ddbece61572dee174cef69abb7668f1"
     },
     {
       "schemaVersion": 1,
@@ -10791,8 +10791,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "aa84011dce51039aad9c41058335407eea4415ef172a6373d23fd69882441d48",
-      "editorialStatus": "pending_native_review",
-      "checksum": "87ffa8584a9b0563129b5080c48ec88153bab9fe9016d48282ac3dee712438ff"
+      "editorialStatus": "approved",
+      "checksum": "3a369a4a473634864794395cba1b0ea85ddbfcc0fac9f8e0a562533fe9031b32"
     },
     {
       "schemaVersion": 1,
@@ -11222,8 +11222,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "812bd4412d5038f10ef8d9e9c3ac964f14f1b1f17e7b10b5605a09b6c05dbb1f",
-      "editorialStatus": "pending_native_review",
-      "checksum": "c2a0d8a5c22828798dd0a5e459fc12ce8ebed646b3b407629f2fb25d92fc8fe4"
+      "editorialStatus": "approved",
+      "checksum": "46cc1e111a1cd58b0365496bf92faeff97d92834fde5eb6f79b71968f5a991a0"
     },
     {
       "schemaVersion": 1,
@@ -11657,8 +11657,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "65822338c52854aab9e4cd3b082a0e8abb403e53c0a2303f37a6126355778412",
-      "editorialStatus": "pending_native_review",
-      "checksum": "ddb5ee3a79a3bc7cf3328ad45d34e1637afeb03d3dc713f35b6fc39a36d00878"
+      "editorialStatus": "approved",
+      "checksum": "b9e7091b793718db2182665dd3d96a58826f8ba21ce3d223acdcfe81a14e71d5"
     },
     {
       "schemaVersion": 1,
@@ -12112,8 +12112,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "a56128e5f28cd57fe5a070d3faf6cf68d455bd2a8fb1c1fc21815a1e79b3e455",
-      "editorialStatus": "pending_native_review",
-      "checksum": "f270c75cbed67febfe4a9becda050d414a43a26f5e968e92e9ed2eb47b557ff1"
+      "editorialStatus": "approved",
+      "checksum": "6c854d7dc36c0e696c80fc80508bf0e5442bca3e84c3e58088219104dba5b0aa"
     },
     {
       "schemaVersion": 1,
@@ -12517,8 +12517,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "64328f611e2622c6e25f2a61365529e1922cfeb2b1002f823394f16d5fe71ce8",
-      "editorialStatus": "pending_native_review",
-      "checksum": "f0e6d19afeeb3b00aabb46141f697364b21fb5ef823401b9c193524489cc22a6"
+      "editorialStatus": "approved",
+      "checksum": "4b70c87fe1030f2a30c657d075ff44e15745e094f6169a80e949d9206ee14f8c"
     },
     {
       "schemaVersion": 1,
@@ -12945,8 +12945,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "b686e728ec4ffe612c33cd1d95ba811beecc61941be779522bc208071c58fc32",
-      "editorialStatus": "pending_native_review",
-      "checksum": "b8e4409fcc3a72bfade371c04e1d2f66077f34cf05ea96fd34fced09b735667e"
+      "editorialStatus": "approved",
+      "checksum": "6dcc4b6db59066cb656e9de7e2a8caef990f2f080c8a185c9459ab3df3dd339c"
     },
     {
       "schemaVersion": 1,
@@ -13390,8 +13390,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "a0be104bdec0bf1a640de9253f138e904cb99a8639e99fd2689002cfe4b51183",
-      "editorialStatus": "pending_native_review",
-      "checksum": "883e8faa7c4f57df9c61528789a41fac2b75f07d08edea6f5a99a97a2ba64784"
+      "editorialStatus": "approved",
+      "checksum": "5a3898b8169160c39fa8cfc4c3efee1e57fb6eff3ae329283df7d3ed8dab717b"
     },
     {
       "schemaVersion": 1,
@@ -13812,8 +13812,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "187000afa7e0744eaace68f9b45159ccfc795210300492397e4adeea7bbebc8d",
-      "editorialStatus": "pending_native_review",
-      "checksum": "a5d17af9a30190ee42e9fc452086f5f172cc2a1f92c99ab2a3b8ed862c796dd1"
+      "editorialStatus": "approved",
+      "checksum": "040809204fb99a888a330ac15196907b236cb0ece7f60714e815fdde9caab156"
     },
     {
       "schemaVersion": 1,
@@ -14248,8 +14248,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "5bed13959258b39b4b27049176203b26547c063468dca5dc0dedc071443ef2a2",
-      "editorialStatus": "pending_native_review",
-      "checksum": "32517ecfa7a38a3a5e10ea034f3acf1d896d586bfbab7edde6b38192b6cbd2c4"
+      "editorialStatus": "approved",
+      "checksum": "5d4a60dcde30c07a5ce6d450aabd47a8f0af428ada4be705b92a4dccfd39f9de"
     },
     {
       "schemaVersion": 1,
@@ -14690,8 +14690,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "fe1ba05885906a91b6feebc809addb85fd47bccb549f849075a44da49a1a9897",
-      "editorialStatus": "pending_native_review",
-      "checksum": "ef4e91265006ebe9156640798b6add4265c41bb385216620e40562b06aca2d19"
+      "editorialStatus": "approved",
+      "checksum": "b4abc9804ff45ccbcb29b5e2e73b542f2c80acb63956a48126b367b06c838b64"
     },
     {
       "schemaVersion": 1,
@@ -15156,8 +15156,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "af8114d949e32c86f47cf8c145e58201647e4e52b4db89eb4f7bd332444c97b6",
-      "editorialStatus": "pending_native_review",
-      "checksum": "0f2fdb7798a97499896e9cac78225dcba1df8e3f11670477c9cecee296aab8b4"
+      "editorialStatus": "approved",
+      "checksum": "90cfdff2d9ef0d7fba0f0cec63dc50698fa79d74810fe24db41258505876adcb"
     },
     {
       "schemaVersion": 1,
@@ -15590,8 +15590,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "06257406ee5782d6481db1572bf62e169db0a17530d84b948e94ab30f122fd89",
-      "editorialStatus": "pending_native_review",
-      "checksum": "94bb176a8183ba4f1387b71c4be3c38eab608a30f789d196cba9a3ae408e44e6"
+      "editorialStatus": "approved",
+      "checksum": "2aa0f495732ef4e7e9c34a7efdfec5bc26d6818e961057f6cbab1143751f1bb9"
     },
     {
       "schemaVersion": 1,
@@ -16013,8 +16013,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "c40597f2be62615e7daf61c33c79cb52981b1ad910cc2edc16948eb2445cbae5",
-      "editorialStatus": "pending_native_review",
-      "checksum": "b7966e8740d97824ee5402f833b445397d50f2444a1156db089705aeb26ba572"
+      "editorialStatus": "approved",
+      "checksum": "4e3b2d15af8213a5f2f4843e5ae5a97700d1d48c73a1874723537adc38a30fb0"
     },
     {
       "schemaVersion": 1,
@@ -16419,8 +16419,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "0e76dc4ee0bc64624d208401cdb8a8cd8865fea20549cf342615a0fce24ce973",
-      "editorialStatus": "pending_native_review",
-      "checksum": "c85f9ad44d2cb09c0950507e0bed48c5b10dd0b9d90a046858358f0956eb3f2d"
+      "editorialStatus": "approved",
+      "checksum": "8a44b1afd3cc89180dd8d43865453a790bd30d71f78293459684951141d5ffef"
     },
     {
       "schemaVersion": 1,
@@ -16876,8 +16876,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "01c6938615fc096dfce66c65c02bf12527a51758864ae80fe623b9913cfd71ea",
-      "editorialStatus": "pending_native_review",
-      "checksum": "daf966e3e13fb2ba25813baa8605ebc7ead8cf87f9f645beffc2495bef30cdec"
+      "editorialStatus": "approved",
+      "checksum": "5ca6e37832ccf57b9968a48a684cf7aca0047f98d3405d227436d3a23fc54822"
     },
     {
       "schemaVersion": 1,
@@ -17315,8 +17315,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "80f0a56c6dabd47a46d50edb615419d1b1baf2f33af3b8a3373572ac9d3d84dd",
-      "editorialStatus": "pending_native_review",
-      "checksum": "6d57cd1d54a8433bc99974c51bf16fc47fccdf68e1cfc420a90aa0faa8a51a5d"
+      "editorialStatus": "approved",
+      "checksum": "7e9b93858c43921fcfedc0be88e6ddc5eae83aa2e87b5ba8758e57a0da52c26f"
     },
     {
       "schemaVersion": 1,
@@ -17758,8 +17758,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "9c7dd703f98b0e10d4e5d9dfcc97870e87c4a4ab6d8c9d480472bbdd8217c691",
-      "editorialStatus": "pending_native_review",
-      "checksum": "8e1ba812b11a526fad50cacf1aa7797afec7a51ebc4901b4c7526a0284ef3e36"
+      "editorialStatus": "approved",
+      "checksum": "3df63c6f2dbd247c4d7dc05b6857a746825434000c441e8621a6ab4ee2c46252"
     },
     {
       "schemaVersion": 1,
@@ -18192,8 +18192,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "bed221f2d11bb04fe15ff9a3ae77c32afa755b0a9fae473a21744ec9a849a2b2",
-      "editorialStatus": "pending_native_review",
-      "checksum": "7102116284453488eff5287b03696e94a53d363ccbfa850cc8d6010099c10d4b"
+      "editorialStatus": "approved",
+      "checksum": "6342c317ec094ba1c111882d28c489a1e4a18a5ba8f78157dc3348c386714243"
     },
     {
       "schemaVersion": 1,
@@ -18647,8 +18647,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "59b3cef59731b41693b5f6edb6464fa21eaaa12644e1a275fe46d667be592358",
-      "editorialStatus": "pending_native_review",
-      "checksum": "26fd93b273f719eb889ba2a652ddefb77d5abd3fc323d721dadcad2fb4fd8d84"
+      "editorialStatus": "approved",
+      "checksum": "5e6f6d2b6a333bdff53b7cd2f66c9068ce5a74e47a39158a026bf37ff3f1628e"
     },
     {
       "schemaVersion": 1,
@@ -19104,8 +19104,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "238abb156d524689cf34aa6b19e2642ba77d99e4c9080d56b8acf93d3d87a481",
-      "editorialStatus": "pending_native_review",
-      "checksum": "a601d711e81a93f80de9675c45ab55846fb6b55f3db72e7685dc4a9502b07b61"
+      "editorialStatus": "approved",
+      "checksum": "d5bef2551de89fe9cfd7f284004ec5a381d4d5347af2738dfbcf19891d8a9d95"
     },
     {
       "schemaVersion": 1,
@@ -19542,8 +19542,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "11d728d7c355311427d38bddfc8a1d010de45153d97973f0cd4ed5152b20a5b4",
-      "editorialStatus": "pending_native_review",
-      "checksum": "6a289f576295b3c574712d1a3a4cf9d370de3e1a421cc300bde1cf9c633fb807"
+      "editorialStatus": "approved",
+      "checksum": "61ee7a5a51e3e8a9cccaa33b4309192c09bb671fbd798b49ca8ba044751d2e8f"
     },
     {
       "schemaVersion": 1,
@@ -19999,8 +19999,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "72804faa1276cefcbdbb17e46272f75bf656ba00b49c9bdd6ac73a082eb52294",
-      "editorialStatus": "pending_native_review",
-      "checksum": "c171362cb371817632e9bd544b782f458eb0c18cb044c7906cf3dbff8be2e889"
+      "editorialStatus": "approved",
+      "checksum": "a620aae1d0ea4fe64ff1c2b5926e4068fe42dd4d22984435c6a5ceaa1dbd3000"
     },
     {
       "schemaVersion": 1,
@@ -20411,8 +20411,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "5c03008a9b64cef07d0a8ac4f662a0f27b7ee5768ba2827929ab8f43205b2abb",
-      "editorialStatus": "pending_native_review",
-      "checksum": "b3cb03815c4c131fac1c8c01ab0653a94b54cd314c0b0a76f3b228fd4464731f"
+      "editorialStatus": "approved",
+      "checksum": "5101fb2008a2932252cba394cae2d1c9a9427ddd8e710166f4b58d70a86ea284"
     },
     {
       "schemaVersion": 1,
@@ -20862,8 +20862,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "bf200e08fda716e860af3f13e0a8cd49766a02cd357de7a4b74d06edfc33b81e",
-      "editorialStatus": "pending_native_review",
-      "checksum": "9bb1004b592e8d207ba2cda067db1b2c1f139ceaee7b1dbe9e17b6b39b9ee87e"
+      "editorialStatus": "approved",
+      "checksum": "400566cb6ba9070d2ab06ce601006ddd1304912db465d2ebb5199bf4d2d6772b"
     },
     {
       "schemaVersion": 1,
@@ -21302,8 +21302,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "9da99ec9c5a8503b2bb620abb03bc4dc48e8f207f79f6eb4fa16ee5a8e28f19f",
-      "editorialStatus": "pending_native_review",
-      "checksum": "78f09ee0a1b10eed244e134d130e752f59b4619d7de134651fe891fb4bea80c5"
+      "editorialStatus": "approved",
+      "checksum": "b897f96edb270c40dc253e87ca4597be4b50955cf3f9eb83400b262a5f6992ba"
     },
     {
       "schemaVersion": 1,
@@ -21714,8 +21714,8 @@
         "requiresGuess": false
       },
       "structuralSignature": "ed83e19d9471507fa2ef389435f34ce177c215ebd1b0655ee9438b0fe8dc50bb",
-      "editorialStatus": "pending_native_review",
-      "checksum": "9bd645f867e7c8c590145a1108f2ebf7ebd9c15b492d4e56ca449eab81d301f8"
+      "editorialStatus": "approved",
+      "checksum": "2bc3592d32a4b839bc59e4099b54505fb41421c061f8641ec1b52e67ffd02c34"
     }
   ]
 }

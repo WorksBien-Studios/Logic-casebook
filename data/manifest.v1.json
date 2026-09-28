@@ -11,10 +11,10 @@
     "expert": 260
   },
   "editorialStatusCounts": {
-    "pending_native_review": 1000,
-    "approved": 0
+    "pending_native_review": 0,
+    "approved": 1000
   },
   "structuralSignatureCount": 1000,
-  "sha256": "88ff76da380a108b28e2de107eb2b6e2ea03259b6f4332ac686f0e6c546ab6d4",
-  "releaseReady": false
+  "sha256": "991b323ae2bba83216c1f83f0c7a44a169a237affbbf67ccdbafe2894e9203ab",
+  "releaseReady": true
 }

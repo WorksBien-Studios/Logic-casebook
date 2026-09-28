@@ -1,7 +1,7 @@
 {
   "mechanicalValidation": "PASS",
-  "releaseReadiness": "HOLD",
-  "bundleSHA256": "88ff76da380a108b28e2de107eb2b6e2ea03259b6f4332ac686f0e6c546ab6d4",
+  "releaseReadiness": "PASS",
+  "bundleSHA256": "991b323ae2bba83216c1f83f0c7a44a169a237affbbf67ccdbafe2894e9203ab",
   "casesChecked": 1000,
   "caseFailures": {},
   "bundleErrors": [],
@@ -18,7 +18,7 @@
     "expert": 4
   },
   "editorialStatusCounts": {
-    "pending_native_review": 1000
+    "approved": 1000
   },
   "uniqueStructuralSignatures": 1000,
   "clueTypeCounts": {
