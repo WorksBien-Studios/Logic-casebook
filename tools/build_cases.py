@@ -20,12 +20,12 @@ PEOPLE = [
 ]
 
 THEMES = [
-    {"code":"museum","title":"消えた展示札","place":"美術館","objectLabel":"展示品","objects":["青い花瓶","古い時計","銀の彫像","風景画","木箱"],"locationLabel":"展示室","locations":["東展示室","西展示室","中央展示室","特別室","資料室"],"timeLabel":"時刻","times":["9時","10時","11時","12時","13時"]},
+    {"code":"museum","title":"消えた展示札","place":"美術館","objectLabel":"展示品","objects":["青い花瓶","古い時計","銀の彫像","風景画","木箱"],"locationLabel":"展示室","locations":["東展示室","西展示室","中央展示室","特別室","南展示室"],"timeLabel":"時刻","times":["9時","10時","11時","12時","13時"]},
     {"code":"cafe","title":"喫茶店の忘れ物","place":"喫茶店","objectLabel":"注文","objects":["紅茶","珈琲","抹茶ラテ","レモネード","ココア"],"locationLabel":"席","locations":["窓側席","入口席","奥の席","カウンター","テラス席"],"timeLabel":"時刻","times":["10時","11時","12時","13時","14時"]},
     {"code":"library","title":"図書館の返却記録","place":"図書館","objectLabel":"本","objects":["歴史書","推理小説","旅行記","図鑑","詩集"],"locationLabel":"閲覧席","locations":["一番席","二番席","三番席","四番席","五番席"],"timeLabel":"返却時刻","times":["13時","14時","15時","16時","17時"]},
     {"code":"station","title":"駅に残された荷物","place":"駅","objectLabel":"荷物","objects":["赤い鞄","傘","紙袋","楽器ケース","小包"],"locationLabel":"場所","locations":["北口","南口","改札前","売店前","待合室"],"timeLabel":"発見時刻","times":["8時","9時","10時","11時","12時"]},
     {"code":"hotel","title":"ホテルの鍵","place":"ホテル","objectLabel":"鍵","objects":["青い鍵","赤い鍵","白い鍵","黒い鍵","金色の鍵"],"locationLabel":"階","locations":["2階","3階","4階","5階","6階"],"timeLabel":"受取時刻","times":["15時","16時","17時","18時","19時"]},
-    {"code":"festival","title":"祭りの当番表","place":"秋祭り","objectLabel":"担当","objects":["受付","案内","清掃","放送","景品"],"locationLabel":"持ち場","locations":["東門","西門","本部","広場","舞台"],"timeLabel":"開始時刻","times":["9時","10時","11時","12時","13時"]},
+    {"code":"festival","title":"祭りの当番表","place":"秋祭り","objectLabel":"担当","objects":["受付","案内","清掃","放送","警備"],"locationLabel":"持ち場","locations":["東門","西門","本部","広場","舞台"],"timeLabel":"開始時刻","times":["9時","10時","11時","12時","13時"]},
     {"code":"bakery","title":"パン屋の予約票","place":"パン屋","objectLabel":"商品","objects":["食パン","あんパン","クロワッサン","メロンパン","バゲット"],"locationLabel":"受取窓口","locations":["一番窓口","二番窓口","三番窓口","四番窓口","五番窓口"],"timeLabel":"受取時刻","times":["8時","9時","10時","11時","12時"]},
     {"code":"garden","title":"庭園の観察記録","place":"植物園","objectLabel":"植物","objects":["薔薇","椿","菊","百合","桜草"],"locationLabel":"区画","locations":["北区画","南区画","東区画","西区画","中央区画"],"timeLabel":"観察時刻","times":["9時","10時","11時","12時","13時"]},
     {"code":"school","title":"放課後の教室","place":"学校","objectLabel":"持ち物","objects":["ノート","定規","筆箱","水筒","辞書"],"locationLabel":"教室","locations":["音楽室","理科室","図書室","美術室","家庭科室"],"timeLabel":"退出時刻","times":["15時","16時","17時","18時","19時"]},
@@ -50,14 +50,14 @@ THEMES = [
     {"code":"flower_shop","title":"花屋の配達表","place":"花屋","objectLabel":"花束","objects":["薔薇の花束","百合の花束","向日葵の花束","菊の花束","桔梗の花束"],"locationLabel":"配達先","locations":["北町","南町","東町","西町","中央町"],"timeLabel":"配達時刻","times":["10時","11時","12時","13時","14時"]},
     {"code":"pottery","title":"陶芸教室の焼成記録","place":"陶芸教室","objectLabel":"作品","objects":["茶碗","湯呑み","花瓶","皿","小鉢"],"locationLabel":"窯","locations":["一号窯","二号窯","三号窯","四号窯","五号窯"],"timeLabel":"完成時刻","times":["12時","13時","14時","15時","16時"]},
     {"code":"newsroom","title":"新聞社の取材表","place":"新聞社","objectLabel":"取材分野","objects":["地域","文化","科学","教育","交通"],"locationLabel":"担当室","locations":["第一室","第二室","第三室","第四室","第五室"],"timeLabel":"締切時刻","times":["14時","15時","16時","17時","18時"]},
-    {"code":"radio","title":"放送局の番組表","place":"放送局","objectLabel":"番組","objects":["ニュース","音楽番組","朗読番組","天気番組","対談番組"],"locationLabel":"スタジオ","locations":["Aスタジオ","Bスタジオ","Cスタジオ","Dスタジオ","Eスタジオ"],"timeLabel":"放送時刻","times":["8時","9時","10時","11時","12時"]},
+    {"code":"radio","title":"放送局の番組表","place":"放送局","objectLabel":"番組","objects":["ニュース番組","音楽番組","朗読番組","天気番組","対談番組"],"locationLabel":"スタジオ","locations":["Aスタジオ","Bスタジオ","Cスタジオ","Dスタジオ","Eスタジオ"],"timeLabel":"放送時刻","times":["8時","9時","10時","11時","12時"]},
     {"code":"lodge","title":"森の宿の貸出帳","place":"森の宿","objectLabel":"貸出品","objects":["双眼鏡","地図","雨具","水筒","毛布"],"locationLabel":"保管棚","locations":["北棚","南棚","東棚","西棚","中央棚"],"timeLabel":"貸出時刻","times":["7時","8時","9時","10時","11時"]},
     {"code":"castle","title":"城跡の案内記録","place":"城跡","objectLabel":"見学場所","objects":["天守跡","石垣","庭園","資料室","門跡"],"locationLabel":"集合場所","locations":["北門","南門","東門","西門","広場"],"timeLabel":"開始時刻","times":["9時","10時","11時","12時","13時"]},
     {"code":"cinema","title":"映画館の上映表","place":"映画館","objectLabel":"作品","objects":["青い海","冬の森","星の旅","古い手紙","朝の街"],"locationLabel":"上映室","locations":["第一上映室","第二上映室","第三上映室","第四上映室","第五上映室"],"timeLabel":"上映時刻","times":["10時","12時","14時","16時","18時"]},
     {"code":"conference","title":"交流会の発表順","place":"交流会","objectLabel":"発表テーマ","objects":["地域活動","読書","健康","防災","環境"],"locationLabel":"会議室","locations":["青の間","白の間","緑の間","黄の間","赤の間"],"timeLabel":"発表時刻","times":["10時","11時","12時","13時","14時"]},
     {"code":"volunteer","title":"地域活動の担当表","place":"地域活動センター","objectLabel":"担当","objects":["受付","清掃","配布","案内","記録"],"locationLabel":"活動場所","locations":["公園","集会所","図書室","広場","遊歩道"],"timeLabel":"開始時刻","times":["8時","9時","10時","11時","12時"]},
     {"code":"repair","title":"修理店の受付票","place":"修理店","objectLabel":"修理品","objects":["時計","鞄","椅子","照明","ラジオ"],"locationLabel":"作業台","locations":["一番台","二番台","三番台","四番台","五番台"],"timeLabel":"受付時刻","times":["9時","10時","11時","12時","13時"]},
-    {"code":"laundry","title":"洗濯店の受取表","place":"洗濯店","objectLabel":"預かり品","objects":["上着","毛布","帽子","手袋","敷物"],"locationLabel":"保管棚","locations":["A棚","B棚","C棚","D棚","E棚"],"timeLabel":"受取時刻","times":["12時","13時","14時","15時","16時"]},
+    {"code":"laundry","title":"クリーニング店の受取表","place":"クリーニング店","objectLabel":"預かり品","objects":["上着","毛布","帽子","手袋","敷物"],"locationLabel":"保管棚","locations":["A棚","B棚","C棚","D棚","E棚"],"timeLabel":"受取時刻","times":["12時","13時","14時","15時","16時"]},
     {"code":"toy_store","title":"玩具店の予約品","place":"玩具店","objectLabel":"玩具","objects":["積み木","人形","模型","絵札","盤ゲーム"],"locationLabel":"受取棚","locations":["赤い棚","青い棚","白い棚","緑の棚","黄色い棚"],"timeLabel":"受取時刻","times":["10時","11時","12時","13時","14時"]},
     {"code":"tea_shop","title":"茶店の注文控え","place":"茶店","objectLabel":"茶葉","objects":["煎茶","焙じ茶","玄米茶","玉露","和紅茶"],"locationLabel":"席","locations":["窓側席","庭側席","奥の席","入口席","中央席"],"timeLabel":"注文時刻","times":["10時","11時","12時","13時","14時"]},
     {"code":"ferry","title":"連絡船の乗船記録","place":"港の連絡船","objectLabel":"荷物","objects":["旅行鞄","小包","自転車","画材箱","楽器ケース"],"locationLabel":"乗船口","locations":["第一口","第二口","第三口","第四口","第五口"],"timeLabel":"乗船時刻","times":["7時","9時","11時","13時","15時"]},
@@ -310,7 +310,7 @@ def deduction_steps(chosen, assignments, categories, n, k):
                     "right":[categories[cb]["id"], categories[cb]["values"][vb]["id"]],
                     "textJA":f"「{categories[ca]['values'][va]['nameJA']}」と「{categories[cb]['values'][vb]['nameJA']}」は同じ組だと確定します。"
                 })
-            cited = "、".join(x.replace("clue-", "手がかり") for x in pending_ids)
+            cited = "、".join(f"手がかり{int(x.split('-')[1])}" for x in pending_ids)
             reason = f"{cited}を使うと、候補は{pending_before}通りから{current.bit_count()}通りに絞れます。"
             if facts:
                 reason += facts[0]["textJA"]
@@ -436,7 +436,7 @@ def build_case(case_number, difficulty, is_free, seen_signatures):
             continue
 
         score, search_space = score_difficulty(n, k, len(clues), steps)
-        title = f"{theme['title']} {cycle}"
+        title = f"{theme['title']} その{cycle}"
         category_names = "、".join(c["nameJA"] for c in categories[1:])
         scenario = f"{theme['place']}にいた{n}人の記録が混ざってしまいました。手がかりを整理して、{category_names}の正しい組み合わせを復元してください。"
         case = {

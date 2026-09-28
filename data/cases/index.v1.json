@@ -6,147 +6,147 @@
   "generatorSeed": 20260928,
   "releaseStatus": "editorial_review_required",
   "caseCount": 1000,
-  "assembledBundleSHA256": "8820a9e703255fbaff6e6084eca88e2782c66ac8bd948a5d3e571a5873243ebe",
+  "assembledBundleSHA256": "37fd713e9b754c5c98fa4981d81d0f9ade46e0cd805033d45a82a84833d58ab3",
   "shards": [
     {
       "path": "data/cases/cases-0001-0050.json",
       "firstCaseID": "jp.logic.0001",
       "lastCaseID": "jp.logic.0050",
       "caseCount": 50,
-      "sha256": "f8404f29c38d53d4dc245b57f601e4cea3eadea63d25c0deda92bd48dbac9fe1"
+      "sha256": "4db727c423186ba3b1e9a52b99832e89155e98e2e3c773b0d449474b6c430614"
     },
     {
       "path": "data/cases/cases-0051-0100.json",
       "firstCaseID": "jp.logic.0051",
       "lastCaseID": "jp.logic.0100",
       "caseCount": 50,
-      "sha256": "f56b04026987f96fdc22ac451f0a38c8042f345fc634385854e3faeebbb0870b"
+      "sha256": "8be66ad83b157f819c85d4753d83898e8e90a51d41d1bc70204fb4bde086f7ea"
     },
     {
       "path": "data/cases/cases-0101-0150.json",
       "firstCaseID": "jp.logic.0101",
       "lastCaseID": "jp.logic.0150",
       "caseCount": 50,
-      "sha256": "b3da1b415bf72cdefc7d7f3ed9f35a96e5da0554900f00119c28e7e70274b52f"
+      "sha256": "02be7d25f5ff85db3eb81d174cd155508b22cff86be8da6dd4c0bf0ad47db628"
     },
     {
       "path": "data/cases/cases-0151-0200.json",
       "firstCaseID": "jp.logic.0151",
       "lastCaseID": "jp.logic.0200",
       "caseCount": 50,
-      "sha256": "00b43a4bd5baabd3df8aa704e8b1572cd6834d4fdeccdae78a2caed33bc19ef8"
+      "sha256": "d2221243f0b511daf8a460390c05b31902bfc7d3a005a1d89cbff4e775624d1c"
     },
     {
       "path": "data/cases/cases-0201-0250.json",
       "firstCaseID": "jp.logic.0201",
       "lastCaseID": "jp.logic.0250",
       "caseCount": 50,
-      "sha256": "c6586d12df5eab2be7002edf72a122d14d8f7c4380e9e12f4b2033e088565873"
+      "sha256": "6fc59cf1985b86db94eef4c5738752b4190b78d39689de30c508e004380c66cb"
     },
     {
       "path": "data/cases/cases-0251-0300.json",
       "firstCaseID": "jp.logic.0251",
       "lastCaseID": "jp.logic.0300",
       "caseCount": 50,
-      "sha256": "1f9330631371ec8573e385364edf06a635eef84da2ab6946f80cdbc8218fef58"
+      "sha256": "973d413da0e5de174dad1b07f7f437c24bfa074e3fe11346db081a8970f85faf"
     },
     {
       "path": "data/cases/cases-0301-0350.json",
       "firstCaseID": "jp.logic.0301",
       "lastCaseID": "jp.logic.0350",
       "caseCount": 50,
-      "sha256": "c1cba0cd0e4e6d45330646581186b76bb86c4ca06d1b4293852dcb19ae9bcfdc"
+      "sha256": "7ba13adcb1a8647ec319dfa2870183839ab070c4540c707be62fe94f3a3b2186"
     },
     {
       "path": "data/cases/cases-0351-0400.json",
       "firstCaseID": "jp.logic.0351",
       "lastCaseID": "jp.logic.0400",
       "caseCount": 50,
-      "sha256": "e5a8a031c0cef9ed24475ee9ae9e70f09ee72b0c5d5309257293aac23fb4e880"
+      "sha256": "b0ac521c5075e24b4dbaf4de4da7dd3469e6028a373eb3a00f6c4a993c88fcbb"
     },
     {
       "path": "data/cases/cases-0401-0450.json",
       "firstCaseID": "jp.logic.0401",
       "lastCaseID": "jp.logic.0450",
       "caseCount": 50,
-      "sha256": "358ab295a60143ec45c88a974a32ef7f1fd3b3a35ab2b0f0076c0a5bbbe2a159"
+      "sha256": "f9f321478055cd27cea41a471b2546e71be9b91ee688dd9834f43fc511eec704"
     },
     {
       "path": "data/cases/cases-0451-0500.json",
       "firstCaseID": "jp.logic.0451",
       "lastCaseID": "jp.logic.0500",
       "caseCount": 50,
-      "sha256": "0b837d90e0849ab947487bd5ca2a20890d78db54fc0aad9e1d80712425fa425c"
+      "sha256": "3c72903f816a994a5051e8dd91596ddb2f6d5d3802cb0d4171f3c9353fe7a4e6"
     },
     {
       "path": "data/cases/cases-0501-0550.json",
       "firstCaseID": "jp.logic.0501",
       "lastCaseID": "jp.logic.0550",
       "caseCount": 50,
-      "sha256": "0be3d91a2eb1fde7176d2cad243ee58ecb624f7e66b662f7cd18725f609df37f"
+      "sha256": "a5ed9587acdfeb8792a174cde52b28d4218db3477e8d834e8d586fc7ec50ad8d"
     },
     {
       "path": "data/cases/cases-0551-0600.json",
       "firstCaseID": "jp.logic.0551",
       "lastCaseID": "jp.logic.0600",
       "caseCount": 50,
-      "sha256": "711309655ea80931f482fbcb793b0f989df98d7f8fda308ab7c25831a4b3cdd0"
+      "sha256": "68a2400a742bc7ea31fb78ebb991675e967c23d995e9666ba188a40cabac6572"
     },
     {
       "path": "data/cases/cases-0601-0650.json",
       "firstCaseID": "jp.logic.0601",
       "lastCaseID": "jp.logic.0650",
       "caseCount": 50,
-      "sha256": "12557dc2ea6441937b5ffb6abd0070cedbd1ed58cc59756089453b69c40cf2ab"
+      "sha256": "02e1c4d4699ddb17797defb9c28360c817614ed466eb3f8d67bdc96659cde36e"
     },
     {
       "path": "data/cases/cases-0651-0700.json",
       "firstCaseID": "jp.logic.0651",
       "lastCaseID": "jp.logic.0700",
       "caseCount": 50,
-      "sha256": "97f5d3be0dd8f061cce6f3563211e14cc8c65560dca970d0dba2166afd669105"
+      "sha256": "665963c6cf1aca72839dd0df50bd747ea81faaefc55ac7b36cbb2948d3c4b1ff"
     },
     {
       "path": "data/cases/cases-0701-0750.json",
       "firstCaseID": "jp.logic.0701",
       "lastCaseID": "jp.logic.0750",
       "caseCount": 50,
-      "sha256": "e667c4b0aa0a454108ceb3503f1aa5c2561615d64dc4d5be90255722dafa414f"
+      "sha256": "791cec537422b554aae4c0b9065a0ad9a776689e7b98ffcf1860ff156a0dff31"
     },
     {
       "path": "data/cases/cases-0751-0800.json",
       "firstCaseID": "jp.logic.0751",
       "lastCaseID": "jp.logic.0800",
       "caseCount": 50,
-      "sha256": "b4c9c9391ac78d51f818d763e79888a7870d2445648d5f0fc294f1cd60778bdf"
+      "sha256": "a726f57f15b63b49e7a0a41a1475fceb11f52f46d4b4a89cfaee608c0d070df0"
     },
     {
       "path": "data/cases/cases-0801-0850.json",
       "firstCaseID": "jp.logic.0801",
       "lastCaseID": "jp.logic.0850",
       "caseCount": 50,
-      "sha256": "34e907e88e94d46bdda8cff5884c5f92b7e55067a2d53fe25c113bae65c4458c"
+      "sha256": "1a9387a6729550e6fff37f1bc6b2207a73e505ccab8485eb1188d025f74fee90"
     },
     {
       "path": "data/cases/cases-0851-0900.json",
       "firstCaseID": "jp.logic.0851",
       "lastCaseID": "jp.logic.0900",
       "caseCount": 50,
-      "sha256": "7ea09e25c1211f05dc8486132756a2b9d5cf0063aed96e2a8f0674f19692c028"
+      "sha256": "29995f3e8dcb77c40c585e3019f2629f5833da0a2219f6ca88b04784e264741d"
     },
     {
       "path": "data/cases/cases-0901-0950.json",
       "firstCaseID": "jp.logic.0901",
       "lastCaseID": "jp.logic.0950",
       "caseCount": 50,
-      "sha256": "377fe61ebacbb89efd1ed2591e4f8d4695bd4da24a6c2b3ca37defc235e75235"
+      "sha256": "983ba9e501b19c4978f5cc15ef15b05e1c1bd914d26fc0be844c21000067493d"
     },
     {
       "path": "data/cases/cases-0951-1000.json",
       "firstCaseID": "jp.logic.0951",
       "lastCaseID": "jp.logic.1000",
       "caseCount": 50,
-      "sha256": "165c57b10f551c409d2b09769486e21cff3662d20ed7df646afd786450128083"
+      "sha256": "79c729e8e197e4dff2b45d6d6d225db7abb9801ce403a231e65535bc1451e4f2"
     }
   ]
 }
