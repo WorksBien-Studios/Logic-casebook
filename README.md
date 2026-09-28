@@ -40,3 +40,7 @@ The assembler verifies every shard and reproduces `data/cases.v1.json` with cano
 The bundle passes exhaustive mechanical validation for unique solutions, reproducible deduction paths, checksums, and structural uniqueness. All 1,000 cases have completed editorial review of their Japanese presentation text and are marked `approved`.
 
 See `docs/logic-casebook-locked-process-flow.md` for the complete product and technical specification.
+
+## iOS app
+
+The SwiftUI app that plays this content lives under `ios/` in this same repository — see `ios/README.md`.

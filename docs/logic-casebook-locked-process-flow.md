@@ -179,7 +179,7 @@ The completion screen shows:
 | Analytics SDK | None at launch |
 | Advertising SDK | None |
 
-The engine repository contains case rules, solver, validation, hint derivation, duplicate detection and progress-facing state transitions. Presentation code remains in the separate iOS interface repository.
+The engine package (`ios/Sources/LogicCasebookEngine`) contains case rules, solver, validation, hint derivation and duplicate/integrity checks, with no UI dependency. Presentation code (`ios/Sources/LogicCasebookApp`) is a separate Swift package target that depends on it, built on `ios-18-shell` for navigation chrome.
 
 ## 6. Preloaded JSON contract
 

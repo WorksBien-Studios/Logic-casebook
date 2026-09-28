@@ -1,0 +1,60 @@
+{
+  "identifier" : "12A34B56",
+  "nonRenewingSubscriptions" : [],
+  "products" : [
+    {
+      "displayPrice" : "1800",
+      "familyShareable" : false,
+      "internalID" : "6E0F0000000001",
+      "localizations" : [
+        {
+          "description" : "残り970件の事件を永久に解放します。広告・購読なし、追加課金なし。",
+          "displayName" : "全事件解放",
+          "locale" : "ja_JP"
+        }
+      ],
+      "productID" : "jp.logic.casebook.fullunlock",
+      "referenceName" : "Full Library Unlock",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "0000000000",
+    "_developerTeamID" : "0000000000",
+    "_failTransactionsEnabled" : false,
+    "_locale" : "ja_JP",
+    "_storefront" : "JPN",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      }
+    ]
+  },
+  "subscriptionGroups" : [],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

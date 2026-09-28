@@ -1,0 +1,101 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B00000000000000000000001 /* LogicCasebookApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000C /* LogicCasebookApp.swift */; };
+		B00000000000000000000002 /* LogicCasebookUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000D /* LogicCasebookUITests.swift */; };
+		B00000000000000000000003 /* LogicCasebookApp in Frameworks */ = {isa = PBXBuildFile; productRef = B00000000000000000000081 /* LogicCasebookApp */; };
+		B00000000000000000000004 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000011 /* Assets.xcassets */; };
+		B00000000000000000000005 /* ShipporiMincho-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000012 /* ShipporiMincho-Regular.ttf */; };
+		B00000000000000000000006 /* ShipporiMincho-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000013 /* ShipporiMincho-SemiBold.ttf */; };
+		B00000000000000000000007 /* ShipporiMincho-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000014 /* ShipporiMincho-ExtraBold.ttf */; };
+		B00000000000000000000008 /* ZenKakuGothicNew-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000015 /* ZenKakuGothicNew-Regular.ttf */; };
+		B00000000000000000000009 /* ZenKakuGothicNew-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000016 /* ZenKakuGothicNew-Medium.ttf */; };
+		B0000000000000000000000A /* ZenKakuGothicNew-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000017 /* ZenKakuGothicNew-Bold.ttf */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B0000000000000000000000B /* PBXContainerItemProxy */ = {isa = PBXContainerItemProxy; containerPortal = B00000000000000000000050 /* Project object */; proxyType = 1; remoteGlobalIDString = B00000000000000000000040; remoteInfo = LogicCasebook; };
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		B0000000000000000000000C /* LogicCasebookApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogicCasebookApp.swift; sourceTree = "<group>"; };
+		B0000000000000000000000D /* LogicCasebookUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogicCasebookUITests.swift; sourceTree = "<group>"; };
+		B0000000000000000000000E /* LogicCasebook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LogicCasebook.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0000000000000000000000F /* LogicCasebookUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LogicCasebookUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B00000000000000000000010 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B00000000000000000000011 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B00000000000000000000012 /* ShipporiMincho-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ShipporiMincho/ShipporiMincho-Regular.ttf"; sourceTree = "<group>"; };
+		B00000000000000000000013 /* ShipporiMincho-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ShipporiMincho/ShipporiMincho-SemiBold.ttf"; sourceTree = "<group>"; };
+		B00000000000000000000014 /* ShipporiMincho-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ShipporiMincho/ShipporiMincho-ExtraBold.ttf"; sourceTree = "<group>"; };
+		B00000000000000000000015 /* ZenKakuGothicNew-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ZenKakuGothicNew/ZenKakuGothicNew-Regular.ttf"; sourceTree = "<group>"; };
+		B00000000000000000000016 /* ZenKakuGothicNew-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ZenKakuGothicNew/ZenKakuGothicNew-Medium.ttf"; sourceTree = "<group>"; };
+		B00000000000000000000017 /* ZenKakuGothicNew-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ZenKakuGothicNew/ZenKakuGothicNew-Bold.ttf"; sourceTree = "<group>"; };
+		B00000000000000000000018 /* LogicCasebook.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = LogicCasebook.storekit; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B00000000000000000000020 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (B00000000000000000000003 /* LogicCasebookApp in Frameworks */); runOnlyForDeploymentPostprocessing = 0; };
+		B00000000000000000000021 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B00000000000000000000030 = {isa = PBXGroup; children = (B00000000000000000000032 /* LogicCasebook */, B00000000000000000000034 /* LogicCasebookUITests */, B00000000000000000000031 /* Products */); sourceTree = "<group>"; };
+		B00000000000000000000031 /* Products */ = {isa = PBXGroup; children = (B0000000000000000000000E /* LogicCasebook.app */, B0000000000000000000000F /* LogicCasebookUITests.xctest */); name = Products; sourceTree = "<group>"; };
+		B00000000000000000000032 /* LogicCasebook */ = {isa = PBXGroup; children = (B0000000000000000000000C /* LogicCasebookApp.swift */, B00000000000000000000010 /* Info.plist */, B00000000000000000000011 /* Assets.xcassets */, B00000000000000000000018 /* LogicCasebook.storekit */, B00000000000000000000033 /* Fonts */); path = LogicCasebook; sourceTree = "<group>"; };
+		B00000000000000000000033 /* Fonts */ = {isa = PBXGroup; children = (B00000000000000000000012 /* ShipporiMincho-Regular.ttf */, B00000000000000000000013 /* ShipporiMincho-SemiBold.ttf */, B00000000000000000000014 /* ShipporiMincho-ExtraBold.ttf */, B00000000000000000000015 /* ZenKakuGothicNew-Regular.ttf */, B00000000000000000000016 /* ZenKakuGothicNew-Medium.ttf */, B00000000000000000000017 /* ZenKakuGothicNew-Bold.ttf */); path = Fonts; sourceTree = "<group>"; };
+		B00000000000000000000034 /* LogicCasebookUITests */ = {isa = PBXGroup; children = (B0000000000000000000000D /* LogicCasebookUITests.swift */); path = LogicCasebookUITests; sourceTree = "<group>"; };
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B00000000000000000000040 /* LogicCasebook */ = {isa = PBXNativeTarget; buildConfigurationList = B00000000000000000000070 /* Build configuration list for PBXNativeTarget "LogicCasebook" */; buildPhases = (B00000000000000000000051 /* Sources */, B00000000000000000000020 /* Frameworks */, B00000000000000000000022 /* Resources */); buildRules = (); dependencies = (); name = LogicCasebook; packageProductDependencies = (B00000000000000000000081 /* LogicCasebookApp */); productName = LogicCasebook; productReference = B0000000000000000000000E /* LogicCasebook.app */; productType = "com.apple.product-type.application"; };
+		B00000000000000000000041 /* LogicCasebookUITests */ = {isa = PBXNativeTarget; buildConfigurationList = B00000000000000000000071 /* Build configuration list for PBXNativeTarget "LogicCasebookUITests" */; buildPhases = (B00000000000000000000052 /* Sources */, B00000000000000000000021 /* Frameworks */, B00000000000000000000023 /* Resources */); buildRules = (); dependencies = (B00000000000000000000053 /* PBXTargetDependency */); name = LogicCasebookUITests; productName = LogicCasebookUITests; productReference = B0000000000000000000000F /* LogicCasebookUITests.xctest */; productType = "com.apple.product-type.bundle.ui-testing"; };
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B00000000000000000000050 /* Project object */ = {isa = PBXProject; attributes = {BuildIndependentTargetsInParallel = 1; LastUpgradeCheck = 1640; TargetAttributes = {B00000000000000000000040 = {CreatedOnToolsVersion = 16.4; }; B00000000000000000000041 = {CreatedOnToolsVersion = 16.4; TestTargetID = B00000000000000000000040; }; }; }; buildConfigurationList = B00000000000000000000072 /* Build configuration list for PBXProject */; compatibilityVersion = "Xcode 14.0"; developmentRegion = ja; hasScannedForEncodings = 0; knownRegions = (ja, Base); mainGroup = B00000000000000000000030; packageReferences = (B00000000000000000000080 /* Local package */); productRefGroup = B00000000000000000000031 /* Products */; projectDirPath = ""; projectRoot = ""; targets = (B00000000000000000000040 /* LogicCasebook */, B00000000000000000000041 /* LogicCasebookUITests */); };
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B00000000000000000000022 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (B00000000000000000000004 /* Assets.xcassets in Resources */, B00000000000000000000005 /* ShipporiMincho-Regular.ttf in Resources */, B00000000000000000000006 /* ShipporiMincho-SemiBold.ttf in Resources */, B00000000000000000000007 /* ShipporiMincho-ExtraBold.ttf in Resources */, B00000000000000000000008 /* ZenKakuGothicNew-Regular.ttf in Resources */, B00000000000000000000009 /* ZenKakuGothicNew-Medium.ttf in Resources */, B0000000000000000000000A /* ZenKakuGothicNew-Bold.ttf in Resources */); runOnlyForDeploymentPostprocessing = 0; };
+		B00000000000000000000023 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B00000000000000000000051 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (B00000000000000000000001 /* LogicCasebookApp.swift in Sources */); runOnlyForDeploymentPostprocessing = 0; };
+		B00000000000000000000052 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (B00000000000000000000002 /* LogicCasebookUITests.swift in Sources */); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B00000000000000000000053 /* PBXTargetDependency */ = {isa = PBXTargetDependency; target = B00000000000000000000040 /* LogicCasebook */; targetProxy = B0000000000000000000000B /* PBXContainerItemProxy */; };
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		B00000000000000000000060 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; DEBUG_INFORMATION_FORMAT = dwarf; IPHONEOS_DEPLOYMENT_TARGET = 18.0; SDKROOT = iphoneos; SWIFT_VERSION = 6.0; }; name = Debug; };
+		B00000000000000000000061 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym"; IPHONEOS_DEPLOYMENT_TARGET = 18.0; SDKROOT = iphoneos; SWIFT_VERSION = 6.0; }; name = Release; };
+		B00000000000000000000062 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor; CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = LogicCasebook/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 18.0; PRODUCT_BUNDLE_IDENTIFIER = jp.logic.casebook; PRODUCT_NAME = "$(TARGET_NAME)"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SUPPORTS_MACCATALYST = NO; SWIFT_VERSION = 6.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Debug; };
+		B00000000000000000000063 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor; CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = LogicCasebook/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 18.0; PRODUCT_BUNDLE_IDENTIFIER = jp.logic.casebook; PRODUCT_NAME = "$(TARGET_NAME)"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SUPPORTS_MACCATALYST = NO; SWIFT_VERSION = 6.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Release; };
+		B00000000000000000000064 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 18.0; PRODUCT_BUNDLE_IDENTIFIER = jp.logic.casebook.uitests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 6.0; TARGETED_DEVICE_FAMILY = "1,2"; TEST_TARGET_NAME = LogicCasebook; }; name = Debug; };
+		B00000000000000000000065 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 18.0; PRODUCT_BUNDLE_IDENTIFIER = jp.logic.casebook.uitests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 6.0; TARGETED_DEVICE_FAMILY = "1,2"; TEST_TARGET_NAME = LogicCasebook; }; name = Release; };
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B00000000000000000000070 /* Build configuration list for PBXNativeTarget "LogicCasebook" */ = {isa = XCConfigurationList; buildConfigurations = (B00000000000000000000062 /* Debug */, B00000000000000000000063 /* Release */); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		B00000000000000000000071 /* Build configuration list for PBXNativeTarget "LogicCasebookUITests" */ = {isa = XCConfigurationList; buildConfigurations = (B00000000000000000000064 /* Debug */, B00000000000000000000065 /* Release */); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		B00000000000000000000072 /* Build configuration list for PBXProject */ = {isa = XCConfigurationList; buildConfigurations = (B00000000000000000000060 /* Debug */, B00000000000000000000061 /* Release */); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		B00000000000000000000080 /* Local package */ = {isa = XCLocalSwiftPackageReference; relativePath = ..; };
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B00000000000000000000081 /* LogicCasebookApp */ = {isa = XCSwiftPackageProductDependency; package = B00000000000000000000080 /* Local package */; productName = LogicCasebookApp; };
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = B00000000000000000000050 /* Project object */;
+}
