@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://worksbienstudios.com/schemas/logic-casebook-v1.json",
+  "title": "Logic Casebook Content Bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["bundleSchemaVersion", "bundleID", "contentVersion", "generatedAt", "generatorSeed", "releaseStatus", "caseCount", "cases"],
+  "properties": {
+    "bundleSchemaVersion": {"const": 1},
+    "bundleID": {"const": "jp.logic.casebook.v1"},
+    "contentVersion": {"type": "integer", "minimum": 1},
+    "generatedAt": {"type": "string", "format": "date-time"},
+    "generatorSeed": {"type": "integer"},
+    "releaseStatus": {"enum": ["editorial_review_required", "release_candidate", "released"]},
+    "caseCount": {"const": 1000},
+    "cases": {
+      "type": "array",
+      "minItems": 1000,
+      "maxItems": 1000,
+      "items": {"$ref": "#/$defs/case"}
+    }
+  },
+  "$defs": {
+    "reference": {
+      "type": "array",
+      "prefixItems": [{"type": "string"}, {"type": "string"}],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "nameJA"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "nameJA": {"type": "string", "minLength": 1}
+      }
+    },
+    "category": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "nameJA", "ordered", "values"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "nameJA": {"type": "string", "minLength": 1},
+        "ordered": {"type": "boolean"},
+        "values": {"type": "array", "minItems": 3, "maxItems": 5, "items": {"$ref": "#/$defs/value"}}
+      }
+    },
+    "clue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "args", "textJA"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^clue-[0-9]{2}$"},
+        "type": {"enum": ["same", "different", "either", "pairSet", "before", "immediatelyBefore", "offsetBefore"]},
+        "args": {"type": "object"},
+        "textJA": {"type": "string", "minLength": 4}
+      }
+    },
+    "deducedFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relation", "left", "right", "textJA"],
+      "properties": {
+        "relation": {"const": "same"},
+        "left": {"$ref": "#/$defs/reference"},
+        "right": {"$ref": "#/$defs/reference"},
+        "textJA": {"type": "string", "minLength": 4}
+      }
+    },
+    "deductionStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["step", "clueIDs", "candidateCountBefore", "candidateCountAfter", "deducedFacts", "explanationJA"],
+      "properties": {
+        "step": {"type": "integer", "minimum": 1},
+        "clueIDs": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "candidateCountBefore": {"type": "integer", "minimum": 2},
+        "candidateCountAfter": {"type": "integer", "minimum": 1},
+        "deducedFacts": {"type": "array", "items": {"$ref": "#/$defs/deducedFact"}},
+        "explanationJA": {"type": "string", "minLength": 8}
+      }
+    },
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "caseID", "contentVersion", "titleJA", "scenarioJA", "questionJA", "difficulty", "difficultyScore", "estimatedMinutes", "isFree", "categories", "clues", "solution", "deductionSteps", "proofMetrics", "structuralSignature", "editorialStatus", "checksum"],
+      "properties": {
+        "schemaVersion": {"const": 1},
+        "caseID": {"type": "string", "pattern": "^jp\\.logic\\.[0-9]{4}$"},
+        "contentVersion": {"type": "integer", "minimum": 1},
+        "titleJA": {"type": "string", "minLength": 3},
+        "scenarioJA": {"type": "string", "minLength": 20},
+        "questionJA": {"type": "string", "minLength": 10},
+        "difficulty": {"enum": ["beginner", "standard", "advanced", "expert"]},
+        "difficultyScore": {"type": "number", "exclusiveMinimum": 0},
+        "estimatedMinutes": {"type": "integer", "minimum": 1},
+        "isFree": {"type": "boolean"},
+        "categories": {"type": "array", "minItems": 3, "maxItems": 4, "items": {"$ref": "#/$defs/category"}},
+        "clues": {"type": "array", "minItems": 2, "items": {"$ref": "#/$defs/clue"}},
+        "solution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["rows"],
+          "properties": {"rows": {"type": "array", "minItems": 3, "maxItems": 5, "items": {"type": "object"}}}
+        },
+        "deductionSteps": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/deductionStep"}},
+        "proofMetrics": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["searchSpace", "solutionCount", "clueCount", "deductionStepCount", "requiresGuess"],
+          "properties": {
+            "searchSpace": {"type": "integer", "minimum": 1},
+            "solutionCount": {"const": 1},
+            "clueCount": {"type": "integer", "minimum": 2},
+            "deductionStepCount": {"type": "integer", "minimum": 1},
+            "requiresGuess": {"const": false}
+          }
+        },
+        "structuralSignature": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "editorialStatus": {"enum": ["pending_native_review", "approved", "rejected"]},
+        "checksum": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    }
+  }
+}
