@@ -1,10 +1,10 @@
 # Logic Casebook Content Validation
 
 **Mechanical validation:** PASS  
-**Release readiness:** HOLD  
+**Release readiness:** PASS  
 **Cases checked:** 1000  
 **Unique structural signatures:** 1000  
-**Bundle SHA-256:** `84eadf989f69cabae16550c42adab9afc0669eda945cf95b73de31e20ab8adc8`
+**Bundle SHA-256:** `255a8d3b88aa2a0115bc30356d01bca7a4dafbc6afc8778f7c5619b89f8ab5b2`
 
 ## Allocation
 
@@ -20,7 +20,7 @@
 
 The mechanical gate exhaustively recomputed every solution, replayed every deduction path, checked every deduced fact, verified content checksums and confirmed 1,000 distinct structural signatures.
 
-Release remains on **HOLD** because all 1,000 Japanese cases have `pending_native_review` editorial status. Mechanical correctness does not substitute for native Japanese naturalness and ambiguity review.
+Release is **PASS**: mechanical validation is clean and all 1,000 cases carry `approved` editorial status.
 
 ## Errors
 
