@@ -32,9 +32,12 @@ step is).
 
 ```bash
 cd ios
-xcodebuild test -scheme LogicCasebookEngineTests \
+xcodebuild test -scheme LogicCasebook-Package \
   -destination "platform=iOS Simulator,name=iPhone 16"
-              # Runs LogicCasebookEngineTests against a simulator. Plain
+              # Runs LogicCasebookEngineTests against a simulator, through
+              # the auto-generated umbrella package scheme (the test target
+              # itself isn't a declared product, so SPM doesn't generate a
+              # scheme by its own name). Plain
               # `swift test` builds the *whole* package for the host (macOS)
               # first, including LogicCasebookUI -- and since Package.swift
               # declares no macOS platform, that build falls back to an

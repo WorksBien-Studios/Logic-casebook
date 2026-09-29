@@ -51,9 +51,12 @@ jobs:
           echo "device=$device" >> "$GITHUB_OUTPUT"
           echo "Using simulator: $device"
 
-      - name: xcodebuild test -scheme LogicCasebookEngineTests
+      - name: xcodebuild test -scheme LogicCasebook-Package
+        # LogicCasebookEngineTests isn't a declared package product, so SPM's
+        # auto-generated per-product schemes don't include one by that name
+        # -- only the umbrella "<PackageName>-Package" scheme runs it.
         run: >
-          xcodebuild test -scheme LogicCasebookEngineTests
+          xcodebuild test -scheme LogicCasebook-Package
           -destination "platform=iOS Simulator,name=${{ steps.sim.outputs.device }}"
 
   ui-build:
