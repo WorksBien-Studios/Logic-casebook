@@ -58,16 +58,18 @@ header.top p{margin:4px 0 0;color:var(--mut);font-size:.85rem;max-width:60ch}
 .dev{position:absolute;left:0;top:0;transform-origin:0 0;background:#0c0b0a;padding:11px;box-shadow:0 24px 60px rgba(0,0,0,.28),0 0 0 2px #2a2724 inset}
 .dev.phone{width:415px;height:874px;border-radius:64px}
 .dev.pad{width:1046px;height:790px;border-radius:38px}
+.dev.one{width:856px;height:1216px;border-radius:44px}
 .scr{position:relative;overflow:hidden;background:var(--d-bg);color:var(--d-ink);font-family:var(--sans);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
 .phone .scr{width:393px;height:852px;border-radius:53px}
 .pad .scr{width:1024px;height:768px;border-radius:27px}
+.one .scr{width:834px;height:1194px;border-radius:33px;font-size:18px}
 .island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:34px;border-radius:20px;background:#000;z-index:60}
-.pad .island{display:none}
+.pad .island,.one .island{display:none}
 .status{position:absolute;inset:0 0 auto 0;height:54px;display:flex;justify-content:space-between;align-items:center;padding:6px 34px 0 44px;font-weight:700;font-size:16px;z-index:50;pointer-events:none}
-.pad .status{height:28px;padding:0 24px;font-size:13px}
+.pad .status,.one .status{height:28px;padding:0 24px;font-size:13px}
 .status i{display:flex;gap:6px;align-items:center}
 .home{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:138px;height:5px;border-radius:3px;background:var(--d-ink);opacity:.85;z-index:60}
-.pad .home{width:190px}
+.pad .home,.one .home{width:190px}
 /* pages */
 .padshell{position:absolute;inset:0;display:flex}
 .sidebar{width:250px;flex:none;background:var(--d-alt);border-right:1px solid var(--d-line);padding:44px 12px 20px;display:flex;flex-direction:column;gap:2px}
@@ -78,7 +80,20 @@ header.top p{margin:4px 0 0;color:var(--mut);font-size:.85rem;max-width:60ch}
 .col{flex:1;min-width:0;position:relative;display:flex;flex-direction:column}
 .page{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--d-bg)}
 .phone .page{padding-top:54px}
-.pad .page{padding-top:28px}
+.pad .page,.one .page{padding-top:28px}
+/* iPad single column: one pane, readable column, larger cells and type */
+.one .scroll>*,.one .clues>*,.one .sf,.one .seg-ios,.one .gridcard,.one .large,.one .brief,.one .cont,.one .cta,.one .group,.one .sect,.one .sumline,.one .bar,.one .hl2,.one .done,.one .tut,.one .stats,.one .steps{max-width:660px;margin-inline:auto;width:100%}
+.one .gridcard{width:calc(100% - 24px);max-width:660px;margin-top:10px}
+.one .clues{padding-inline:0}.one .clues>*{width:calc(100% - 24px)}
+.one .ch,.one .rh{font-size:15.5px}
+.one .clue .tx{font-size:17px}.one .clue .kind{font-size:12px}
+.one .cell svg{width:32px;height:32px}
+.one .toolbar,.one .bottomcta{padding-bottom:22px}
+.one .toolbar{justify-content:center;gap:10px}.one .toolbar .sp{flex:0 0 24px}
+.one .sheet{left:50%;right:auto;transform:translateX(-50%);width:min(100%,640px);padding-bottom:30px}
+.one .banner,.one .hint{left:50%;right:auto;transform:translateX(-50%);width:min(calc(100% - 24px),640px)}
+.one .tabbar{padding-bottom:10px}
+.one .nav .t{font-size:19px}
 .nav{flex:none;height:44px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 8px;background:var(--d-bar);backdrop-filter:blur(16px)}
 .nav .t{font-weight:700;font-size:17px;text-align:center;white-space:nowrap}
 .nav .t small{display:block;font-weight:400;font-size:11px;color:var(--d-faint);line-height:1.1}
@@ -295,7 +310,7 @@ details.aud summary{cursor:pointer;font-weight:700;font-size:.9rem}
       <p>Mock only, no engine wired. Uses the 30 free cases from the real bundle, so every clue, grid and hint is real content. Built on the iOS 18 shell layout: tab bar on iPhone, sidebar on iPad.</p>
     </div>
     <div class="ctl">
-      <div class="seg" role="group" aria-label="Device"><button data-act="device:phone" aria-pressed="true">iPhone</button><button data-act="device:pad" aria-pressed="false">iPad</button></div>
+      <div class="seg" role="group" aria-label="Device"><button data-act="device:phone" aria-pressed="true">iPhone</button><button data-act="device:pad" aria-pressed="false">iPad split</button><button data-act="device:one" aria-pressed="false">iPad 1-column</button></div>
       <div class="seg" role="group" aria-label="Appearance"><button data-act="theme:auto" aria-pressed="true">Auto</button><button data-act="theme:light" aria-pressed="false">Light</button><button data-act="theme:dark" aria-pressed="false">Dark</button></div>
       <div class="seg" role="group" aria-label="Purchase state"><button data-act="own:0" aria-pressed="true">Free</button><button data-act="own:1" aria-pressed="false">Unlocked</button></div>
     </div>
@@ -417,7 +432,7 @@ function clueRow(n,cl,idx,opts={}){
 function dims(n){
   const c=FREE[n], V=c.categories[0].values.length; const len=s=>s.replace(/\d{1,2}/g,'x').length;
   let rh=0, ch=0; c.categories.forEach(cat=>cat.values.forEach(v=>{ rh=Math.max(rh,len(v.nameJA)); ch=Math.max(ch,len(v.nameJA)); }));
-  return {cs:44, rh:Math.max(64,rh*14+22), chh:Math.max(62,ch*14+16), V};
+  return {cs:S.device==='one'?56:44, rh:Math.max(64,rh*(S.device==='one'?17:14)+22), chh:Math.max(62,ch*(S.device==='one'?17:14)+16), V};
 }
 /* Vertical (tate) labels built per character, as SwiftUI would: no writing-mode needed. Digit runs stay together, the long-vowel mark is rotated. */
 const tate=s=>(s.match(/\d{1,2}|./g)||[]).map(t=>`<span${t==='ー'?' class="lv"':''}>${esc(t)}</span>`).join('');
@@ -605,7 +620,7 @@ function render(){
   const scr=$('#scr'); scr.className='scr'+(document.documentElement.dataset.dark==='1'?' dark-prim':'');
   const sk=screenKey(), keep=(S._sk===sk)?[...scr.querySelectorAll('.scroll,.clues')].map(e=>e.scrollTop):[]; S._sk=sk;
   const body=pageHTML();
-  const tb=(S.device==='phone'&&!deep&&!tut)?tabbar():'';
+  const tb=(S.device!=='pad'&&!deep&&!tut)?tabbar():'';
   let sheet=''; if(S.sheet==='purchase') sheet=purchaseSheet(); if(S.sheet==='brief'&&t) sheet=briefSheet(t.n);
   if(S.sheet==='nodata') sheet=`<div class="scrim" data-act="sheetclose"></div><div class="sheet"><div class="grab"></div><h3>この事件は mock に未収録です</h3><p style="margin:0;color:var(--d-soft);font-size:14.5px;line-height:1.7">この mock では無料の30事件だけを実データで遊べます。解放後の970事件は、同じ画面が本物のデータで開きます。</p><button class="cta" style="margin:0;width:100%" data-act="sheetclose">閉じる</button></div>`;
   const hideSide=pad&&(deep||tut);
@@ -783,8 +798,8 @@ document.addEventListener('contextmenu',e=>{ if(e.target.closest('.cell')) e.pre
 
 /* ---------- scale to fit ---------- */
 function fit(){
-  const pad=S.device==='pad', w=pad?1046:415, h=pad?790:874;
-  const ww=$('.wrap').clientWidth||w; const avail=Math.min(ww>980?ww-28-380:ww, pad?860:415);
+  const dv=S.device, w=dv==='pad'?1046:dv==='one'?856:415, h=dv==='pad'?790:dv==='one'?1216:874;
+  const ww=$('.wrap').clientWidth||w; const avail=Math.min(ww>980?ww-28-380:ww, dv==='phone'?415:860);
   const s=Math.min(1,avail/w), sc=$('#scaler');
   sc.style.width=w*s+'px'; sc.style.height=h*s+'px'; $('#dev').style.transform=`scale(${s})`;
 }
