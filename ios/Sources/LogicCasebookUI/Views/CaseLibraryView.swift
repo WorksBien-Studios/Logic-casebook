@@ -1,148 +1,111 @@
 import SwiftUI
 import SwiftData
 import LogicCasebookEngine
-import LogicCasebookContent
 
 /// The case library (docs/logic-casebook-locked-process-flow.md, section
 /// 4.2). All four difficulty levels are visible from first launch; players
-/// may attempt any available difficulty immediately.
+/// may attempt any available difficulty immediately. Lives inside the shell's
+/// per-tab `NavigationStack`, so it declares destinations but no stack.
 public struct CaseLibraryView: View {
     @EnvironmentObject private var entitlements: EntitlementStore
-    @Query(sort: \CaseProgress.lastPlayedAt, order: .reverse) private var progressRecords: [CaseProgress]
-    @State private var showingPurchaseSheet = false
-
-    private let cases = BundledContent.bundle().cases
+    @Query(sort: \CaseProgress.lastPlayedAt, order: .reverse) private var records: [CaseProgress]
+    @State private var tier: Difficulty = .beginner
+    @State private var showingPurchase = false
 
     public init() {}
 
-    private var continueEntry: (Case, CaseProgress)? {
-        guard let record = progressRecords.first(where: { $0.status == .inProgress }),
-              let gameCase = cases.first(where: { $0.caseID == record.caseID }) else { return nil }
-        return (gameCase, record)
-    }
-
     public var body: some View {
-        NavigationStack {
-            List {
-                if let (gameCase, record) = continueEntry {
-                    Section {
-                        NavigationLink(value: gameCase) {
-                            ContinueRow(gameCase: gameCase, record: record)
-                        }
-                    }
-                }
-                ForEach(Difficulty.allCases, id: \.self) { difficulty in
-                    let casesInTier = cases.filter { $0.difficulty == difficulty }
-                    Section {
-                        ForEach(casesInTier) { gameCase in
-                            row(for: gameCase)
-                        }
-                    } header: {
-                        DifficultyHeader(difficulty: difficulty, cases: casesInTier)
-                    }
+        let progress = Dictionary(records.map { ($0.caseID, $0) }, uniquingKeysWith: { first, _ in first })
+        let cases = CaseCatalog.byDifficulty[tier] ?? []
+        let free = cases.filter(\.isFree)
+        let paid = cases.filter { !$0.isFree }
+        let solved = cases.filter { progress[$0.caseID]?.status == .completed }.count
+
+        List {
+            if let resume = continueCase(progress) {
+                Section {
+                    NavigationLink(value: resume) { ContinueRow(gameCase: resume, record: progress[resume.caseID]) }
+                        .listRowBackground(Theme.accentSoft)
                 }
             }
-            .listStyle(.insetGrouped)
-            .navigationTitle("事件簿")
-            .navigationDestination(for: Case.self) { gameCase in
-                CaseBriefingView(gameCase: gameCase)
+
+            Section {
+                Picker("難易度", selection: $tier) {
+                    ForEach(Difficulty.allCases, id: \.self) { Text($0.labelJA).tag($0) }
+                }
+                .pickerStyle(.segmented)
+                .listRowBackground(Color.clear)
+                .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
+            } footer: {
+                HStack {
+                    Text("\(tier.labelJA) ・ \(cases.count)問")
+                    Spacer()
+                    Text("解決 \(solved) / \(cases.count)")
+                }
+                .padding(.top, 6)
+            }
+
+            Section("無料の事件 \(free.count)件") {
+                ForEach(free) { row($0, progress: progress) }
+            }
+
+            Section {
+                ForEach(paid) { row($0, progress: progress) }
+            } header: {
+                HStack {
+                    Text("全編 \(paid.count)件")
+                    Spacer()
+                    if !entitlements.isFullUnlockPurchased {
+                        Button("\(entitlements.fullUnlockProduct?.displayPrice ?? "¥1,800") で解放") {
+                            showingPurchase = true
+                        }
+                        .font(.footnote.weight(.bold))
+                        .foregroundStyle(Theme.accent)
+                        .textCase(nil)
+                    }
+                }
             }
         }
-        .sheet(isPresented: $showingPurchaseSheet) {
-            PurchaseSheetView()
-        }
+        .listStyle(.insetGrouped)
+        .scrollContentBackground(.hidden)
+        .background(Theme.background)
+        .navigationTitle("事件簿")
+        .navigationDestination(for: Case.self) { CaseBriefingView(gameCase: $0) }
+        .sheet(isPresented: $showingPurchase) { PurchaseSheetView() }
     }
 
-    @ViewBuilder
-    private func row(for gameCase: Case) -> some View {
-        let unlocked = gameCase.isFree || entitlements.isFullUnlockPurchased
-        let status = progressRecords.first { $0.caseID == gameCase.caseID }?.status ?? .notStarted
-        if unlocked {
-            NavigationLink(value: gameCase) {
-                CaseRow(gameCase: gameCase, isUnlocked: true, status: status)
-            }
-        } else {
-            Button {
-                showingPurchaseSheet = true
-            } label: {
-                CaseRow(gameCase: gameCase, isUnlocked: false, status: status)
-            }
-            .buttonStyle(.plain)
-        }
-    }
-}
-
-private struct DifficultyHeader: View {
-    let difficulty: Difficulty
-    let cases: [Case]
-
-    var body: some View {
-        HStack {
-            Text(difficulty.labelJA)
-            Spacer()
-            Text("\(cases.count)問 · \(cases.filter(\.isFree).count)問無料")
-        }
-    }
-}
-
-private struct CaseRow: View {
-    let gameCase: Case
-    let isUnlocked: Bool
-    let status: ProgressStatus
-
-    var body: some View {
-        HStack(spacing: 12) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(isUnlocked ? Theme.goodSoft : Theme.accentSoft)
-                Image(systemName: isUnlocked ? "checkmark.circle" : "lock.fill")
-                    .foregroundStyle(isUnlocked ? Theme.good : Theme.accent)
-            }
-            .frame(width: 34, height: 34)
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(gameCase.titleJA)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(Theme.ink)
-                Text(subtitle)
-                    .font(.caption)
-                    .foregroundStyle(Theme.inkSoft)
-            }
-        }
-        .padding(.vertical, 2)
+    private func row(_ gameCase: Case, progress: [String: CaseProgress]) -> some View {
+        CaseListRow(
+            gameCase: gameCase,
+            progress: progress[gameCase.caseID],
+            isUnlocked: gameCase.isFree || entitlements.isFullUnlockPurchased,
+            onLockedTap: { showingPurchase = true }
+        )
+        .listRowBackground(Theme.surface)
     }
 
-    private var subtitle: String {
-        let priceOrFree = isUnlocked ? (gameCase.isFree ? "無料" : "購入済み") : "¥1,800で解放"
-        let statusText: String
-        switch status {
-        case .notStarted: statusText = "未着手"
-        case .inProgress: statusText = "進行中"
-        case .completed: statusText = "クリア済み"
-        }
-        return "\(priceOrFree) · 目安\(gameCase.estimatedMinutes)分 · \(statusText)"
+    private func continueCase(_ progress: [String: CaseProgress]) -> Case? {
+        guard let record = records.first(where: { $0.status == .inProgress }) else { return nil }
+        return CaseCatalog.byID[record.caseID]
     }
 }
 
 private struct ContinueRow: View {
     let gameCase: Case
-    let record: CaseProgress
+    let record: CaseProgress?
 
     var body: some View {
-        HStack(spacing: 12) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 10).fill(Theme.amberSoft)
-                Image(systemName: "star.fill").foregroundStyle(Theme.amber)
-            }
-            .frame(width: 36, height: 36)
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text("続きから").font(.caption).foregroundStyle(Theme.inkFaint)
-                Text(gameCase.titleJA).font(.subheadline.weight(.semibold))
-                Text("進行中 · ヒント\(record.hintsUsed)回使用")
-                    .font(.caption)
-                    .foregroundStyle(Theme.inkSoft)
-            }
+        VStack(alignment: .leading, spacing: 2) {
+            Text("続きから")
+                .font(.caption.weight(.bold))
+                .foregroundStyle(Theme.accent)
+            Text(gameCase.titleJA)
+                .font(Theme.display(17))
+                .foregroundStyle(Theme.ink)
+            Text("第\(gameCase.number)号 ・ \(gameCase.difficulty.labelJA) ・ ヒント\(record?.hintsUsed ?? 0)回使用")
+                .font(.caption)
+                .foregroundStyle(Theme.inkSoft)
         }
+        .padding(.vertical, 4)
     }
 }
