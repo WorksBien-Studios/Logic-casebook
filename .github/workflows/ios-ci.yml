@@ -12,14 +12,18 @@ on:
       - ".github/workflows/ios-ci.yml"
 
 jobs:
-  engine-tests:
-    # `swift test` builds every target in the package, not just
-    # LogicCasebookEngineTests' own dependencies -- including LogicCasebookUI,
-    # for the host (macOS). Since Package.swift declares no macOS platform,
-    # that build falls back to an ancient implicit deployment target where
-    # ordinary SwiftUI (Shape, buttonStyle, ...) doesn't exist yet, so plain
-    # `swift test` fails on this package regardless of what the test target
-    # itself needs. Running through xcodebuild against an iOS Simulator
+  package-tests:
+    # Runs both test targets: LogicCasebookEngineTests (content/solver
+    # validation) and LogicCasebookUITests (StoreKit 2 purchase/restore
+    # against a local StoreKitTest session).
+    #
+    # `swift test` builds every target in the package, not just the test
+    # targets' own dependencies -- including LogicCasebookUI, for the host
+    # (macOS). Since Package.swift declares no macOS platform, that build
+    # falls back to an ancient implicit deployment target where ordinary
+    # SwiftUI (Shape, buttonStyle, ...) doesn't exist yet, so plain
+    # `swift test` fails on this package regardless of what the test targets
+    # themselves need. Running through xcodebuild against an iOS Simulator
     # destination builds everything against the iOS SDK instead, where all
     # of this code is actually meant to run.
     runs-on: macos-14
@@ -67,9 +71,9 @@ jobs:
           echo "Using simulator udid: $udid"
 
       - name: xcodebuild test -scheme LogicCasebook-Package
-        # LogicCasebookEngineTests isn't a declared package product, so SPM's
-        # auto-generated per-product schemes don't include one by that name
-        # -- only the umbrella "<PackageName>-Package" scheme runs it.
+        # Neither test target is a declared package product, so SPM's
+        # auto-generated per-product schemes don't include one by their name
+        # -- only the umbrella "<PackageName>-Package" scheme runs them.
         run: >
           xcodebuild test -scheme LogicCasebook-Package
           -destination "id=${{ steps.sim.outputs.udid }}"

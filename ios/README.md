@@ -2,7 +2,7 @@
 
 Swift implementation of the locked spec in
 `../docs/logic-casebook-locked-process-flow.md`. This is a single Swift
-package with three library targets and one test target — no Xcode project is
+package with three library targets and two test targets — no Xcode project is
 checked in (see "Creating the app shell" below for why, and what that last
 step is).
 
@@ -27,6 +27,11 @@ step is).
   bundle and checks every one of the 1,000 cases decodes, is `approved`, and
   independently re-solves to its bundled solution with a consistent
   deduction path.
+- **`Tests/LogicCasebookUITests`** — XCTest suite exercising `EntitlementStore`
+  against a checked-in StoreKit Testing configuration
+  (`Resources/Configuration.storekit`) via `StoreKitTest.SKTestSession` —
+  Apple's supported way to drive real StoreKit 2 purchase/restore calls in an
+  automated test without an App Store sandbox account.
 
 ## Building and testing
 
@@ -34,10 +39,11 @@ step is).
 cd ios
 xcodebuild test -scheme LogicCasebook-Package \
   -destination "platform=iOS Simulator,name=iPhone 16"
-              # Runs LogicCasebookEngineTests against a simulator, through
-              # the auto-generated umbrella package scheme (the test target
-              # itself isn't a declared product, so SPM doesn't generate a
-              # scheme by its own name). Plain
+              # Runs LogicCasebookEngineTests AND LogicCasebookUITests (the
+              # StoreKit purchase/restore suite) against a simulator, through
+              # the auto-generated umbrella package scheme (the test targets
+              # themselves aren't declared products, so SPM doesn't generate
+              # schemes by their own names). Plain
               # `swift test` builds the *whole* package for the host (macOS)
               # first, including LogicCasebookUI -- and since Package.swift
               # declares no macOS platform, that build falls back to an
@@ -94,11 +100,12 @@ leaving this step to whoever opens this in Xcode first:
    }
    ```
 
-4. Add a StoreKit configuration file (Editor menu, once you have a scheme)
-   with one non-consumable product, ID `jp.logic.casebook.fullunlock`,
-   matching `EntitlementStore.fullUnlockProductID` — then select it under
-   Scheme → Edit Scheme → Run → Options → StoreKit Configuration to test
-   purchase/restore in the simulator without App Store Connect.
+4. For interactive purchase/restore testing in the simulator, point your run
+   scheme at the StoreKit configuration already checked in for the automated
+   tests — `ios/Tests/LogicCasebookUITests/Resources/Configuration.storekit`
+   (one non-consumable product, `jp.logic.casebook.fullunlock`, matching
+   `EntitlementStore.fullUnlockProductID`) — under Scheme → Edit Scheme →
+   Run → Options → StoreKit Configuration. No App Store Connect needed.
 
 Everything else asked for by the locked spec's acceptance criteria — the
 actual view hierarchy, the domain logic, local progress, the entitlement
