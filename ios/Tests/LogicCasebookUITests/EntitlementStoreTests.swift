@@ -1,3 +1,4 @@
+import Foundation
 import StoreKitTest
 import XCTest
 
@@ -13,13 +14,27 @@ final class EntitlementStoreTests: XCTestCase {
     private var session: SKTestSession!
 
     override func setUpWithError() throws {
-        session = try SKTestSession(configurationFileNamed: "Configuration")
+        // `SKTestSession(configurationFileNamed:)` failed in CI with
+        // "File not found": SwiftPM copies test-target resources into a
+        // nested "LogicCasebook_LogicCasebookUITests.bundle" inside the
+        // .xctest bundle rather than its root, and that lookup doesn't find
+        // resources there. `Bundle.module` (which SwiftPM generates for any
+        // target that declares `resources:`) does, so go straight to a URL.
+        let url = try XCTUnwrap(
+            Bundle.module.url(forResource: "Configuration", withExtension: "storekit"),
+            "Configuration.storekit not found in Bundle.module"
+        )
+        session = try SKTestSession(contentsOf: url)
         session.disableDialogs = true
         session.clearTransactions()
     }
 
     override func tearDownWithError() throws {
-        session.clearTransactions()
+        // Optional chaining, not `session.clearTransactions()`: if setUp
+        // ever fails before assigning `session`, tearDown force-unwrapping
+        // it too turns one reported test failure into a process crash that
+        // takes the rest of the test run down with it (as happened here).
+        session?.clearTransactions()
     }
 
     @MainActor
