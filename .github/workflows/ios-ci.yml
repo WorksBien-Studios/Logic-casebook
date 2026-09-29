@@ -1,0 +1,89 @@
+name: iOS package CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "ios/**"
+      - ".github/workflows/ios-ci.yml"
+  pull_request:
+    paths:
+      - "ios/**"
+      - ".github/workflows/ios-ci.yml"
+
+jobs:
+  engine-tests:
+    # `swift test` builds every target in the package, not just
+    # LogicCasebookEngineTests' own dependencies -- including LogicCasebookUI,
+    # for the host (macOS). Since Package.swift declares no macOS platform,
+    # that build falls back to an ancient implicit deployment target where
+    # ordinary SwiftUI (Shape, buttonStyle, ...) doesn't exist yet, so plain
+    # `swift test` fails on this package regardless of what the test target
+    # itself needs. Running through xcodebuild against an iOS Simulator
+    # destination builds everything against the iOS SDK instead, where all
+    # of this code is actually meant to run.
+    runs-on: macos-14
+    defaults:
+      run:
+        working-directory: ios
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select newest available Xcode (Swift Testing needs Xcode 16+)
+        run: |
+          latest=$(ls -d /Applications/Xcode*.app 2>/dev/null | sort -V | tail -1)
+          if [ -n "$latest" ]; then
+            echo "Selecting $latest"
+            sudo xcode-select -s "$latest/Contents/Developer"
+          fi
+          xcodebuild -version
+
+      - name: Pick an available iOS Simulator
+        id: sim
+        # `-destination "platform=iOS Simulator,name=<X>"` implicitly means
+        # OS:latest, which failed here: this runner has "iPhone 15 Pro"
+        # instances but only up to iOS 17.5, while the newest installed
+        # runtime is 18.2 -- name+"latest" doesn't fall back to an older
+        # runtime, it just fails to resolve. Pick a UDID straight out of the
+        # newest iOS runtime's own device list instead, so the pairing is
+        # guaranteed to exist.
+        run: |
+          udid=$(python3 -c "
+          import json, subprocess
+          data = json.loads(subprocess.check_output(['xcrun', 'simctl', 'list', 'devices', 'available', '-j']))
+          ios_runtimes = sorted(k for k in data['devices'] if 'SimRuntime.iOS-' in k)
+          for runtime in reversed(ios_runtimes):
+              for d in data['devices'][runtime]:
+                  if d['name'].startswith('iPhone'):
+                      print(d['udid'])
+                      raise SystemExit
+          ")
+          if [ -z "$udid" ]; then
+            echo "No iPhone simulator found" >&2
+            xcrun simctl list devices available
+            exit 1
+          fi
+          echo "udid=$udid" >> "$GITHUB_OUTPUT"
+          echo "Using simulator udid: $udid"
+
+      - name: xcodebuild test -scheme LogicCasebook-Package
+        # LogicCasebookEngineTests isn't a declared package product, so SPM's
+        # auto-generated per-product schemes don't include one by that name
+        # -- only the umbrella "<PackageName>-Package" scheme runs it.
+        run: >
+          xcodebuild test -scheme LogicCasebook-Package
+          -destination "id=${{ steps.sim.outputs.udid }}"
+
+  ui-build:
+    # LogicCasebookUI uses SwiftUI, SwiftData and StoreKit 2 iOS-only APIs
+    # (e.g. .navigationBarTitleDisplayMode, .tabViewStyle(.page)), so it must
+    # be compiled against the iOS SDK, not the host macOS SDK that a plain
+    # `swift build` would use.
+    runs-on: macos-14
+    defaults:
+      run:
+        working-directory: ios
+    steps:
+      - uses: actions/checkout@v4
+      - name: xcodebuild -scheme LogicCasebookUI (generic iOS destination)
+        run: xcodebuild build -scheme LogicCasebookUI -destination "generic/platform=iOS"
