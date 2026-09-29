@@ -1,0 +1,47 @@
+name: iOS package CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "ios/**"
+      - ".github/workflows/ios-ci.yml"
+  pull_request:
+    paths:
+      - "ios/**"
+      - ".github/workflows/ios-ci.yml"
+
+jobs:
+  engine-tests:
+    # LogicCasebookEngine and LogicCasebookContent are pure Foundation, no
+    # UIKit/SwiftUI dependency, so they build and test directly on the
+    # runner's host (macOS) without needing a simulator.
+    #
+    # The test target uses Swift Testing (`import Testing`, `@Test`), per
+    # the locked spec's "Automated verification: Swift Testing" (section 5)
+    # -- this needs an Xcode 16+ toolchain. Pin `xcode-version` here if the
+    # runner image's default Xcode predates that.
+    runs-on: macos-14
+    defaults:
+      run:
+        working-directory: ios
+    steps:
+      - uses: actions/checkout@v4
+      - name: Show Swift toolchain
+        run: swift --version
+      - name: swift test
+        run: swift test
+
+  ui-build:
+    # LogicCasebookUI uses SwiftUI, SwiftData and StoreKit 2 iOS-only APIs
+    # (e.g. .navigationBarTitleDisplayMode, .tabViewStyle(.page)), so it must
+    # be compiled against the iOS SDK, not the host macOS SDK that a plain
+    # `swift build` would use.
+    runs-on: macos-14
+    defaults:
+      run:
+        working-directory: ios
+    steps:
+      - uses: actions/checkout@v4
+      - name: xcodebuild -scheme LogicCasebookUI (generic iOS destination)
+        run: xcodebuild build -scheme LogicCasebookUI -destination "generic/platform=iOS"
