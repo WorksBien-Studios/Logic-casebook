@@ -30,8 +30,13 @@ step is).
 - **`Tests/LogicCasebookUITests`** — XCTest suite exercising `EntitlementStore`
   against a checked-in StoreKit Testing configuration
   (`Resources/Configuration.storekit`) via `StoreKitTest.SKTestSession` —
-  Apple's supported way to drive real StoreKit 2 purchase/restore calls in an
-  automated test without an App Store sandbox account.
+  Apple's supported way to drive real StoreKit 2 APIs in an automated test
+  without an App Store sandbox account. Covers product loading and
+  correctly recognizing a completed transaction (`refreshEntitlements()`,
+  `restorePurchases()`), simulated headlessly via `SKTestSession.buyProduct`;
+  `Product.purchase()`'s own confirmation UI needs a foreground window scene
+  this unit-test bundle doesn't have, so that specific call path is only
+  covered by manual Xcode simulator testing (below).
 
 ## Building and testing
 
