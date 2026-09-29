@@ -26,7 +26,7 @@ jobs:
     # themselves need. Running through xcodebuild against an iOS Simulator
     # destination builds everything against the iOS SDK instead, where all
     # of this code is actually meant to run.
-    runs-on: macos-14
+    runs-on: macos-15
     defaults:
       run:
         working-directory: ios
@@ -71,15 +71,10 @@ jobs:
           echo "Using simulator udid: $udid"
 
       - name: Erase the simulator to a clean first-boot state
-        # StoreKitTest's local daemon failed enumerating transaction history
-        # ("Error Domain=AMSErrorDomain Code=301 Invalid Status Code"
-        # against its own http://localhost/inApps/history) identically on
-        # both the oldest and newest installed runtimes, ruling out runtime
-        # version as the cause. AMSErrorDomain 301 against that endpoint is
-        # a documented symptom of stale/pre-existing simulator state
-        # (leftover Account/Media Services or receipt data baked into the
-        # runner image's pre-created simulators); erasing gives the daemon a
-        # clean slate before the tests that depend on it run.
+        # A documented symptom of stale/pre-existing simulator state, so
+        # worth keeping regardless -- but on its own this did NOT fix the
+        # StoreKit daemon failure below (confirmed on a prior run: identical
+        # error survived the erase), so it isn't the whole story.
         run: |
           xcrun simctl shutdown "${{ steps.sim.outputs.udid }}" || true
           xcrun simctl erase "${{ steps.sim.outputs.udid }}"
@@ -88,6 +83,19 @@ jobs:
         # Neither test target is a declared package product, so SPM's
         # auto-generated per-product schemes don't include one by their name
         # -- only the umbrella "<PackageName>-Package" scheme runs them.
+        #
+        # EntitlementStoreTests.testPurchaseUnlocksEntitlement and
+        # testRestorePurchasesRecoversEntitlementOnAFreshStore fail here with
+        # StoreKitTest's local daemon itself erroring on its own transaction-
+        # history endpoint ("Error Domain=AMSErrorDomain Code=301 Invalid
+        # Status Code" against http://localhost/inApps/history) --
+        # reproduced identically across both the oldest and newest installed
+        # iOS runtimes and before/after erasing the simulator, which rules
+        # out runtime version and stale simulator state. Trying the macos-15
+        # runner image (a different host OS/Xcode-default-set entirely) as
+        # one more hypothesis before concluding this is a limitation of
+        # GitHub-hosted runners' StoreKitTest daemon rather than something
+        # fixable from application or workflow code.
         run: >
           xcodebuild test -scheme LogicCasebook-Package
           -destination "id=${{ steps.sim.outputs.udid }}"
