@@ -21,6 +21,7 @@ public final class CaseProgress {
     public var timeSpentSeconds: Int
     public var lastPlayedAt: Date
     public var marksData: Data?
+    public var checkedClueData: Data?
 
     public init(caseID: String) {
         self.caseID = caseID
@@ -31,6 +32,7 @@ public final class CaseProgress {
         self.timeSpentSeconds = 0
         self.lastPlayedAt = .now
         self.marksData = nil
+        self.checkedClueData = nil
     }
 
     public var status: ProgressStatus {
@@ -38,14 +40,27 @@ public final class CaseProgress {
         set { statusRaw = newValue.rawValue }
     }
 
-    public var marks: [GridKey: MarkState] {
+    /// The player's pair grid. Data saved by the earlier single-grid layout
+    /// does not decode and simply starts the case over.
+    public var marks: [PairKey: MarkState] {
         get {
-            guard let marksData, let decoded = try? JSONDecoder().decode([GridKey: MarkState].self, from: marksData) else {
+            guard let marksData, let decoded = try? JSONDecoder().decode([PairKey: MarkState].self, from: marksData) else {
                 return [:]
             }
             return decoded
         }
         set { marksData = try? JSONEncoder().encode(newValue) }
+    }
+
+    /// Clues the player has marked as reviewed.
+    public var checkedClueIDs: Set<String> {
+        get {
+            guard let checkedClueData, let decoded = try? JSONDecoder().decode(Set<String>.self, from: checkedClueData) else {
+                return []
+            }
+            return decoded
+        }
+        set { checkedClueData = try? JSONEncoder().encode(newValue) }
     }
 }
 

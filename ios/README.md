@@ -10,7 +10,8 @@ step is).
 
 - **`Sources/LogicCasebookEngine`** — pure Swift, no UI dependency: the
   `Case`/`Clue`/`DeductionStep` models (decoded straight from the bundled
-  JSON, matching `schema/case-bundle.schema.json`), `Solver` (exhaustive clue
+  JSON, matching `schema/case-bundle.schema.json`), `PairGrid` (pair-based cell keys, `PairSolutionChecker`, `HintPlanner`,
+  `MarkHistory` for undo/redo), `Solver` (exhaustive clue
   evaluation), `ContentValidator` (an independent re-proof of solution
   uniqueness and deduction-path consistency — the Swift-side counterpart to
   `tools/validate_cases.py`), and `SolutionChecker` (checks a player's grid
@@ -18,11 +19,25 @@ step is).
 - **`Sources/LogicCasebookContent`** — bundles `data/cases.v1.json` (copied
   in, currently the 1,000-case, fully-approved bundle) as a package resource
   and decodes it once via `BundledContent.bundle()`.
-- **`Sources/LogicCasebookUI`** — SwiftUI + SwiftData + StoreKit 2: the
-  locked user flow (Tutorial → Case Library → Case Briefing → Logic
-  Workspace → Completion, plus the purchase sheet), `CaseProgress` (local
-  SwiftData model — no account, no server) and `EntitlementStore` (the
-  ¥1,800 non-consumable unlock).
+- **`Sources/LogicCasebookUI`** — SwiftUI + SwiftData + StoreKit 2 on the
+  [`ios-18-shell`](https://github.com/lrodeveloperr/ios-18-shell) package
+  (pinned by commit in `Package.swift`): `RootView` gates the shell behind the
+  tutorial, then runs a tab bar (iPhone) / sidebar (iPad) with three tabs:
+  case library, search (the shell's search-role tab) and help. Each tab owns a
+  `NavigationStack`, so the views declare destinations but no stacks. The
+  layout follows `../docs/ui-mock/index.html`, which documents the UI choice
+  for every engine component.
+  - `Components/` — reusable pieces: `PairGrid` (one category pair, the iPad
+    staircase and the pair mini-map), `MarkGlyph` (drawn ○ × △),
+    `VerticalLabel` (縦書き column heads), `ClueRow`, `HankoSeal`.
+  - `Models/WorkspaceModel` — one play-through: pair grid, undo/redo, reviewed
+    clues, hints, checks, autosave. Rules stay in the engine.
+  - The board has three layouts: iPhone (one pair at a time at 44pt cells with
+    a mini-map), iPad single column (same layout, up to 56pt cells and larger
+    type in a readable column) and iPad wide (every pair as a staircase beside
+    the clue list, from 900pt wide).
+  - `CaseProgress` (local SwiftData model — no account, no server) and
+    `EntitlementStore` (the ¥1,800 non-consumable unlock).
 - **`Tests/LogicCasebookEngineTests`** — Swift Testing suite. Loads the real
   bundle and checks every one of the 1,000 cases decodes, is `approved`, and
   independently re-solves to its bundled solution with a consistent
@@ -70,7 +85,7 @@ xcodebuild build -scheme LogicCasebookUI -destination "generic/platform=iOS"
               # compiled against the iOS SDK rather than the host's.
 ```
 
-This requires an Xcode 16+ toolchain (the test target uses Swift Testing,
+This requires an Xcode 16+ toolchain and an iOS 18+ simulator runtime (the test target uses Swift Testing,
 `import Testing`, which Xcode 15's bundled Swift 5.10 doesn't include). **This
 package
 has not been compiled in the environment that wrote it** — that environment
@@ -90,7 +105,7 @@ open it in Xcode to confirm it isn't silently broken, would be worse than
 leaving this step to whoever opens this in Xcode first:
 
 1. File → New → Project → iOS → App. Interface: SwiftUI. Minimum deployment:
-   iOS 17.
+   iOS 18.
 2. Add this package as a local dependency: File → Add Package Dependencies →
    Add Local... → select this `ios/` directory.
 3. Replace the generated `<AppName>App.swift` with:

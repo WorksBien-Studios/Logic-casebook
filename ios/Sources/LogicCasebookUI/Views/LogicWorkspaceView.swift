@@ -1,352 +1,374 @@
 import SwiftUI
 import SwiftData
+import TipKit
 import LogicCasebookEngine
 
-/// The primary workspace: matrix grid, clue list, undo/redo, hint and check
-/// solution (docs/logic-casebook-locked-process-flow.md, section 4.4-4.6).
+/// Shown once, the first time the board appears.
+struct LongPressTip: Tip {
+    var title: Text { Text("長押しで直接選べます") }
+    var message: Text? { Text("マスを長押しすると、○ × △ を直接選べます。") }
+    var image: Image? { Image(systemName: "hand.tap") }
+}
+
+/// The logic workspace (docs/logic-casebook-locked-process-flow.md, sections
+/// 4.4 to 4.6).
 ///
-/// The grid shows the primary category (people) as rows against every other
-/// category as grouped columns. A deduced fact that relates two *secondary*
-/// categories to each other (e.g. an object directly to a time) has no cell
-/// on this single grid to land on — a full implementation would give every
-/// category pair its own sub-grid. Hints still surface that fact as text;
-/// only the primary-linked half of a step is applied to a cell here.
+/// Three layouts from one set of components:
+/// - iPhone: one category pair at a time at 44pt cells, a mini-map to switch
+///   pairs, and the clue list below.
+/// - iPad single column (portrait or a narrow window): the same layout, wider
+///   cells and larger type, in a centred readable column.
+/// - iPad wide (landscape, split view): every pair as a staircase grid beside
+///   the clue list.
 public struct LogicWorkspaceView: View {
     public let gameCase: Case
 
+    @State private var model: WorkspaceModel
+    @State private var showingBriefing = false
     @Environment(\.modelContext) private var modelContext
-    @State private var marks: [GridKey: MarkState] = [:]
-    @State private var checkedClueIDs: Set<String> = []
-    @State private var appliedHintSteps = 0
-    @State private var hintOpen = false
-    @State private var checkBanner: CheckResult?
-    @State private var validationAttempts = 0
-    @State private var hintsUsed = 0
-    @State private var startedAt = Date()
-    @State private var isSolved = false
 
     public init(gameCase: Case) {
         self.gameCase = gameCase
-    }
-
-    private var otherCategories: [CaseCategory] {
-        gameCase.categories.filter { $0.id != gameCase.primaryCategory.id }
-    }
-
-    private var nextHintStep: DeductionStep? {
-        guard appliedHintSteps < gameCase.deductionSteps.count else { return nil }
-        return gameCase.deductionSteps[appliedHintSteps]
+        _model = State(initialValue: WorkspaceModel(gameCase: gameCase))
     }
 
     public var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                Text(gameCase.questionJA)
-                    .font(.footnote)
-                    .foregroundStyle(Theme.inkSoft)
-                    .padding(12)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Theme.surfaceAlt)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-
-                grid
-
-                if let banner = checkBanner {
-                    CheckBannerView(result: banner)
+        GeometryReader { proxy in
+            let layout = WorkspaceLayout(width: proxy.size.width, gameCase: gameCase)
+            Group {
+                if layout.isWide {
+                    wideLayout(layout)
+                } else {
+                    compactLayout(layout)
                 }
-
-                clueList
             }
-            .padding(20)
+            .overlay(alignment: .bottom) {
+                if let banner = model.banner {
+                    CheckBannerView(
+                        result: banner,
+                        onContinue: { model.banner = nil },
+                        onUndo: { model.undo() },
+                        onHint: { model.requestHint() }
+                    )
+                    .padding(12)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+            }
+            .animation(.default, value: model.banner)
         }
         .background(Theme.background)
-        .navigationTitle(gameCase.titleJA)
+        .navigationTitle(gameCase.titleJA.replacingOccurrences(of: #"（.*）"#, with: "", options: .regularExpression))
         .navigationBarTitleDisplayMode(.inline)
-        .safeAreaInset(edge: .bottom) { toolbar }
-        .overlay(alignment: .bottom) {
-            if hintOpen, let step = nextHintStep {
-                HintCardView(
-                    step: step,
-                    onApply: { applyHint(step) },
-                    onDismiss: { hintOpen = false }
-                )
-                .padding(.horizontal, 20)
-                .padding(.bottom, 84)
+        .toolbar(.hidden, for: .tabBar)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button { showingBriefing = true } label: { Label("概要", systemImage: "info.circle") }
+            }
+            ToolbarItemGroup(placement: .bottomBar) {
+                Button { model.undo() } label: { Label("元に戻す", systemImage: "arrow.uturn.backward") }
+                    .disabled(!model.history.canUndo)
+                Button { model.redo() } label: { Label("やり直す", systemImage: "arrow.uturn.forward") }
+                    .disabled(!model.history.canRedo)
+                Button { model.requestHint() } label: { Label("ヒント", systemImage: "lightbulb") }
+                Spacer()
+                Button(action: checkSolution) {
+                    Label("解答を確認", systemImage: "checkmark").fontWeight(.bold)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(Theme.accent)
             }
         }
-        .navigationDestination(isPresented: $isSolved) {
-            CompletionView(
+        .sheet(isPresented: Binding(get: { model.isHintPresented }, set: { model.isHintPresented = $0 })) {
+            HintSheetView(
                 gameCase: gameCase,
-                elapsedSeconds: Int(Date().timeIntervalSince(startedAt)),
-                hintsUsed: hintsUsed,
-                validationAttempts: validationAttempts,
-                isPerfect: hintsUsed == 0 && validationAttempts == 1
+                step: model.currentHint,
+                onApply: { model.applyHint($0) },
+                onDismiss: { model.isHintPresented = false }
             )
         }
-        .onAppear(perform: loadProgress)
-    }
-
-    // MARK: Grid
-
-    private var grid: some View {
-        Grid(horizontalSpacing: 2, verticalSpacing: 2) {
-            GridRow {
-                Color.clear.frame(width: 64, height: 34)
-                ForEach(otherCategories) { category in
-                    Text(category.nameJA)
-                        .font(.caption2.weight(.semibold))
-                        .foregroundStyle(Theme.inkSoft)
-                        .frame(height: 34)
-                        .frame(maxWidth: .infinity)
-                        .background(Theme.surfaceAlt)
-                        .gridCellColumns(category.values.count)
+        .sheet(isPresented: $showingBriefing) {
+            NavigationStack {
+                ScrollView {
+                    CaseBriefingContent(gameCase: gameCase).padding(20)
                 }
-            }
-            GridRow {
-                Color.clear.frame(width: 64, height: 28)
-                ForEach(otherCategories) { category in
-                    ForEach(category.values) { value in
-                        Text(value.nameJA)
-                            .font(.caption2)
-                            .foregroundStyle(Theme.inkSoft)
-                            .frame(height: 28)
-                            .frame(maxWidth: .infinity)
-                            .background(Theme.surfaceAlt)
-                    }
-                }
-            }
-            ForEach(gameCase.primaryCategory.values) { primaryValue in
-                GridRow {
-                    Text(primaryValue.nameJA)
-                        .font(.subheadline.weight(.semibold))
-                        .frame(width: 64, height: 40, alignment: .leading)
-                        .padding(.leading, 8)
-                        .background(Theme.surfaceAlt)
-                    ForEach(otherCategories) { category in
-                        ForEach(category.values) { value in
-                            let key = GridKey(primaryValueID: primaryValue.id, categoryID: category.id, valueID: value.id)
-                            Button {
-                                marks[key] = (marks[key] ?? .blank).next
-                            } label: {
-                                Text(symbol(for: marks[key] ?? .blank))
-                                    .font(.body.weight(.semibold))
-                                    .foregroundStyle(color(for: marks[key] ?? .blank))
-                                    .frame(height: 40)
-                                    .frame(maxWidth: .infinity)
-                                    .background(Theme.surface)
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
+                .background(Theme.background)
+                .navigationTitle("概要")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) { Button("盤面に戻る") { showingBriefing = false } }
                 }
             }
         }
-        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Theme.border))
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .navigationDestination(isPresented: Binding(get: { model.isSolvedPresented }, set: { model.isSolvedPresented = $0 })) {
+            CompletionView(
+                gameCase: gameCase,
+                elapsedSeconds: model.elapsedSeconds,
+                hintsUsed: model.hintsUsed,
+                validationAttempts: model.validationAttempts,
+                isPerfect: model.isPerfect
+            )
+        }
+        .onAppear { model.load(from: modelContext) }
+        .onChange(of: model.marks) { _, _ in model.save(to: modelContext) }
+        .onChange(of: model.checkedClueIDs) { _, _ in model.save(to: modelContext) }
+        .onChange(of: model.hintsUsed) { _, _ in model.save(to: modelContext) }
+        .onChange(of: model.validationAttempts) { _, _ in model.save(to: modelContext) }
+        .sensoryFeedback(.selection, trigger: model.marks)
+        .sensoryFeedback(.success, trigger: model.isSolved)
     }
 
-    private func symbol(for mark: MarkState) -> String {
-        switch mark {
-        case .blank: return ""
-        case .confirmed: return "○"
-        case .excluded: return "×"
-        case .candidate: return "△"
+    // MARK: Layouts
+
+    private var actions: PairGridActions {
+        PairGridActions(
+            marks: model.marks,
+            onTap: { model.cycle($0) },
+            onSet: { model.set($0, $1) }
+        )
+    }
+
+    private func compactLayout(_ layout: WorkspaceLayout) -> some View {
+        VStack(spacing: 0) {
+            boardCard(layout)
+                .padding(.horizontal, 12)
+                .padding(.top, 6)
+            clueList
+        }
+        .frame(maxWidth: 680)
+        .frame(maxWidth: .infinity)
+    }
+
+    private func wideLayout(_ layout: WorkspaceLayout) -> some View {
+        HStack(spacing: 0) {
+            ScrollView([.horizontal, .vertical]) {
+                VStack(alignment: .leading, spacing: 12) {
+                    legend
+                    StaircaseView(gameCase: gameCase, metrics: layout.metrics, actions: actions)
+                    TipView(LongPressTip())
+                }
+                .padding(20)
+            }
+            Divider()
+            clueList.frame(width: 360)
         }
     }
 
-    private func color(for mark: MarkState) -> Color {
-        switch mark {
-        case .blank: return Theme.inkFaint
-        case .confirmed: return Theme.good
-        case .excluded: return Theme.inkSoft
-        case .candidate: return Theme.amber
+    private func boardCard(_ layout: WorkspaceLayout) -> some View {
+        let pair = model.selectedPair
+        return VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .top, spacing: 12) {
+                PairMiniMap(
+                    gameCase: gameCase,
+                    marks: model.marks,
+                    selection: Binding(get: { model.selectedPair }, set: { model.selectedPair = $0 })
+                )
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("\(gameCase.categories[pair.rowIndex].nameJA) × \(gameCase.categories[pair.columnIndex].nameJA)")
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(Theme.ink)
+                    legend
+                }
+            }
+            ScrollView(.horizontal, showsIndicators: false) {
+                PairBlockView(gameCase: gameCase, pair: pair, metrics: layout.metrics, actions: actions)
+            }
+            .scrollBounceBehavior(.basedOnSize)
+            TipView(LongPressTip())
         }
+        .padding(10)
+        .background(Theme.surface, in: RoundedRectangle(cornerRadius: 14))
     }
 
-    // MARK: Clues
+    private var legend: some View {
+        HStack(spacing: 10) {
+            ForEach([MarkState.confirmed, .excluded, .candidate], id: \.self) { state in
+                HStack(spacing: 2) {
+                    MarkGlyph(mark: state, size: 18)
+                    Text(state.labelJA.split(separator: " ").first.map(String.init) ?? "")
+                }
+            }
+        }
+        .font(.caption2)
+        .foregroundStyle(Theme.inkSoft)
+        .accessibilityHidden(true)
+    }
 
     private var clueList: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("手がかり")
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(Theme.inkSoft)
-            ForEach(gameCase.clues) { clue in
-                let isChecked = checkedClueIDs.contains(clue.id)
-                Button {
-                    if isChecked { checkedClueIDs.remove(clue.id) } else { checkedClueIDs.insert(clue.id) }
-                } label: {
-                    HStack(alignment: .top, spacing: 10) {
-                        Circle()
-                            .strokeBorder(isChecked ? Theme.good : Theme.border, lineWidth: 2)
-                            .background(Circle().fill(isChecked ? Theme.good : .clear))
-                            .frame(width: 18, height: 18)
-                            .padding(.top, 2)
-                        Text(clue.textJA)
-                            .font(.footnote)
-                            .foregroundStyle(isChecked ? Theme.inkFaint : Theme.ink)
-                            .strikethrough(isChecked)
-                            .multilineTextAlignment(.leading)
-                    }
-                    .padding(12)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Theme.surface)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                    .overlay(RoundedRectangle(cornerRadius: 12).stroke(Theme.border))
+        ScrollView {
+            LazyVStack(alignment: .leading, spacing: 6) {
+                Text("問い：\(gameCase.questionJA)")
+                    .font(.footnote)
+                    .foregroundStyle(Theme.inkSoft)
+                    .padding(.horizontal, 4)
+                    .padding(.bottom, 4)
+                HStack {
+                    Text("手がかり（タップで確認済み）")
+                    Spacer()
+                    Text("\(model.checkedClueIDs.count)/\(gameCase.clues.count)").monospacedDigit()
                 }
-                .buttonStyle(.plain)
-            }
-        }
-    }
+                .font(.caption)
+                .foregroundStyle(Theme.inkSoft)
+                .padding(.horizontal, 4)
 
-    // MARK: Toolbar
-
-    private var toolbar: some View {
-        HStack(spacing: 4) {
-            ToolbarButton(systemImage: "arrow.uturn.backward", label: "戻す") {}
-            ToolbarButton(systemImage: "arrow.uturn.forward", label: "やり直す") {}
-            ToolbarButton(systemImage: "lightbulb", label: "ヒント", tint: Theme.amber) {
-                hintOpen.toggle()
+                ForEach(Array(gameCase.clues.enumerated()), id: \.element.id) { index, clue in
+                    ClueRow(
+                        gameCase: gameCase,
+                        clue: clue,
+                        index: index,
+                        isChecked: model.checkedClueIDs.contains(clue.id),
+                        onToggle: { model.toggleClue(clue.id) }
+                    )
+                }
             }
-            Button {
-                checkSolution()
-            } label: {
-                Text("回答を確認")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
-                    .background(Theme.ink)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-            }
+            .padding(12)
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
-        .background(.bar)
     }
 
     // MARK: Actions
 
-    private func loadProgress() {
-        let progress = ProgressStore.progress(for: gameCase.caseID, in: modelContext)
-        marks = progress.marks
-        hintsUsed = progress.hintsUsed
-        validationAttempts = progress.validationAttempts
-        if progress.status == .notStarted {
-            progress.status = .inProgress
-        }
-    }
-
-    private func saveProgress() {
-        let progress = ProgressStore.progress(for: gameCase.caseID, in: modelContext)
-        progress.marks = marks
-        progress.hintsUsed = hintsUsed
-        progress.validationAttempts = validationAttempts
-        progress.lastPlayedAt = .now
-        try? modelContext.save()
-    }
-
-    private func applyHint(_ step: DeductionStep) {
-        let primaryID = gameCase.primaryCategory.id
-        for fact in step.deducedFacts {
-            if fact.left.categoryID == primaryID {
-                marks[GridKey(primaryValueID: fact.left.valueID, categoryID: fact.right.categoryID, valueID: fact.right.valueID)] = .confirmed
-            } else if fact.right.categoryID == primaryID {
-                marks[GridKey(primaryValueID: fact.right.valueID, categoryID: fact.left.categoryID, valueID: fact.left.valueID)] = .confirmed
-            }
-        }
-        appliedHintSteps += 1
-        hintsUsed += 1
-        hintOpen = false
-        saveProgress()
-    }
-
     private func checkSolution() {
-        validationAttempts += 1
-        let result = SolutionChecker.check(gameCase, marks: marks)
-        checkBanner = result
-        if result == .correct {
-            let progress = ProgressStore.progress(for: gameCase.caseID, in: modelContext)
-            progress.status = .completed
-            progress.isPerfect = hintsUsed == 0 && validationAttempts == 1
-            progress.timeSpentSeconds = Int(Date().timeIntervalSince(startedAt))
-            try? modelContext.save()
-            isSolved = true
+        if model.check() == .correct {
+            model.markCompleted(in: modelContext)
         } else {
-            saveProgress()
+            model.save(to: modelContext)
         }
     }
 }
 
-private struct ToolbarButton: View {
-    let systemImage: String
-    let label: String
-    var tint: Color = Theme.inkSoft
-    let action: () -> Void
+/// Picks cell size and header sizes for the available width. Cells are never
+/// below 44pt; the board scrolls sideways instead if a phone is too narrow.
+private struct WorkspaceLayout {
+    let isWide: Bool
+    let metrics: GridMetrics
 
-    var body: some View {
-        Button(action: action) {
-            VStack(spacing: 4) {
-                Image(systemName: systemImage)
-                Text(label).font(.caption2)
-            }
-            .foregroundStyle(tint)
-            .frame(maxWidth: .infinity)
+    init(width: CGFloat, gameCase: Case) {
+        let wide = width >= 900
+        let roomy = width >= 600
+        let probe = GridMetrics(gameCase: gameCase, cell: 44, characterWidth: roomy ? 17 : 15)
+        let values = CGFloat(gameCase.primaryCategory.values.count)
+        let resolvedCell: CGFloat
+        if wide {
+            resolvedCell = 48
+        } else {
+            let available = min(width, 680) - 24 - 20 - probe.rowHeaderWidth
+            let cap: CGFloat = roomy ? 56 : 44
+            resolvedCell = min(cap, max(44, (available / values).rounded(.down)))
         }
+        isWide = wide
+        metrics = GridMetrics(gameCase: gameCase, cell: resolvedCell, characterWidth: roomy ? 17 : 15)
     }
 }
 
 private struct CheckBannerView: View {
     let result: CheckResult
+    let onContinue: () -> Void
+    let onUndo: () -> Void
+    let onHint: () -> Void
 
     var body: some View {
-        Group {
-            switch result {
-            case .correct:
-                EmptyView()
-            case .incomplete:
-                banner(text: "まだ確定していないマスがあります。", color: Theme.amber)
-            case .contradiction:
-                banner(text: "現在の盤面に矛盾があります。手がかりを見直してください。", color: Theme.accent)
+        switch result {
+        case .correct:
+            EmptyView()
+        case .incomplete:
+            card(
+                title: "まだ確定していないマスがあります",
+                message: "どのマスかはお知らせしません。手がかりを見直して、続けてみましょう。",
+                color: Theme.amber
+            ) {
+                Button("編集を続ける", action: onContinue).buttonStyle(.borderedProminent).tint(Theme.accent)
+                Button("ヒントを見る", action: onHint).buttonStyle(.bordered)
+            }
+        case .contradiction:
+            card(
+                title: "盤面のどこかに矛盾があります",
+                message: "答えは表示しません。入力は消えていません。元に戻すか、ヒントで確認できます。",
+                color: Theme.accent
+            ) {
+                Button("元に戻す", action: onUndo).buttonStyle(.borderedProminent).tint(Theme.accent)
+                Button("ヒント", action: onHint).buttonStyle(.bordered)
+                Button("続ける", action: onContinue).buttonStyle(.bordered)
             }
         }
     }
 
-    private func banner(text: String, color: Color) -> some View {
-        Text(text)
-            .font(.footnote.weight(.semibold))
-            .foregroundStyle(color)
-            .padding(12)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(color.opacity(0.12))
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+    private func card<Actions: View>(title: String, message: String, color: Color, @ViewBuilder actions: () -> Actions) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(title).font(.subheadline.weight(.bold)).foregroundStyle(Theme.ink)
+            Text(message).font(.footnote).foregroundStyle(Theme.inkSoft)
+            HStack(spacing: 8, content: actions).padding(.top, 6)
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Theme.surface, in: RoundedRectangle(cornerRadius: 16))
+        .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(color, lineWidth: 1.5))
+        .shadow(color: .black.opacity(0.12), radius: 12, y: 4)
+        .accessibilityElement(children: .contain)
     }
 }
 
-private struct HintCardView: View {
-    let step: DeductionStep
-    let onApply: () -> Void
+/// The hint half-sheet: the clue involved, the logic in one sentence, and the
+/// mark it justifies. The board stays visible and usable above it. It never
+/// reveals more than the next deduction.
+private struct HintSheetView: View {
+    let gameCase: Case
+    let step: DeductionStep?
+    let onApply: (DeductionStep) -> Void
     let onDismiss: () -> Void
 
+    private let detent = PresentationDetent.height(400)
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Label("次の一手", systemImage: "lightbulb")
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(Theme.amber)
-            Text(step.explanationJA)
-                .font(.footnote)
-                .foregroundStyle(Theme.ink)
-            HStack(spacing: 8) {
-                Button("反映する", action: onApply)
-                    .buttonStyle(.borderedProminent)
-                    .tint(Theme.amber)
-                Button("閉じる", action: onDismiss)
-                    .buttonStyle(.bordered)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 12) {
+                if let step {
+                    Text("次の推論 ・ \(step.step)/\(gameCase.deductionSteps.count)")
+                        .font(.footnote.weight(.bold))
+                        .foregroundStyle(Theme.accent)
+                    ForEach(step.clueIDs, id: \.self) { id in
+                        if let index = gameCase.clues.firstIndex(where: { $0.id == id }) {
+                            ClueRow(gameCase: gameCase, clue: gameCase.clues[index], index: index)
+                                .background(Theme.surfaceAlt, in: RoundedRectangle(cornerRadius: 12))
+                        }
+                    }
+                    Text(ClueRow.attributed(step.explanationJA, in: gameCase))
+                        .font(.callout)
+                        .lineSpacing(4)
+                        .foregroundStyle(Theme.ink)
+                    FlowLayout(spacing: 6) {
+                        ForEach(Array(step.deducedFacts.enumerated()), id: \.offset) { _, fact in
+                            if let left = gameCase.entity(fact.left), let right = gameCase.entity(fact.right) {
+                                Text("\(left.name) ＝ \(right.name)")
+                                    .font(.footnote.weight(.bold))
+                                    .foregroundStyle(Theme.accent)
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 3)
+                                    .background(Theme.accentSoft, in: RoundedRectangle(cornerRadius: 8))
+                            }
+                        }
+                    }
+                    HStack(spacing: 10) {
+                        Button("反映せず戻る", action: onDismiss)
+                            .buttonStyle(.bordered)
+                            .frame(maxWidth: .infinity)
+                        Button("盤面に反映") { onApply(step) }
+                            .buttonStyle(.borderedProminent)
+                            .tint(Theme.accent)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .controlSize(.large)
+                } else {
+                    Text("ヒント").font(.footnote.weight(.bold)).foregroundStyle(Theme.accent)
+                    Text("すべての手順が盤面に反映されています。「解答を確認」を押してください。")
+                        .font(.callout)
+                        .foregroundStyle(Theme.ink)
+                    Button("閉じる", action: onDismiss).buttonStyle(.bordered).controlSize(.large)
+                }
             }
+            .padding(20)
         }
-        .padding(16)
-        .background(Theme.surface)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay(RoundedRectangle(cornerRadius: 16).stroke(Theme.amber))
-        .shadow(color: .black.opacity(0.15), radius: 12, y: 4)
+        .background(Theme.background)
+        .presentationDetents([detent, .large])
+        .presentationBackgroundInteraction(.enabled(upThrough: detent))
+        .presentationDragIndicator(.visible)
     }
 }
