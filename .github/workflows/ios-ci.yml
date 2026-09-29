@@ -12,14 +12,18 @@ on:
       - ".github/workflows/ios-ci.yml"
 
 jobs:
-  engine-tests:
-    # `swift test` builds every target in the package, not just
-    # LogicCasebookEngineTests' own dependencies -- including LogicCasebookUI,
-    # for the host (macOS). Since Package.swift declares no macOS platform,
-    # that build falls back to an ancient implicit deployment target where
-    # ordinary SwiftUI (Shape, buttonStyle, ...) doesn't exist yet, so plain
-    # `swift test` fails on this package regardless of what the test target
-    # itself needs. Running through xcodebuild against an iOS Simulator
+  package-tests:
+    # Runs both test targets: LogicCasebookEngineTests (content/solver
+    # validation) and LogicCasebookUITests (StoreKit 2 purchase/restore
+    # against a local StoreKitTest session).
+    #
+    # `swift test` builds every target in the package, not just the test
+    # targets' own dependencies -- including LogicCasebookUI, for the host
+    # (macOS). Since Package.swift declares no macOS platform, that build
+    # falls back to an ancient implicit deployment target where ordinary
+    # SwiftUI (Shape, buttonStyle, ...) doesn't exist yet, so plain
+    # `swift test` fails on this package regardless of what the test targets
+    # themselves need. Running through xcodebuild against an iOS Simulator
     # destination builds everything against the iOS SDK instead, where all
     # of this code is actually meant to run.
     runs-on: macos-14
@@ -44,15 +48,15 @@ jobs:
         # OS:latest, which failed here: this runner has "iPhone 15 Pro"
         # instances but only up to iOS 17.5, while the newest installed
         # runtime is 18.2 -- name+"latest" doesn't fall back to an older
-        # runtime, it just fails to resolve. Pick a UDID straight out of the
-        # newest iOS runtime's own device list instead, so the pairing is
-        # guaranteed to exist.
+        # runtime, it just fails to resolve. Pick a UDID straight out of a
+        # runtime's own device list instead, so the pairing is guaranteed to
+        # exist.
         run: |
           udid=$(python3 -c "
           import json, subprocess
           data = json.loads(subprocess.check_output(['xcrun', 'simctl', 'list', 'devices', 'available', '-j']))
           ios_runtimes = sorted(k for k in data['devices'] if 'SimRuntime.iOS-' in k)
-          for runtime in reversed(ios_runtimes):
+          for runtime in ios_runtimes:
               for d in data['devices'][runtime]:
                   if d['name'].startswith('iPhone'):
                       print(d['udid'])
@@ -66,10 +70,30 @@ jobs:
           echo "udid=$udid" >> "$GITHUB_OUTPUT"
           echo "Using simulator udid: $udid"
 
+      - name: Erase the simulator to a clean first-boot state
+        # A documented symptom of stale/pre-existing simulator state, so
+        # worth keeping regardless -- but on its own this did NOT fix the
+        # StoreKit daemon failure below (confirmed on a prior run: identical
+        # error survived the erase), so it isn't the whole story.
+        run: |
+          xcrun simctl shutdown "${{ steps.sim.outputs.udid }}" || true
+          xcrun simctl erase "${{ steps.sim.outputs.udid }}"
+
       - name: xcodebuild test -scheme LogicCasebook-Package
-        # LogicCasebookEngineTests isn't a declared package product, so SPM's
-        # auto-generated per-product schemes don't include one by that name
-        # -- only the umbrella "<PackageName>-Package" scheme runs it.
+        # Neither test target is a declared package product, so SPM's
+        # auto-generated per-product schemes don't include one by their name
+        # -- only the umbrella "<PackageName>-Package" scheme runs them.
+        #
+        # Two EntitlementStoreTests cases are skipped (see that file):
+        # anything that enumerates Transaction.currentEntitlements hangs/
+        # fails with StoreKitTest's local daemon erroring on its own
+        # transaction-history endpoint ("Error Domain=AMSErrorDomain
+        # Code=301 Invalid Status Code" against http://localhost/inApps/
+        # history). Reproduced identically across the oldest and newest
+        # installed iOS runtimes, before/after erasing the simulator, and on
+        # both the macos-14 and macos-15 runner images -- a GitHub-hosted
+        # runner limitation in StoreKitTest itself, not application or
+        # workflow code.
         run: >
           xcodebuild test -scheme LogicCasebook-Package
           -destination "id=${{ steps.sim.outputs.udid }}"

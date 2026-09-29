@@ -40,5 +40,16 @@ let package = Package(
             dependencies: ["LogicCasebookEngine", "LogicCasebookContent"],
             path: "Tests/LogicCasebookEngineTests"
         ),
+        // Exercises EntitlementStore's StoreKit 2 purchase/restore flow
+        // against a local StoreKit Testing configuration (StoreKitTest /
+        // SKTestSession) -- the supported, CI-runnable substitute for a real
+        // App Store sandbox account, which this environment has no way to
+        // authenticate against.
+        .testTarget(
+            name: "LogicCasebookUITests",
+            dependencies: ["LogicCasebookUI"],
+            path: "Tests/LogicCasebookUITests",
+            resources: [.copy("Resources/Configuration.storekit")]
+        ),
     ]
 )

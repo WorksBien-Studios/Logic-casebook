@@ -1,0 +1,80 @@
+{
+  "identifier" : "7A19B99A-2B8E-4A4B-9C3F-1E7B6E5D9C10",
+  "nonRenewingSubscriptions" : [],
+  "products" : [
+    {
+      "displayPrice" : "1800",
+      "familyShareable" : false,
+      "internalID" : "4B6E9F2C-8D1A-4E7B-9C2F-3A5D6E8F1B2C",
+      "localizations" : [
+        {
+          "description" : "970件の追加ケースを永久に解放します。広告・サブスクリプションはありません。",
+          "displayName" : "すべてのケースを解放",
+          "locale" : "ja_JP"
+        }
+      ],
+      "productID" : "jp.logic.casebook.fullunlock",
+      "referenceName" : "Full Unlock (Non-Consumable)",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "0",
+    "_developerTeamID" : "0000000000",
+    "_failTransactionsEnabled" : false,
+    "_locale" : "ja_JP",
+    "_storefront" : "JPN",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptionGroups" : [],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}
