@@ -32,8 +32,16 @@ step is).
 
 ```bash
 cd ios
-swift test    # LogicCasebookEngine + LogicCasebookContent: pure Foundation,
-              # builds and runs directly on the host.
+xcodebuild test -scheme LogicCasebookEngineTests \
+  -destination "platform=iOS Simulator,name=iPhone 16"
+              # Runs LogicCasebookEngineTests against a simulator. Plain
+              # `swift test` builds the *whole* package for the host (macOS)
+              # first, including LogicCasebookUI -- and since Package.swift
+              # declares no macOS platform, that build falls back to an
+              # ancient implicit deployment target where ordinary SwiftUI
+              # doesn't exist yet. Building through xcodebuild against iOS
+              # avoids that entirely. Swap in whatever simulator is
+              # installed locally.
 
 xcodebuild build -scheme LogicCasebookUI -destination "generic/platform=iOS"
               # LogicCasebookUI: SwiftUI/SwiftData/StoreKit 2 use iOS-only
@@ -41,7 +49,9 @@ xcodebuild build -scheme LogicCasebookUI -destination "generic/platform=iOS"
               # compiled against the iOS SDK rather than the host's.
 ```
 
-This requires an Apple Swift toolchain (Xcode 15+ on macOS). **This package
+This requires an Xcode 16+ toolchain (the test target uses Swift Testing,
+`import Testing`, which Xcode 15's bundled Swift 5.10 doesn't include). **This
+package
 has not been compiled in the environment that wrote it** — that environment
 is Linux with no Apple toolchain available at all, so none of this can be
 verified there even in principle. `.github/workflows/ios-ci.yml` runs both

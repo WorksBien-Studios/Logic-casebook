@@ -13,20 +13,22 @@ on:
 
 jobs:
   engine-tests:
-    # LogicCasebookEngine and LogicCasebookContent are pure Foundation, no
-    # UIKit/SwiftUI dependency, so they build and test directly on the
-    # runner's host (macOS) without needing a simulator.
-    #
-    # The test target uses Swift Testing (`import Testing`, `@Test`), per
-    # the locked spec's "Automated verification: Swift Testing" (section 5)
-    # -- this needs an Xcode 16+ toolchain. Pin `xcode-version` here if the
-    # runner image's default Xcode predates that.
+    # `swift test` builds every target in the package, not just
+    # LogicCasebookEngineTests' own dependencies -- including LogicCasebookUI,
+    # for the host (macOS). Since Package.swift declares no macOS platform,
+    # that build falls back to an ancient implicit deployment target where
+    # ordinary SwiftUI (Shape, buttonStyle, ...) doesn't exist yet, so plain
+    # `swift test` fails on this package regardless of what the test target
+    # itself needs. Running through xcodebuild against an iOS Simulator
+    # destination builds everything against the iOS SDK instead, where all
+    # of this code is actually meant to run.
     runs-on: macos-14
     defaults:
       run:
         working-directory: ios
     steps:
       - uses: actions/checkout@v4
+
       - name: Select newest available Xcode (Swift Testing needs Xcode 16+)
         run: |
           latest=$(ls -d /Applications/Xcode*.app 2>/dev/null | sort -V | tail -1)
@@ -34,10 +36,25 @@ jobs:
             echo "Selecting $latest"
             sudo xcode-select -s "$latest/Contents/Developer"
           fi
-      - name: Show Swift toolchain
-        run: swift --version
-      - name: swift test
-        run: swift test
+          xcodebuild -version
+
+      - name: Pick an available iOS Simulator
+        id: sim
+        run: |
+          device=$(xcrun simctl list devices available 2>/dev/null \
+            | grep -oE 'iPhone [0-9]+[A-Za-z ]*' | head -1 | sed 's/[[:space:]]*$//')
+          if [ -z "$device" ]; then
+            echo "No iPhone simulator found" >&2
+            xcrun simctl list devices available
+            exit 1
+          fi
+          echo "device=$device" >> "$GITHUB_OUTPUT"
+          echo "Using simulator: $device"
+
+      - name: xcodebuild test -scheme LogicCasebookEngineTests
+        run: >
+          xcodebuild test -scheme LogicCasebookEngineTests
+          -destination "platform=iOS Simulator,name=${{ steps.sim.outputs.device }}"
 
   ui-build:
     # LogicCasebookUI uses SwiftUI, SwiftData and StoreKit 2 iOS-only APIs
