@@ -30,7 +30,9 @@ public struct CategoryValue: Codable, Identifiable, Hashable, Sendable {
     public let nameJA: String
 }
 
-public struct Category: Codable, Identifiable, Hashable, Sendable {
+// Named `CaseCategory`, not `Category` -- the bare name collides with
+// `ObjectiveC.Category`, which is implicitly visible on Apple platforms.
+public struct CaseCategory: Codable, Identifiable, Hashable, Sendable {
     public let id: String
     public let nameJA: String
     public let ordered: Bool
@@ -198,7 +200,7 @@ public struct Case: Codable, Identifiable, Hashable, Sendable {
     public let difficultyScore: Double
     public let estimatedMinutes: Int
     public let isFree: Bool
-    public let categories: [Category]
+    public let categories: [CaseCategory]
     public let clues: [Clue]
     public let solution: CaseSolution
     public let deductionSteps: [DeductionStep]
@@ -211,9 +213,9 @@ public struct Case: Codable, Identifiable, Hashable, Sendable {
 
     /// The sole ordered category (always the last one — see
     /// schema/case-bundle.schema.json and ContentValidator).
-    public var orderedCategory: Category? { categories.last(where: { $0.ordered }) }
+    public var orderedCategory: CaseCategory? { categories.last(where: { $0.ordered }) }
 
-    public var primaryCategory: Category { categories[0] }
+    public var primaryCategory: CaseCategory { categories[0] }
 }
 
 public struct CaseBundle: Codable, Sendable {

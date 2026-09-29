@@ -4,7 +4,7 @@ import Foundation
 /// exhaustive assignment space used to check solution uniqueness. Mirrors
 /// `numeric_context()` in `tools/validate_cases.py`.
 public struct CaseContext: Sendable {
-    public let categories: [Category]
+    public let categories: [CaseCategory]
     /// Number of entities in the primary category (people).
     public let n: Int
     /// Number of categories.

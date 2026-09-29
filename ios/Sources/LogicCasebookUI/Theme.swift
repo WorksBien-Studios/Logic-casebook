@@ -1,4 +1,5 @@
 import SwiftUI
+import LogicCasebookEngine
 
 /// The app's visual language: a warm, calm "casebook" palette per the
 /// locked spec's requirement to keep the experience calm and uncluttered

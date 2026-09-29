@@ -29,7 +29,7 @@ public struct LogicWorkspaceView: View {
         self.gameCase = gameCase
     }
 
-    private var otherCategories: [Category] {
+    private var otherCategories: [CaseCategory] {
         gameCase.categories.filter { $0.id != gameCase.primaryCategory.id }
     }
 
