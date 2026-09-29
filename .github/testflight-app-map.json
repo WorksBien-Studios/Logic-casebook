@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "state": "awaiting_ios_source_and_credential_route",
+  "repository": "lrodeveloperr/Logic-casebook",
+  "bundle_id": "com.worksbienstudios.logiccasebook",
+  "team_id": "49SQ3XQ68Q",
+  "asc_app_id": "6817388232",
+  "credential_alias": "worksbien-primary",
+  "asc_key_id": "",
+  "asc_issuer_id": "",
+  "private_key_secret_name": "ASC_PRIVATE_KEY",
+  "runtime_env": {
+    "key_id": "ASC_KEY_ID",
+    "issuer_id": "ASC_ISSUER_ID",
+    "private_key": "ASC_PRIVATE_KEY"
+  },
+  "beta_group_id": "ef8f600d-1b25-4354-9e3a-7f8e8c556218",
+  "listing_platform": "IOS",
+  "marketing_version": "1.0",
+  "xcode_container_type": "",
+  "xcode_container": "",
+  "scheme": "",
+  "required_check_name": "ui-build",
+  "signing_style": "automatic",
+  "export_method": "app-store-connect",
+  "signing_certificate": "Apple Distribution"
+}
