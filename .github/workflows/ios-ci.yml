@@ -51,16 +51,6 @@ jobs:
         # runtime, it just fails to resolve. Pick a UDID straight out of a
         # runtime's own device list instead, so the pairing is guaranteed to
         # exist.
-        #
-        # Deliberately the OLDEST available runtime, not the newest: with
-        # 18.2 (the newest installed here), StoreKitTest's local daemon
-        # itself failed enumerating transaction history ("Error Domain=
-        # AMSErrorDomain Code=301 Invalid Status Code" against its own
-        # http://localhost/inApps/v1/history) -- a very recently released
-        # runtime's StoreKit test daemon is a plausible place for that kind
-        # of immaturity to show up. Swift Testing's own version requirement
-        # is about the Xcode/Swift toolchain (selected above), not the
-        # simulator OS, so this doesn't reintroduce that problem.
         run: |
           udid=$(python3 -c "
           import json, subprocess
@@ -79,6 +69,20 @@ jobs:
           fi
           echo "udid=$udid" >> "$GITHUB_OUTPUT"
           echo "Using simulator udid: $udid"
+
+      - name: Erase the simulator to a clean first-boot state
+        # StoreKitTest's local daemon failed enumerating transaction history
+        # ("Error Domain=AMSErrorDomain Code=301 Invalid Status Code"
+        # against its own http://localhost/inApps/history) identically on
+        # both the oldest and newest installed runtimes, ruling out runtime
+        # version as the cause. AMSErrorDomain 301 against that endpoint is
+        # a documented symptom of stale/pre-existing simulator state
+        # (leftover Account/Media Services or receipt data baked into the
+        # runner image's pre-created simulators); erasing gives the daemon a
+        # clean slate before the tests that depend on it run.
+        run: |
+          xcrun simctl shutdown "${{ steps.sim.outputs.udid }}" || true
+          xcrun simctl erase "${{ steps.sim.outputs.udid }}"
 
       - name: xcodebuild test -scheme LogicCasebook-Package
         # Neither test target is a declared package product, so SPM's
