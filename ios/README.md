@@ -31,12 +31,19 @@ step is).
   against a checked-in StoreKit Testing configuration
   (`Resources/Configuration.storekit`) via `StoreKitTest.SKTestSession` —
   Apple's supported way to drive real StoreKit 2 APIs in an automated test
-  without an App Store sandbox account. Covers product loading and
-  correctly recognizing a completed transaction (`refreshEntitlements()`,
-  `restorePurchases()`), simulated headlessly via `SKTestSession.buyProduct`;
-  `Product.purchase()`'s own confirmation UI needs a foreground window scene
-  this unit-test bundle doesn't have, so that specific call path is only
-  covered by manual Xcode simulator testing (below).
+  without an App Store sandbox account. `testProductLoads` passes in CI.
+  The other two tests (a purchase flipping `isFullUnlockPurchased`, and
+  `restorePurchases()` recovering it on a fresh `EntitlementStore`) are
+  currently `XCTSkip`ped: on GitHub Actions runners, anything that
+  enumerates `Transaction.currentEntitlements` hangs or fails against
+  StoreKitTest's own local daemon (`AMSErrorDomain Code=301` against its
+  transaction-history endpoint), reproduced identically across iOS runtime
+  version, simulator freshness, and host OS image (`macos-14`/`macos-15`) —
+  a runner limitation, not a bug in `EntitlementStore` or these tests. See
+  the comment at the top of `EntitlementStoreTests.swift` to re-enable them
+  somewhere that limitation doesn't apply (a real device, a local Mac, or a
+  different CI provider). Until then, purchase/restore is verified only by
+  manual Xcode simulator testing (below).
 
 ## Building and testing
 
