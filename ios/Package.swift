@@ -4,7 +4,9 @@ import PackageDescription
 let package = Package(
     name: "LogicCasebook",
     platforms: [
-        .iOS(.v18)
+        // The string form: `.v18` needs swift-tools-version 6.0, which would
+        // also switch every target to Swift 6 language mode.
+        .iOS("18.0")
     ],
     products: [
         .library(name: "LogicCasebookEngine", targets: ["LogicCasebookEngine"]),
