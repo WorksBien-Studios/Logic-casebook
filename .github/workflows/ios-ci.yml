@@ -112,5 +112,15 @@ jobs:
         working-directory: ios
     steps:
       - uses: actions/checkout@v4
+
+      - name: Select newest available Xcode (the package targets iOS 18)
+        run: |
+          latest=$(ls -d /Applications/Xcode*.app 2>/dev/null | sort -V | tail -1)
+          if [ -n "$latest" ]; then
+            echo "Selecting $latest"
+            sudo xcode-select -s "$latest/Contents/Developer"
+          fi
+          xcodebuild -version
+
       - name: xcodebuild -scheme LogicCasebookUI (generic iOS destination)
         run: xcodebuild build -scheme LogicCasebookUI -destination "generic/platform=iOS"
