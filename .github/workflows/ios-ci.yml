@@ -40,16 +40,31 @@ jobs:
 
       - name: Pick an available iOS Simulator
         id: sim
+        # `-destination "platform=iOS Simulator,name=<X>"` implicitly means
+        # OS:latest, which failed here: this runner has "iPhone 15 Pro"
+        # instances but only up to iOS 17.5, while the newest installed
+        # runtime is 18.2 -- name+"latest" doesn't fall back to an older
+        # runtime, it just fails to resolve. Pick a UDID straight out of the
+        # newest iOS runtime's own device list instead, so the pairing is
+        # guaranteed to exist.
         run: |
-          device=$(xcrun simctl list devices available 2>/dev/null \
-            | grep -oE 'iPhone [0-9]+[A-Za-z ]*' | head -1 | sed 's/[[:space:]]*$//')
-          if [ -z "$device" ]; then
+          udid=$(python3 -c "
+          import json, subprocess
+          data = json.loads(subprocess.check_output(['xcrun', 'simctl', 'list', 'devices', 'available', '-j']))
+          ios_runtimes = sorted(k for k in data['devices'] if 'SimRuntime.iOS-' in k)
+          for runtime in reversed(ios_runtimes):
+              for d in data['devices'][runtime]:
+                  if d['name'].startswith('iPhone'):
+                      print(d['udid'])
+                      raise SystemExit
+          ")
+          if [ -z "$udid" ]; then
             echo "No iPhone simulator found" >&2
             xcrun simctl list devices available
             exit 1
           fi
-          echo "device=$device" >> "$GITHUB_OUTPUT"
-          echo "Using simulator: $device"
+          echo "udid=$udid" >> "$GITHUB_OUTPUT"
+          echo "Using simulator udid: $udid"
 
       - name: xcodebuild test -scheme LogicCasebook-Package
         # LogicCasebookEngineTests isn't a declared package product, so SPM's
@@ -57,7 +72,7 @@ jobs:
         # -- only the umbrella "<PackageName>-Package" scheme runs it.
         run: >
           xcodebuild test -scheme LogicCasebook-Package
-          -destination "platform=iOS Simulator,name=${{ steps.sim.outputs.device }}"
+          -destination "id=${{ steps.sim.outputs.udid }}"
 
   ui-build:
     # LogicCasebookUI uses SwiftUI, SwiftData and StoreKit 2 iOS-only APIs
