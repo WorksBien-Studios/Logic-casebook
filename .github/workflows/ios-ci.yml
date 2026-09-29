@@ -48,15 +48,25 @@ jobs:
         # OS:latest, which failed here: this runner has "iPhone 15 Pro"
         # instances but only up to iOS 17.5, while the newest installed
         # runtime is 18.2 -- name+"latest" doesn't fall back to an older
-        # runtime, it just fails to resolve. Pick a UDID straight out of the
-        # newest iOS runtime's own device list instead, so the pairing is
-        # guaranteed to exist.
+        # runtime, it just fails to resolve. Pick a UDID straight out of a
+        # runtime's own device list instead, so the pairing is guaranteed to
+        # exist.
+        #
+        # Deliberately the OLDEST available runtime, not the newest: with
+        # 18.2 (the newest installed here), StoreKitTest's local daemon
+        # itself failed enumerating transaction history ("Error Domain=
+        # AMSErrorDomain Code=301 Invalid Status Code" against its own
+        # http://localhost/inApps/v1/history) -- a very recently released
+        # runtime's StoreKit test daemon is a plausible place for that kind
+        # of immaturity to show up. Swift Testing's own version requirement
+        # is about the Xcode/Swift toolchain (selected above), not the
+        # simulator OS, so this doesn't reintroduce that problem.
         run: |
           udid=$(python3 -c "
           import json, subprocess
           data = json.loads(subprocess.check_output(['xcrun', 'simctl', 'list', 'devices', 'available', '-j']))
           ios_runtimes = sorted(k for k in data['devices'] if 'SimRuntime.iOS-' in k)
-          for runtime in reversed(ios_runtimes):
+          for runtime in ios_runtimes:
               for d in data['devices'][runtime]:
                   if d['name'].startswith('iPhone'):
                       print(d['udid'])
