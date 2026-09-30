@@ -6,10 +6,12 @@ on:
     paths:
       - "ios/**"
       - ".github/workflows/ios-ci.yml"
+      - "scripts/asc_delivery.rb"
   pull_request:
     paths:
       - "ios/**"
       - ".github/workflows/ios-ci.yml"
+      - "scripts/asc_delivery.rb"
 
 jobs:
   package-tests:
