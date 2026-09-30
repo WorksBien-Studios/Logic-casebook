@@ -450,7 +450,7 @@ function strip(n,cl){
   const [ln,ka]=nameOf(n,cl.args.left), [rn,kb]=nameOf(n,cl.args.right);
   const oc=FREE[n].categories.find(c=>c.id===cl.args.orderedCategory);
   let mid, lab;
-  if(cl.type==='before'){ mid='<i class="ln dash"></i><i class="ln" style="width:10px;margin-left:-2px"></i>'; lab='どこかで前'; }
+  if(cl.type==='before'){ mid='<i class="ln dash"></i><i class="ln" style="width:10px;margin-left:-2px"></i>'; lab='前のどこか'; }
   else if(cl.type==='immediatelyBefore'){ mid='<i class="ln" style="width:12px"></i>'; lab='すぐ前（隣）'; }
   else { const k=cl.args.offset||2; mid='<i class="sl"></i>'.repeat(Math.max(0,k-1)).replace(/<i class="sl"><\/i>/g,'<i class="sl"></i><i class="ln dash" style="width:8px"></i>')+'<i class="ln" style="width:10px"></i>'; lab=k+'つ前'; }
   return `<div class="strip" aria-hidden="true"><span class="n" style="color:var(--c${ka});border-color:var(--c${ka})">${esc(ln)}</span>${mid}<span class="n" style="color:var(--c${kb});border-color:var(--c${kb})">${esc(rn)}</span><small>${esc(oc.nameJA)}：${lab}</small></div>`;
@@ -564,7 +564,7 @@ function libraryList(){
   const lab=i=>`${rows[i*PER][0]}–${rows[Math.min(rows.length,(i+1)*PER)-1][0]}`;
   const opts=Array.from({length:nv},(_,i)=>`<option value="${i}" ${i===v?'selected':''}>${rows.slice(i*PER,(i+1)*PER).every(d=>done(d[0]))?'✓ ':''}第${i+1}巻 ・ ${lab(i)}</option>`).join('');
   const pager=`<div class="pager"><button data-act="vol:${v-1}" ${v?'':'disabled'} aria-label="前の巻" style="transform:scaleX(-1)">${chev}</button><label class="vsel"><select id="volsel" aria-label="巻を選ぶ">${opts}</select><span>第${v+1}巻 ・ ${lab(v)}</span><small>解決 ${solved} / ${rows.length}</small></label><button data-act="vol:${v+1}" ${v<nv-1?'':'disabled'} aria-label="次の巻">${chev}</button></div>`;
-  const nx=next>=0&&Math.floor(next/PER)!==v?`<button data-act="vol:${Math.floor(next/PER)}" class="nxt">次の未解決 第${Math.floor(next/PER)+1}巻 ${chev}</button>`:'<span></span>';
+  const nx=next>=0&&Math.floor(next/PER)!==v?`<button data-act="vol:${Math.floor(next/PER)}" class="nxt">次の未解決へ（第${Math.floor(next/PER)+1}巻） ${chev}</button>`:'<span></span>';
   const buy=paid&&!S.own?`<button data-act="buy">${free?`残り${paid}件は ¥1,800 で解放`:'¥1,800 で解放'}</button>`:'';
   const note=(nx.length>20||buy)?`<div class="sect" style="margin-top:6px">${nx}${buy}</div>`:'';
   return `${pager}${note}<div class="group clist">${vr.map(d=>crowHTML(d[0])).join('')}</div><div style="height:16px"></div>`;
@@ -624,7 +624,7 @@ function overlays(n){
     const k=nextStep(n), c=FREE[n];
     if(k<0) h+=`<div class="hint"><div class="grab"></div><h4>ヒント</h4><div class="ex">すべての手順が盤面に反映されています。「解答を確認」を押してください。</div><div class="acts"><button class="btn" data-act="hintclose">閉じる</button></div></div>`;
     else { const st=c.deductionSteps[k];
-      h+=`<div class="hint"><div class="grab"></div><h4>次の推論 ・ ${k+1}/${c.deductionSteps.length}</h4>
+      h+=`<div class="hint"><div class="grab"></div><h4>次の一手 ・ ${k+1}/${c.deductionSteps.length}</h4>
       ${st.clueIDs.map(id=>{const i=c.clues.findIndex(x=>x.id===id);return clueRow(n,c.clues[i],i,{plain:true})}).join('')}
       <div class="ex">${clueHTML(n,st.explanationJA.replace(/^手がかり[\d・、]+を使うと、/,''))}</div>
       <div class="facts">${st.deducedFacts.map(f=>`<span>${esc(nameOf(n,f.left)[0])} ＝ ${esc(nameOf(n,f.right)[0])}</span>`).join('')}</div>
@@ -638,8 +638,8 @@ function doneScreen(n){
   const c=FREE[n], w=W(n), perfect=w.hints===0&&w.checks<=1;
   const sec=Math.max(1,Math.round((Date.now()-w.start)/1000)), mm=Math.floor(sec/60), ss=String(sec%60).padStart(2,'0');
   const sp=Math.log(c.proof||36);
-  return `${nav({title:''})}<div class="scroll"><div class="done"><div class="hero"><div class="seal ${perfect?'perfect':''}">解決<small>${perfect?'完全':''}</small></div><h2>${esc(c.titleJA)}</h2><span style="font-size:13.5px;color:var(--d-soft)">${perfect?'ヒントも誤答もなしで解決しました。':'事件を解決しました。'}</span></div>
-   <div class="stats"><div><b>${w.hints}</b><small>ヒント</small></div><div><b>${w.checks}</b><small>確認</small></div><div><b>${mm}:${ss}</b><small>所要時間（参考）</small></div></div>
+  return `${nav({title:''})}<div class="scroll"><div class="done"><div class="hero"><div class="seal ${perfect?'perfect':''}">解決<small>${perfect?'完全':''}</small></div><h2>${esc(c.titleJA)}</h2><span style="font-size:13.5px;color:var(--d-soft)">${perfect?'ヒントも誤答もなく解決しました。':'事件を解決しました。'}</span></div>
+   <div class="stats"><div><b>${w.hints}</b><small>ヒント</small></div><div><b>${w.checks}</b><small>解答確認</small></div><div><b>${mm}:${ss}</b><small>所要時間（参考）</small></div></div>
    <div class="steps"><div style="font-size:12px;color:var(--d-soft);padding:8px 0 2px;font-weight:500">推理の道筋</div>${c.deductionSteps.map(s=>`<div class="step"><div class="h"><span>手順 ${s.step} ・ 手がかり ${s.clueIDs.map(x=>+x.slice(-2)).join('・')}</span><span>${s.candidateCountBefore} → ${s.candidateCountAfter}通り</span></div><div class="nb"><i style="width:${Math.max(3,Math.log(Math.max(1,s.candidateCountAfter))/sp*100)}%"></i></div></div>`).join('')}</div>
    </div></div><div class="bottomcta"><button class="cta" data-act="next">次の事件へ</button><button class="cta ghost" style="height:40px" data-act="replay">もう一度解く</button><button class="cta ghost" style="height:40px" data-act="tolib">事件簿に戻る</button></div>`;
 }
@@ -647,21 +647,21 @@ function purchaseSheet(){
   const li=t=>`<li>${ic('check')}<span>${t}</span></li>`;
   return `<div class="scrim" data-act="sheetclose"></div><div class="sheet" role="dialog" aria-label="全編を解放"><div class="grab"></div><h3>全1,000事件を解放</h3>
    <div class="price">¥1,800<small>買い切り ・ 1回のお支払い</small></div>
-   <ul class="ul">${li('無料の30事件に加え、残り970事件が遊べます')}${li('サブスクリプションではありません')}${li('広告は表示しません')}${li('すべてオフラインで遊べます')}${li('無料事件の進捗はそのまま引き継がれます')}</ul>
+   <ul class="ul">${li('無料の30事件に加えて、残り970事件も遊べます')}${li('サブスクリプションではありません')}${li('広告は表示しません')}${li('すべてオフラインで遊べます')}${li('無料事件の進捗はそのまま引き継がれます')}</ul>
    <button class="cta" style="margin:0;width:100%" data-act="buyok">購入する</button>
    <div style="display:flex;justify-content:center;gap:24px"><button style="color:var(--d-acc);font-weight:700" data-act="restore">購入を復元</button><button style="color:var(--d-soft)" data-act="sheetclose">あとで</button></div>
-   <div class="fine">価格はApp Storeから取得した表示です。通信できない場合も無料の事件は遊べます。</div></div>`;
+   <div class="fine">価格はApp Storeから取得して表示しています。通信できない場合でも、無料の事件は遊べます。</div></div>`;
 }
 function briefSheet(n){ return `<div class="scrim" data-act="sheetclose"></div><div class="sheet" style="padding-inline:0"><div class="grab"></div>${briefScreen(n,true)}<div style="padding:0 16px"><button class="cta" style="margin:0;width:100%" data-act="sheetclose">盤面に戻る</button></div></div>`; }
 function tutorialScreen(){
   const pages=[
    ['小さな事件で、ルールを確かめましょう','手がかりだけを頼りに、人・物・時刻などの正しい組み合わせを見つけます。推測は必要ありません。全部で1分ほどです。',`<div class="clueq"><small style="display:block;font-size:11.5px;color:var(--d-acc);font-weight:700;letter-spacing:.06em">手がかり</small>「凛」の傘は、「葵」の傘より先に返されました。</div><div class="mini"><span></span>${['傘','鍵','帽子'].map(x=>`<span class="cl">${x}</span>`).join('')}${['凛','葵','千尋'].map((r,i)=>`<span class="rl">${r}</span>${[0,1,2].map(j=>`<span class="mc${i===0?' f':''}${j===0?' l':''}"></span>`).join('')}`).join('')}</div><div style="font-size:13px;color:var(--d-soft)">人と物の組み合わせを、マス目で整理します。</div>`],
-   ['マスは4つの状態を切り替えます','タップするたびに 未入力 → ○ → × → △ の順に変わります。試してみてください。',`<button class="big" data-act="tutcell" aria-label="練習マス">${mark(S.tutCell)||'<span style="color:var(--d-faint);font-size:13px">タップ</span>'}</button><div style="font-size:14px;font-weight:700;color:var(--d-acc)">${['未入力','確定 ○','除外 ×','候補 △'][S.tutCell]}</div><div class="four">${[1,2,3].map(k=>`<div><span>${mark(k)}</span>${['確定','除外','候補'][k-1]}</div>`).join('')}</div>`],
-   ['読んだ手がかりは、チェックして整理','手がかりをタップすると確認済みになります。間違えたら「元に戻す」、行き詰まったら「ヒント」。ヒントは次の一手だけを教えます。',`<div class="four">${[['undo','元に戻す'],['redo','やり直す'],['bulb','ヒント']].map(([i,l])=>`<div><span style="color:var(--d-acc)">${ic(i)}</span>${l}</div>`).join('')}</div>`],
-   ['準備ができました','無料で30事件を遊べます。広告はなく、タイマーも制限もありません。いつでもヘルプから、この説明を見返せます。',`<div class="fact"><div><b>30</b>無料の事件</div><div><b>0</b>広告</div><div><b>1,800円</b>買い切り</div></div>`]
+   ['マスは4つの状態に切り替わります','タップするたびに 未入力 → ○ → × → △ の順に変わります。試してみてください。',`<button class="big" data-act="tutcell" aria-label="練習マス">${mark(S.tutCell)||'<span style="color:var(--d-faint);font-size:13px">タップ</span>'}</button><div style="font-size:14px;font-weight:700;color:var(--d-acc)">${['未入力','確定 ○','除外 ×','候補 △'][S.tutCell]}</div><div class="four">${[1,2,3].map(k=>`<div><span>${mark(k)}</span>${['確定','除外','候補'][k-1]}</div>`).join('')}</div>`],
+   ['読んだ手がかりは、チェックして整理しましょう','手がかりをタップすると確認済みになります。間違えたら「元に戻す」、行き詰まったら「ヒント」。ヒントは次の一手だけを教えます。',`<div class="four">${[['undo','元に戻す'],['redo','やり直す'],['bulb','ヒント']].map(([i,l])=>`<div><span style="color:var(--d-acc)">${ic(i)}</span>${l}</div>`).join('')}</div>`],
+   ['準備ができました','無料で30事件が遊べます。広告はなく、タイマーや時間制限もありません。いつでもヘルプから、この説明を見返せます。',`<div class="fact"><div><b>30</b>無料の事件</div><div><b>0</b>広告</div><div><b>1,800円</b>買い切り</div></div>`]
   ];
   const p=pages[S.tut], last=S.tut===3;
-  return `<button class="skip" data-act="tutskip">スキップ</button><div class="page" style="padding-top:${S.device==='phone'?54:28}px"><div class="tut" style="${S.device!=='phone'?'max-width:600px;margin:0 auto;width:100%':''}"><div class="dots2">${pages.map((_,i)=>`<i class="${i===S.tut?'on':''}"></i>`).join('')}</div><h2>${p[0]}</h2><p>${p[1]}</p>${p[2]}</div><div class="bottomcta" style="background:none;border:0"><button class="cta" style="${S.device!=='phone'?'max-width:420px;align-self:center':''}" data-act="tutnext">${last?'事件簿をひらく':'次へ'}</button></div></div>`;
+  return `<button class="skip" data-act="tutskip">スキップ</button><div class="page" style="padding-top:${S.device==='phone'?54:28}px"><div class="tut" style="${S.device!=='phone'?'max-width:600px;margin:0 auto;width:100%':''}"><div class="dots2">${pages.map((_,i)=>`<i class="${i===S.tut?'on':''}"></i>`).join('')}</div><h2>${p[0]}</h2><p>${p[1]}</p>${p[2]}</div><div class="bottomcta" style="background:none;border:0"><button class="cta" style="${S.device!=='phone'?'max-width:420px;align-self:center':''}" data-act="tutnext">${last?'事件簿を開く':'次へ'}</button></div></div>`;
 }
 
 /* ---------- compose ---------- */

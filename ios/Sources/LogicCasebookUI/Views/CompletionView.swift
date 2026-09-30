@@ -39,14 +39,14 @@ public struct CompletionView: View {
                     .font(Theme.display(24))
                     .multilineTextAlignment(.center)
                     .foregroundStyle(Theme.ink)
-                Text(isPerfect ? "ヒントも誤答もなしで解決しました。" : "事件を解決しました。")
+                Text(isPerfect ? "ヒントも誤答もなく解決しました。" : "事件を解決しました。")
                     .font(.subheadline)
                     .foregroundStyle(Theme.inkSoft)
 
                 HStack(spacing: 0) {
                     stat("\(hintsUsed)", "ヒント")
                     Divider().frame(height: 36)
-                    stat("\(validationAttempts)", "確認")
+                    stat("\(validationAttempts)", "解答確認")
                     Divider().frame(height: 36)
                     stat(elapsedLabel, "所要時間（参考）")
                 }

@@ -50,6 +50,7 @@ public struct LogicWorkspaceView: View {
                         onUndo: { model.undo() },
                         onHint: { model.requestHint() }
                     )
+                    .frame(maxWidth: 600)
                     .padding(12)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
@@ -149,7 +150,7 @@ public struct LogicWorkspaceView: View {
                 .padding(20)
             }
             Divider()
-            clueList.frame(width: 360)
+            clueList.frame(width: WorkspaceLayout.cluePaneWidth)
         }
     }
 
@@ -235,27 +236,40 @@ public struct LogicWorkspaceView: View {
     }
 }
 
-/// Picks cell size and header sizes for the available width. Cells are never
-/// below 44pt; the board scrolls sideways instead if a phone is too narrow.
+/// Picks cell size and header sizes for the available width, in points:
+/// - iPhone (under 600pt): 44pt cells; the board scrolls sideways if too narrow.
+/// - iPad one column (600 to 900pt, e.g. iPad mini portrait at 744pt): 72pt
+///   cells and larger header type inside the 680pt readable column.
+/// - iPad two column (900pt and up, e.g. an 11-inch iPad in landscape at
+///   1194pt): every pair as a staircase beside the 360pt clue pane, with the
+///   cell fitted to the board pane (40 to 56pt) so nothing overflows or
+///   leaves dead space.
 private struct WorkspaceLayout {
+    static let cluePaneWidth: CGFloat = 360
+
     let isWide: Bool
     let metrics: GridMetrics
 
     init(width: CGFloat, gameCase: Case) {
         let wide = width >= 900
         let roomy = width >= 600
-        let probe = GridMetrics(gameCase: gameCase, cell: 44, characterWidth: roomy ? 17 : 15)
+        let characterWidth: CGFloat = wide ? 14 : roomy ? 19 : 15
+        let probe = GridMetrics(gameCase: gameCase, cell: 44, characterWidth: characterWidth)
         let values = CGFloat(gameCase.primaryCategory.values.count)
+        let categories = CGFloat(gameCase.categories.count)
         let resolvedCell: CGFloat
         if wide {
-            resolvedCell = 48
-        } else {
+            // board pane minus its padding, row headers and the gaps between pair columns
+            let pane = width - Self.cluePaneWidth - 40 - probe.rowHeaderWidth - (categories - 1) * 10
+            resolvedCell = min(56, max(40, (pane / (values * (categories - 1))).rounded(.down)))
+        } else if roomy {
             let available = min(width, 680) - 24 - 20 - probe.rowHeaderWidth
-            let cap: CGFloat = roomy ? 56 : 44
-            resolvedCell = min(cap, max(44, (available / values).rounded(.down)))
+            resolvedCell = min(72, max(44, (available / values).rounded(.down)))
+        } else {
+            resolvedCell = 44
         }
         isWide = wide
-        metrics = GridMetrics(gameCase: gameCase, cell: resolvedCell, characterWidth: roomy ? 17 : 15)
+        metrics = GridMetrics(gameCase: gameCase, cell: resolvedCell, characterWidth: characterWidth)
     }
 }
 
@@ -321,7 +335,7 @@ private struct HintSheetView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
                 if let step {
-                    Text("次の推論 ・ \(step.step)/\(gameCase.deductionSteps.count)")
+                    Text("次の一手 ・ \(step.step)/\(gameCase.deductionSteps.count)")
                         .font(.footnote.weight(.bold))
                         .foregroundStyle(Theme.accent)
                     ForEach(step.clueIDs, id: \.self) { id in
