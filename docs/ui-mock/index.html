@@ -57,12 +57,12 @@ header.top p{margin:4px 0 0;color:var(--mut);font-size:.85rem;max-width:60ch}
 .scaler{position:relative}
 .dev{position:absolute;left:0;top:0;transform-origin:0 0;background:#0c0b0a;padding:11px;box-shadow:0 24px 60px rgba(0,0,0,.28),0 0 0 2px #2a2724 inset}
 .dev.phone{width:415px;height:874px;border-radius:64px}
-.dev.pad{width:1046px;height:790px;border-radius:38px}
-.dev.one{width:856px;height:1216px;border-radius:44px}
+.dev.pad{width:1216px;height:856px;border-radius:38px}
+.dev.one{width:766px;height:1155px;border-radius:44px}
 .scr{position:relative;overflow:hidden;background:var(--d-bg);color:var(--d-ink);font-family:var(--sans);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
 .phone .scr{width:393px;height:852px;border-radius:53px}
-.pad .scr{width:1024px;height:768px;border-radius:27px}
-.one .scr{width:834px;height:1194px;border-radius:33px;font-size:18px}
+.pad .scr{width:1194px;height:834px;border-radius:27px}
+.one .scr{width:744px;height:1133px;border-radius:33px;font-size:18px}
 .island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:34px;border-radius:20px;background:#000;z-index:60}
 .pad .island,.one .island{display:none}
 .status{position:absolute;inset:0 0 auto 0;height:54px;display:flex;justify-content:space-between;align-items:center;padding:6px 34px 0 44px;font-weight:700;font-size:16px;z-index:50;pointer-events:none}
@@ -85,9 +85,9 @@ header.top p{margin:4px 0 0;color:var(--mut);font-size:.85rem;max-width:60ch}
 .one .scroll>*,.one .clues>*,.one .sf,.one .seg-ios,.one .gridcard,.one .large,.one .brief,.one .cont,.one .cta,.one .group,.one .sect,.one .sumline,.one .bar,.one .hl2,.one .done,.one .tut,.one .stats,.one .steps{max-width:660px;margin-inline:auto;width:100%}
 .one .gridcard{width:calc(100% - 24px);max-width:660px;margin-top:10px}
 .one .clues{padding-inline:0}.one .clues>*{width:calc(100% - 24px)}
-.one .ch,.one .rh{font-size:15.5px}
+.one .ch,.one .rh{font-size:17px}
 .one .clue .tx{font-size:17px}.one .clue .kind{font-size:12px}
-.one .cell svg{width:32px;height:32px}
+.one .cell svg{width:40px;height:40px}
 .one .toolbar,.one .bottomcta{padding-bottom:22px}
 .one .toolbar{justify-content:center;gap:10px}.one .toolbar .sp{flex:0 0 24px}
 .one .sheet{left:50%;right:auto;transform:translateX(-50%);width:min(100%,640px);padding-bottom:30px}
@@ -295,6 +295,7 @@ b.e0{color:var(--c0)}b.e1{color:var(--c1)}b.e2{color:var(--c2)}b.e3{color:var(--
 .tag{display:inline-block;padding:0 7px;border-radius:5px;font-size:.68rem;font-weight:700;border:1px solid}
 .tag.native{color:var(--tag-n)}.tag.shell{color:var(--tag-s)}.tag.custom{color:var(--tag-c)}
 details.aud{border:1px solid var(--line);border-radius:12px;background:var(--card);padding:10px 14px}
+table.ref{border-collapse:collapse;font-size:.78rem;margin-top:8px;width:100%;min-width:560px}table.ref th{text-align:left;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);padding:4px 8px 4px 0}table.ref td{padding:6px 10px 6px 0;border-top:1px solid var(--line);vertical-align:top}
 details.aud summary{cursor:pointer;font-weight:700;font-size:.9rem}
 .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:10px}
 .two h4{margin:0 0 4px;font-size:.78rem;letter-spacing:.05em}
@@ -310,7 +311,7 @@ details.aud summary{cursor:pointer;font-weight:700;font-size:.9rem}
       <p>Mock only, no engine wired. Uses the 30 free cases from the real bundle, so every clue, grid and hint is real content. Built on the iOS 18 shell layout: tab bar on iPhone, sidebar on iPad.</p>
     </div>
     <div class="ctl">
-      <div class="seg" role="group" aria-label="Device"><button data-act="device:phone" aria-pressed="true">iPhone</button><button data-act="device:pad" aria-pressed="false">iPad split</button><button data-act="device:one" aria-pressed="false">iPad 1-column</button></div>
+      <div class="seg" role="group" aria-label="Device"><button data-act="device:phone" aria-pressed="true">iPhone</button><button data-act="device:pad" aria-pressed="false">iPad 2-column</button><button data-act="device:one" aria-pressed="false">iPad mini 1-column</button></div>
       <div class="seg" role="group" aria-label="Appearance"><button data-act="theme:auto" aria-pressed="true">Auto</button><button data-act="theme:light" aria-pressed="false">Light</button><button data-act="theme:dark" aria-pressed="false">Dark</button></div>
       <div class="seg" role="group" aria-label="Purchase state"><button data-act="own:0" aria-pressed="true">Free</button><button data-act="own:1" aria-pressed="false">Unlocked</button></div>
     </div>
@@ -432,7 +433,8 @@ function clueRow(n,cl,idx,opts={}){
 function dims(n){
   const c=FREE[n], V=c.categories[0].values.length; const len=s=>s.replace(/\d{1,2}/g,'x').length;
   let rh=0, ch=0; c.categories.forEach(cat=>cat.values.forEach(v=>{ rh=Math.max(rh,len(v.nameJA)); ch=Math.max(ch,len(v.nameJA)); }));
-  return {cs:S.device==='one'?56:44, rh:Math.max(64,rh*(S.device==='one'?17:14)+22), chh:Math.max(62,ch*(S.device==='one'?17:14)+16), V};
+  const N=c.categories.length, rhp=Math.max(64,rh*14+22), padCs=Math.max(40,Math.min(56,Math.floor((1194-360-36-rhp-(N-1)*10)/(V*(N-1)))));
+  return {cs:S.device==='one'?72:S.device==='pad'?padCs:44, rh:Math.max(64,rh*(S.device==='one'?19:14)+22), chh:Math.max(62,ch*(S.device==='one'?19:14)+16), V};
 }
 /* Vertical (tate) labels built per character, as SwiftUI would: no writing-mode needed. Digit runs stay together, the long-vowel mark is rotated. */
 const tate=s=>(s.match(/\d{1,2}|./g)||[]).map(t=>`<span${t==='ー'?' class="lv"':''}>${esc(t)}</span>`).join('');
@@ -549,7 +551,7 @@ function workScreen(n){
   const cls=`style="--cs:${dm.cs}px;--rh:${dm.rh}px;--chh:${dm.chh}px"`;
   const g=pad?`<div style="flex:1;min-width:0;display:flex;flex-direction:column"><div class="scroll" style="padding:14px 18px;--cs:${dm.cs}px;--rh:${dm.rh}px;--chh:${dm.chh}px"><div class="ghead"><div class="gtitle"><b>${esc(c.titleJA)}</b><div class="legend">${[1,2,3].map(k=>`<span>${mark(k)}${['確定','除外','候補'][k-1]}</span>`).join('')}<span>タップで切替 ・ 長押しで直接選択</span></div></div></div>${staircase(n)}</div>${toolbar(n)}</div>`
    :`<div class="gridcard" ${cls}><div class="ghead">${minimap(n)}<div class="gtitle"><b>${esc(c.categories[a].nameJA)} × ${esc(c.categories[b].nameJA)}</b><div class="legend">${[1,2,3].map(k=>`<span>${mark(k)}${['確定','除外','候補'][k-1]}</span>`).join('')}</div></div></div>${pairBlock(n,a,b)}${!S.tipSeen?'<div class="tip"><span style="flex:1">マスを長押しすると、○ × △ を直接選べます。</span><button data-act="tipclose">閉じる</button></div>':''}</div>`;
-  const clues=`<div class="clues"${pad?' style="width:340px;flex:none;border-left:1px solid var(--d-line);padding-top:14px"':''}><div class="qline">問い：${esc(c.questionJA)}</div><h5><span>手がかり（タップで確認済み）</span><span>${w.checked.size}/${c.clues.length}</span></h5>${c.clues.map((cl,i)=>clueRow(n,cl,i)).join('')}</div>`;
+  const clues=`<div class="clues"${pad?' style="width:360px;flex:none;border-left:1px solid var(--d-line);padding-top:14px"':''}><div class="qline">問い：${esc(c.questionJA)}</div><h5><span>手がかり（タップで確認済み）</span><span>${w.checked.size}/${c.clues.length}</span></h5>${c.clues.map((cl,i)=>clueRow(n,cl,i)).join('')}</div>`;
   const right=`<button data-act="briefsheet" aria-label="概要">${ic('info')}</button>`;
   const inner=pad?`<div style="display:flex;flex:1;min-height:0">${g}${clues}</div>`:`${g}${clues}${toolbar(n)}`;
   return `${nav({back:'事件簿',title:esc(c.titleJA.replace(/（.*）/,'')),sub:'自動保存済み',right})}${inner}${overlays(n)}`;
@@ -645,6 +647,22 @@ const AUD={
  like:['Paper and pencil feel: warm paper ground, a 朱 (vermilion) ○, the real ○ × △ notation.','Japanese that reads cleanly: full reviewed sentences, vertical column heads, no truncated clues.','Serious puzzles from minute one: all four levels visible, free cases in every level.','Quiet progress: a hanko stamp per solved case. No timers, lives or streaks.','One honest price, shown as StoreKit returns it. No ads, offline.'],
  avoid:['Ads, banners, rewarded hints or any ad-like upsell.','Game-show gamification: XP, streaks, energy, confetti, leaderboards.','Cartoon mascots, neon gradients, loud sale badges or countdowns.','Small cells, hidden headers, a grid that needs sideways scrolling.','A paywall, sign-in or tracking prompt before the tutorial.']
 };
+const SCALE=[
+ ['iPhone','393 × 852 pt (iPhone 15 / 16)','Tab bar. One category pair per screen, clues below, toolbar pinned.','44 pt'],
+ ['iPad mini, 1 column','744 × 1133 pt portrait. The same layout serves 810 and 820 pt iPads.','Tab bar. One pair in a 660 pt readable column, 19 pt header type.','72 pt'],
+ ['iPad, 2 column','1194 × 834 pt landscape (11 in). 13 in (1376 × 1032) uses the same layout.','Sidebar hides on the board. Every pair as a staircase beside a 360 pt clue pane.','fitted 40-56 pt'],
+];
+const SRC=[
+ ['App base','ios-18-shell (this owner\'s package)','AppShellView: tab bar on iPhone, sidebar on iPad, search-role tab, TipKit setup.'],
+ ['Navigation, lists, sheets','SwiftUI: NavigationStack, NavigationSplitView, List, presentationDetents','Part of iOS. No licence to buy or track.'],
+ ['Purchase','StoreKit 2 (already in EntitlementStore); ProductView / StoreView optional','Part of iOS. Price text comes from the App Store, so it is always correct.'],
+ ['Cell input and feedback','Menu / contextMenu, sensoryFeedback, TipKit','Part of iOS.'],
+ ['Adaptive scale','ViewThatFits, onGeometryChange (iOS 18), Layout','Part of iOS. Sizes the grid to the pane instead of hard-coding iPad models.'],
+ ['Japanese type','System Hiragino Sans / Mincho (default). Optional: Noto Sans JP, Noto Serif JP','Noto is SIL OFL 1.1: free for commercial use when bundled. Needs the licence file shipped.'],
+ ['Icons','SF Symbols for toolbar and tab icons','Free on Apple platforms. Apple\'s terms bar using them in the app icon or logo.'],
+ ['Sample code','Apple sample code, only as reference','Read each sample\'s LICENSE.txt before copying code.'],
+ ['Custom, no template','Vertical (tate) headers, pair grid, hanko stamps','No suitable free SwiftUI library known for these, so they stay bespoke. Not searched exhaustively.'],
+];
 const ANN={
  tutorial:[
   ['Tutorial (spec 4.1)','Full-screen paged intro, 4 pages, one live cell to tap','custom','Paged TabView(.page) + a real GridCell view','A tap-to-try cell teaches the ○ × △ cycle faster than text. Skip is small but present; no account, tracking or paywall screen.'],
@@ -698,7 +716,9 @@ function renderPanel(){
   const names={tutorial:'Tutorial',library:'Case library',search:'Search',help:'Help',brief:'Case briefing',work:'Logic workspace',check:'Solution check',hint:'Hint sheet',done:'Completion',purchase:'Purchase sheet'};
   $('#panel').innerHTML=`<div><h2>${names[k]}</h2><p class="sub">Each row: the engine part, the UI chosen for it, and why it suits the audience.</p></div>
   <div class="ann">${items.map(([e,u,kind,api,why])=>`<div><div class="eng"><span class="tag ${kind}">${{native:'Native SwiftUI',shell:'iOS 18 shell',custom:'Custom SwiftUI'}[kind]}</span><code>${esc(e)}</code></div><b>${esc(u)}</b><div class="api">${esc(api)}</div><p>${esc(why)}</p></div>`).join('')}</div>
-  <details class="aud" ${S.audOpen===false?'':'open'}><summary>Who this is for: what appeals and what does not</summary><div class="two"><div><h4>APPEALS</h4><ul>${AUD.like.map(x=>`<li>${x}</li>`).join('')}</ul></div><div><h4>DOES NOT APPEAL</h4><ul>${AUD.avoid.map(x=>`<li>${x}</li>`).join('')}</ul></div></div><p class="basis">Basis: the locked spec (sections 2, 4 and 9, which cite Japanese reviews). These are design assumptions, not tested with players yet.</p></details>`;
+  <details class="aud" ${S.audOpen===false?'':'open'}><summary>Who this is for: what appeals and what does not</summary><div class="two"><div><h4>APPEALS</h4><ul>${AUD.like.map(x=>`<li>${x}</li>`).join('')}</ul></div><div><h4>DOES NOT APPEAL</h4><ul>${AUD.avoid.map(x=>`<li>${x}</li>`).join('')}</ul></div></div><p class="basis">Basis: the locked spec (sections 2, 4 and 9, which cite Japanese reviews). These are design assumptions, not tested with players yet.</p></details>
+  <details class="aud"><summary>Device scale: real points, cells fitted to the pane</summary><div style="overflow-x:auto"><table class="ref"><thead><tr><th>Layout</th><th>Screen</th><th>Rule</th><th>Cell</th></tr></thead><tbody>${SCALE.map(r=>`<tr>${r.map(x=>`<td>${esc(x)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>
+  <details class="aud"><summary>Native first: what is used, and the licence position</summary><div style="overflow-x:auto"><table class="ref"><thead><tr><th>Need</th><th>Source</th><th>Note</th></tr></thead><tbody>${SRC.map(r=>`<tr>${r.map(x=>`<td>${esc(x)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`;
 }
 
 /* ---------- jump nav ---------- */
@@ -798,8 +818,8 @@ document.addEventListener('contextmenu',e=>{ if(e.target.closest('.cell')) e.pre
 
 /* ---------- scale to fit ---------- */
 function fit(){
-  const dv=S.device, w=dv==='pad'?1046:dv==='one'?856:415, h=dv==='pad'?790:dv==='one'?1216:874;
-  const ww=$('.wrap').clientWidth||w; const avail=Math.min(ww>980?ww-28-380:ww, dv==='phone'?415:860);
+  const dv=S.device, w=dv==='pad'?1216:dv==='one'?766:415, h=dv==='pad'?856:dv==='one'?1155:874;
+  const ww=$('.wrap').clientWidth||w; const avail=Math.min(ww>980?ww-28-380:ww, dv==='phone'?415:dv==='one'?766:1000);
   const s=Math.min(1,avail/w), sc=$('#scaler');
   sc.style.width=w*s+'px'; sc.style.height=h*s+'px'; $('#dev').style.transform=`scale(${s})`;
 }
