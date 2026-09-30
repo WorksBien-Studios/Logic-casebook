@@ -1,6 +1,6 @@
 # App Store screenshot shell
 
-`index.html` lays out three App Store screenshots (paper background, one headline, device frame) with a labelled empty slot for each real capture. Open it in a browser to preview. `?device=ipad` shows the iPad set.
+`index.html` lays out three App Store screenshots (paper background, one headline, full iPhone/iPad device frame, never cropped) with a labelled empty slot for each real capture. Open it in a browser to preview. `?device=ipad` shows the iPad set.
 
 ## Audience basis (assumption, not player-tested)
 
@@ -15,7 +15,7 @@ Taken from the locked spec (sections 2, 4, 9) and the audience read in `docs/ui-
 ## Use
 
 1. Capture simulator screens (light mode) into `captures/iphone/` (iPhone 16 Pro Max, 1320×2868) and `captures/ipad/` (iPad Pro 13", 2064×2752), using the file names above. Use the free cases only. Captures replace the placeholders automatically.
-2. Export: `node docs/screenshots/render.mjs` writes `out/<device>/<id>.png` at exact App Store size (gitignored). Set `CHROMIUM_PATH` if needed.
+2. Export (fails if a file is not an Apple-accepted size or has an alpha channel; accepted: iPhone 6.9" 1320×2868, 1290×2796, 1260×2736; iPad 13" 2064×2752, 2048×2732): `node docs/screenshots/render.mjs` writes `out/<device>/<id>.png` at exact App Store size (gitignored). Set `CHROMIUM_PATH` if needed.
 3. Run the export on macOS so Hiragino Mincho ProN is used. The Linux fallback fonts only suit layout checks.
 
 Captions live in the `SHOTS` array in `index.html`. Have a native Japanese speaker read them before submission.
