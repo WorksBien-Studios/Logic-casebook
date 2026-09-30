@@ -72,7 +72,8 @@ abort "Build #{BUILD_NUMBER} did not finish processing within 30 minutes." unles
 build_id = build.fetch("id")
 
 relationship = { data: [{ type: "builds", id: build_id }] }
-# Internal groups can auto-distribute a processed build before this call; Apple then returns 422 for the redundant assignment.\nrequest(:post, "/v1/betaGroups/#{BETA_GROUP_ID}/relationships/builds", body: relationship, allow: [409, 422])
+# Internal groups can auto-distribute a processed build before this call; Apple then returns 422 for the redundant assignment.
+request(:post, "/v1/betaGroups/#{BETA_GROUP_ID}/relationships/builds", body: relationship, allow: [409, 422])
 
 query = URI.encode_www_form("filter[platform]" => PLATFORM, "filter[versionString]" => VERSION, "limit" => "20")
 versions = json_get("/v1/apps/#{APP_ID}/appStoreVersions?#{query}").fetch("data")
