@@ -26,7 +26,7 @@ public struct HelpView: View {
                     HStack {
                         ForEach(MarkState.allCases, id: \.self) { state in
                             VStack(spacing: 4) {
-                                MarkGlyph(mark: state, size: 36)
+                                MarkGlyph(mark: state, size: 36, blankAsDash: true)
                                     .frame(width: 52, height: 44)
                                     .background(Theme.surface, in: RoundedRectangle(cornerRadius: 10))
                                     .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(Theme.border, lineWidth: 1))
