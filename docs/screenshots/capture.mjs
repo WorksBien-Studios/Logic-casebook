@@ -1,0 +1,133 @@
+// Live gameplay captures for the screenshot shells.
+//   node docs/screenshots/capture.mjs            (iPhone + iPad)
+//   node docs/screenshots/capture.mjs iphone
+//
+// Drives docs/ui-mock/index.html (the HTML mock of the SwiftUI app, playing the real free cases,
+// real clues, real deduction steps) into three player states and screenshots the app screen only,
+// at the exact App Store pixel size, to captures/<device>/<file>.png:
+//   01-library  advanced library, a player partway through the first volume
+//   02-board    case 381 after four real deduction steps: ○ × △ marks placed, clues ticked
+//   03-hint     the same board with the next deduction (step 5) open in the hint sheet
+// Every mark placed is checked against the case's bundled solution (○ and × must be true, △ is a
+// candidate), so the board never shows a wrong deduction.
+import { chromium } from "playwright";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import os from "node:os";
+import path from "node:path";
+
+const dir = path.dirname(fileURLToPath(import.meta.url));
+// Logical screen size (pt) and pixel ratio that give App Store sizes:
+// iPhone 6.9" 440x956 @3x = 1320x2868, iPad 13" portrait 1032x1376 @2x = 2064x2752.
+const DEVICES = {
+  iphone: { w: 440, h: 956, dpr: 3, mode: "phone" },
+  ipad: { w: 1032, h: 1376, dpr: 2, mode: "pad" },
+};
+const which = process.argv[2] ? [process.argv[2]] : Object.keys(DEVICES);
+
+// The mock hard-codes case 741 as the "continue" case and fits the iPad board to a 1194pt screen.
+// Continue case 381 (the case the board shots show) and fit the board to the real 1032pt width.
+let html = readFileSync(path.join(dir, "../ui-mock/index.html"), "utf8");
+const swaps = [
+  ["const cont=S.progress[741]==='progress'?741:null", "const cont=S.progress[381]==='progress'?381:null"],
+  ['<button class="cont slim" data-act="open:741">', '<button class="cont slim" data-act="open:381">'],
+  ["1194-360-36", "1032-360-36"],
+];
+for (const [from, to] of swaps) {
+  if (!html.includes(from)) throw new Error(`mock changed, cannot patch: ${from}`);
+  html = html.replace(from, to);
+}
+const tmp = path.join(os.tmpdir(), "logic-casebook-mock.html");
+writeFileSync(tmp, html);
+
+const css = (d) => `
+  :root{--serif:"Hiragino Mincho ProN","Noto Serif CJK JP","Noto Serif JP",serif !important;
+        --sans:"Hiragino Sans","Noto Sans CJK JP","Noto Sans JP",system-ui,sans-serif !important}
+  body{padding:0!important;margin:0!important;background:#000!important}
+  header.top,#jump,.panel{display:none!important}
+  .wrap,.main,.stagebox{display:block!important;max-width:none!important;padding:0!important;margin:0!important}
+  .scaler{position:fixed!important;left:0;top:0;width:auto!important;height:auto!important}
+  .dev{position:static!important;transform:none!important;padding:0!important;border-radius:0!important;
+       box-shadow:none!important;width:auto!important;height:auto!important;background:none!important}
+  .scr{width:${d.w}px!important;height:${d.h}px!important;border-radius:0!important}
+  .island{display:none!important}`;
+
+const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
+for (const name of which) {
+  const d = DEVICES[name];
+  mkdirSync(path.join(dir, "captures", name), { recursive: true });
+  const page = await browser.newPage({ viewport: { width: d.w, height: d.h }, deviceScaleFactor: d.dpr });
+  await page.goto(pathToFileURL(tmp).href);
+  await page.addStyleTag({ content: css(d) });
+  await page.evaluate(() => document.fonts.ready);
+
+  // ---- state helpers, run inside the mock ----
+  await page.evaluate((mode) => {
+    window.fit = () => {};
+    ACT.theme("light");
+    ACT.device(mode);
+    ACT.own("0");
+  }, d.mode);
+
+  const shoot = async (file) => {
+    await page.waitForTimeout(250);
+    await page.locator("#scr").screenshot({ path: path.join(dir, "captures", name, file) });
+    console.log("captured", name, file);
+  };
+
+  // 01: library. Advanced level, first volume (381-390): a player who has closed several cases
+  //     (完 = perfect, 済 = solved), one case in progress, two paid cases still locked.
+  await page.evaluate(() => {
+    S.progress = { 381: "progress", 382: "perfect", 383: "solved", 384: "perfect", 385: "solved", 386: "perfect" };
+    S.tab = "library"; S.sideTier = false; S.stack = []; S.sheet = null;
+    S.tier = "a"; S.vol = 0; S.last = 381;
+    render();
+  });
+  await shoot("01-library.png");
+
+  // 02 / 03: case 381 (放送局の番組表), five people x five programmes x five broadcast hours.
+  await page.evaluate(() => {
+    const n = 381;
+    delete S.work[n];
+    const w = W(n);
+    const cats = FREE[n].categories;
+    const at = (a, name) => cats[a].values.findIndex((v) => v.nameJA === name);
+    const put = (m, a, x, b, y) => {
+      const i = at(a, x), j = at(b, y);
+      if (m === 1 && !truth(n, a, i, b, j)) throw new Error(`wrong ○ ${x}/${y}`);
+      if (m === 2 && truth(n, a, i, b, j)) throw new Error(`wrong × ${x}/${y}`);
+      w.marks[mk(a, i, b, j)] = m;
+    };
+    // Real deduction steps 1-4 (clues 10, 8, 6, 7, 4, 5, 1): the engine's own facts, as ○.
+    for (let k = 0; k < 4; k++) applyStep(n, k, true);
+    // × a player writes after those ○: the rest of each ○'s row and column.
+    const P = 0, O = 1, T = 2;
+    for (const [x, y] of [["七海", "天気番組"], ["七海", "音楽番組"], ["七海", "朗読番組"], ["七海", "ニュース"],
+                          ["直樹", "天気番組"], ["直樹", "音楽番組"], ["直樹", "朗読番組"], ["直樹", "対談番組"],
+                          ["陽菜", "対談番組"], ["彩乃", "対談番組"], ["悠真", "対談番組"],
+                          ["陽菜", "ニュース"], ["彩乃", "ニュース"], ["悠真", "ニュース"],
+                          ["陽菜", "朗読番組"]]) put(2, P, x, O, y);
+    // candidates: 陽菜 leaves at 11 or 12 (直樹 is before 陽菜), so 天気番組 or 音楽番組.
+    put(3, P, "陽菜", O, "天気番組"); put(3, P, "陽菜", O, "音楽番組");
+    for (const [x, y] of [["七海", "8時"], ["七海", "10時"], ["七海", "11時"], ["七海", "12時"],
+                          ["直樹", "8時"], ["直樹", "11時"], ["直樹", "12時"],
+                          ["陽菜", "8時"], ["陽菜", "9時"], ["陽菜", "10時"],
+                          ["彩乃", "9時"], ["悠真", "9時"], ["彩乃", "10時"], ["悠真", "10時"],
+                          ["悠真", "11時"], ["彩乃", "11時"]]) put(2, P, x, T, y);
+    for (const [x, y] of [["対談番組", "10時"], ["音楽番組", "10時"], ["天気番組", "9時"], ["朗読番組", "9時"]]) put(2, O, x, T, y);
+    if (w.marks[mk(O, at(O, "対談番組"), T, at(T, "9時"))] !== 1) put(1, O, "対談番組", T, "9時");
+    // clues used so far are ticked; clues 2, 3 and 9 are still to come.
+    for (const c of [10, 8, 6, 7, 4, 5, 1]) w.checked.add(c - 1);
+    w.undo = [JSON.stringify({})];  // the player has moves to undo
+    S.tab = "library"; S.stack = [{ t: "work", n }]; S.pair = [0, 1];
+    S.hintOpen = false; S.banner = null; S.sheet = null; S.tipSeen = true;
+    S.progress[n] = "progress"; S.last = n;
+    render();
+  });
+  await shoot("02-board.png");
+
+  await page.evaluate(() => { S.hintOpen = true; render(); });
+  await shoot("03-hint.png");
+  await page.close();
+}
+await browser.close();
