@@ -298,6 +298,14 @@ b.e0{color:var(--c0)}b.e1{color:var(--c1)}b.e2{color:var(--c2)}b.e3{color:var(--
 .tlegend{display:flex;gap:16px;justify-content:center;margin:14px 16px 0;font-size:11.5px;color:var(--d-soft)}.tlegend>span{display:flex;align-items:center;gap:5px}.tlegend .stamp{width:18px;height:18px;font-size:9px;border-width:1.5px;transform:none}
 .one .tiles,.one .vols,.one .tlegend{max-width:660px;margin-inline:auto;width:calc(100% - 32px)}.one .vols{padding-inline:0}
 .one .tile{font-size:19px}.pad .tile{font-size:18px}
+.cont.slim{padding:10px 14px;gap:8px;margin-top:6px}.cont.slim small{display:inline;font-size:11.5px;white-space:nowrap}.cont.slim b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pager{display:flex;align-items:center;gap:6px;margin:10px 12px 0}.pager>button .chev{width:10px;height:18px}.pager>button{width:40px;height:40px;border-radius:10px;color:var(--d-acc);display:grid;place-items:center;flex:none}.pager>button:disabled{color:var(--d-faint);opacity:.5}
+.vsel{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:44px;border-radius:10px;background:var(--d-surf);border:1px solid var(--d-line);font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
+.vsel small{font-size:11px;font-weight:400;color:var(--d-soft);line-height:1.1}.vsel select{position:absolute;inset:0;opacity:0;width:100%;height:100%;font-size:16px}
+.crow{min-height:48px;padding:6px 14px}.crow .ti b{font-size:15.5px;font-weight:600;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.crow .ti{min-width:0;flex:1}
+.crow .sz{font-size:12px;color:var(--d-faint);font-variant-numeric:tabular-nums;flex:none}.crow .tr{width:30px;display:flex;justify-content:flex-end;flex:none}
+.phone .crow .sz{display:none}
+.pad .clist{display:grid;grid-template-columns:1fr 1fr;column-gap:0}.pad .clist .crow{border-right:.5px solid var(--d-line)}
 .dots2{display:flex;gap:7px;justify-content:center}.dots2 i{width:7px;height:7px;border-radius:50%;background:var(--d-line)}.dots2 i.on{background:var(--d-acc)}
 .big{width:96px;height:96px;margin:0 auto;border:1.5px solid var(--d-line);border-radius:18px;background:var(--d-surf);display:grid;place-items:center}.big svg{width:64px;height:64px}
 .four{display:flex;justify-content:center;gap:10px}.four div{width:60px;font-size:11.5px;color:var(--d-soft)}.four span{display:grid;place-items:center;height:52px;border:1px solid var(--d-line);border-radius:12px;background:var(--d-surf);margin-bottom:4px}.four svg{width:30px;height:30px}
@@ -535,21 +543,30 @@ function tileHTML(n){
   else if(st==='progress') mk='<span class="dots"><i></i><i></i><i></i></span>';
   return `<button class="tile ${open?'':'lock'} ${cur?'cur':''}" data-act="open:${n}" aria-label="第${n}号 ${esc(d[1])}${open?'':' 全編版'}">${n}${mk}</button>`;
 }
+function crowHTML(n){
+  const d=info(n), open=!!d[3]||S.own, st=state(n);
+  let tr='';
+  if(!open) tr=`<span style="color:var(--d-faint)">${ic('lock','style="width:16px;height:16px"')}</span>`;
+  else if(st==='perfect') tr='<span class="stamp perfect" title="完全解決">完</span>';
+  else if(st==='solved') tr='<span class="stamp solved" title="解決">済</span>';
+  else if(st==='progress') tr='<span class="dots" title="途中"><i></i><i></i><i></i></span>';
+  else tr=chev;
+  return `<button class="row crow ${open?'':'lock'}" data-act="open:${n}"><span class="no">${pad4(n)}</span><span class="ti"><b>${esc(d[1])}</b></span><span class="sz">${d[5]}×${d[6]}</span><span class="tr">${tr}</span></button>`;
+}
 function libraryList(){
-  const t=S.tier, rows=IDX.filter(d=>d[2]===t), PER=30, nv=Math.ceil(rows.length/PER);
+  const t=S.tier, rows=IDX.filter(d=>d[2]===t), PER=10, nv=Math.ceil(rows.length/PER);
   const v=Math.min(S.vol||0,nv-1), vr=rows.slice(v*PER,(v+1)*PER), free=vr.filter(d=>d[3]).length, paid=vr.length-free;
   const solved=Object.entries(S.progress).filter(([n,s])=>(s==='perfect'||s==='solved')&&info(+n)[2]===t).length;
-  const chips=Array.from({length:nv},(_,i)=>{const a=rows[i*PER][0],z=rows[Math.min(rows.length,(i+1)*PER)-1][0];return `<button data-act="vol:${i}" aria-pressed="${i===v}">${a}–${z}</button>`}).join('');
-  const note=paid&&!S.own?`<div class="sect"><span>${free?`無料 ${free}件 ・ 残り ${paid}件は全編版`:`全編版 ${paid}件`}</span><button data-act="buy">¥1,800 で解放</button></div>`:`<div class="sect"><span>${vr.length}件</span></div>`;
-  return `<div class="sumline"><span>${TIER[t][0]} ・ ${rows[0][5]}×${rows[0][6]} ・ 約${rows[0][4]}分〜</span><span>解決 ${solved} / ${rows.length}</span></div>
-   <div class="bar"><i style="width:${solved/rows.length*100}%"></i></div>
-   <div class="vols" role="tablist" aria-label="巻">${chips}</div>${note}
-   <div class="group">${vr.map(d=>rowHTML(d[0])).join('')}</div><div style="height:24px"></div>`;
+  const lab=i=>`${rows[i*PER][0]}–${rows[Math.min(rows.length,(i+1)*PER)-1][0]}`;
+  const opts=Array.from({length:nv},(_,i)=>`<option value="${i}" ${i===v?'selected':''}>第${i+1}巻 ・ ${lab(i)}</option>`).join('');
+  const pager=`<div class="pager"><button data-act="vol:${v-1}" ${v?'':'disabled'} aria-label="前の巻" style="transform:scaleX(-1)">${chev}</button><label class="vsel"><select id="volsel" aria-label="巻を選ぶ">${opts}</select><span>第${v+1}巻 ・ ${lab(v)}</span><small>解決 ${solved} / ${rows.length}</small></label><button data-act="vol:${v+1}" ${v<nv-1?'':'disabled'} aria-label="次の巻">${chev}</button></div>`;
+  const note=paid&&!S.own?`<div class="sect" style="margin-top:8px"><span>${free?`無料 ${free}件`:'全編版'}${paid&&free?` ・ 残り ${paid}件は全編版`:''}</span><button data-act="buy">¥1,800 で解放</button></div>`:'';
+  return `${pager}${note}<div class="group clist">${vr.map(d=>crowHTML(d[0])).join('')}</div><div style="height:16px"></div>`;
 }
 function libraryScreen(){
   const cont=S.progress[741]==='progress'?741:null, d=cont&&info(cont);
   const seg=`<div class="seg-ios" role="tablist">${['b','s','a','e'].map(k=>`<button data-act="tier:${k}" aria-pressed="${S.tier===k}">${TIER[k][0]}</button>`).join('')}</div>`;
-  const cc=cont?`<button class="cont" data-act="open:741"><span style="flex:1"><small>続きから</small><b>${esc(d[1])}</b><span style="display:block;font-size:12px;color:var(--d-soft)">第${pad4(741)}号 ・ 超級 ・ 4×4</span></span>${chev}</button>`:'';
+  const cc=cont?`<button class="cont slim" data-act="open:741"><small>続きから</small><b>${esc(d[1])}</b><span style="flex:1"></span>${chev}</button>`:'';
   const isPad=S.device==='pad';
   return `${isPad?nav({title:'事件簿'}):''}<div class="scroll">${isPad?'':'<div class="large">事件簿</div>'}${cc}${isPad&&S.sideTier?'':seg}${libraryList()}</div>`;
 }
@@ -794,7 +811,7 @@ const ACT={
   tab:v=>{S.tab=v;S.sideTier=false;S.stack=[];},
   sidetier:v=>{S.vol=0;S.tab='library';S.sideTier=true;S.tier=v;S.stack=[];},
   tier:v=>{S.tier=v;S.vol=0;},
-  vol:v=>{S.vol=+v;},
+  vol:v=>{S.vol=Math.max(0,+v);},
   open:v=>{openCase(+v);return 1;},
   back:()=>{S.stack.pop();S.hintOpen=false;S.banner=null;},
   start:()=>{const n=topScreen().n;S.stack=[{t:'work',n}];S.pair=[0,1];W(n);},
@@ -848,6 +865,7 @@ document.addEventListener('pointerup',e=>{
 });
 document.addEventListener('pointercancel',()=>clearTimeout(lp));
 document.addEventListener('keydown',e=>{ if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('cell')){ e.preventDefault(); const [a,i,b,j]=e.target.dataset.cell.split('.').map(Number),t=topScreen(); const cur=W(t.n).marks[mk(a,i,b,j)]||0; setMark(t.n,a,i,b,j,(cur+1)%4); render(); }});
+document.addEventListener('change',e=>{ if(e.target.id==='volsel'){ S.vol=+e.target.value; render(); }});
 document.addEventListener('input',e=>{ if(e.target.id==='q'){ S.q=e.target.value; $('#res').innerHTML=searchResults(); }});
 document.addEventListener('toggle',e=>{ if(e.target.classList&&e.target.classList.contains('aud')) S.audOpen=e.target.open; },true);
 document.addEventListener('contextmenu',e=>{ if(e.target.closest('.cell')) e.preventDefault(); });
