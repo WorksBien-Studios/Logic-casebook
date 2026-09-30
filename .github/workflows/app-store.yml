@@ -1,0 +1,44 @@
+name: App Store listing and review submission
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: Upload listing details or submit an exact build for review
+        required: true
+        type: choice
+        default: upload_listing
+        options:
+          - upload_listing
+          - submit_review
+      build_number:
+        description: Exact processed build number; required only for submit_review
+        required: false
+        type: string
+      upload_screenshots:
+        description: Replace App Store screenshots with the complete manifest set
+        required: true
+        type: boolean
+        default: false
+      confirm_submission:
+        description: Confirm final App Review submission
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  app-store:
+    uses: WorksBien-Studios/.github/.github/workflows/ios-app-store.yml@main
+    with:
+      validated_sha: ${{ github.sha }}
+      operation: ${{ inputs.operation }}
+      build_number: ${{ inputs.build_number }}
+      upload_screenshots: ${{ inputs.upload_screenshots }}
+      confirm_submission: ${{ inputs.confirm_submission }}
+    secrets:
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
