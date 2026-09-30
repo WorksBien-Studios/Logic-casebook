@@ -13,6 +13,8 @@ private final class FakeBackend: EntitlementBackend, @unchecked Sendable {
     private var updateContinuation: AsyncStream<EntitlementRecord>.Continuation?
     private(set) var syncCount = 0
     var syncError: Error?
+    private var nextSnapshotStarted: (@Sendable () -> Void)?
+    private var pausedSnapshot: (AsyncStream<EntitlementRecord>.Continuation, [EntitlementRecord])?
 
     /// `owned` is visible immediately; `restorable` appears only after `sync()`.
     init(owned: [EntitlementRecord] = [], restorable: [EntitlementRecord] = []) {
@@ -21,11 +23,21 @@ private final class FakeBackend: EntitlementBackend, @unchecked Sendable {
     }
 
     func currentEntitlements() -> AsyncStream<EntitlementRecord> {
-        lock.lock(); defer { lock.unlock() }
+        lock.lock()
         let snapshot = owned
+        let onStarted = nextSnapshotStarted
+        nextSnapshotStarted = nil
+        lock.unlock()
         return AsyncStream { continuation in
-            snapshot.forEach { continuation.yield($0) }
-            continuation.finish()
+            if let onStarted {
+                self.lock.lock()
+                self.pausedSnapshot = (continuation, snapshot)
+                self.lock.unlock()
+                onStarted()
+            } else {
+                snapshot.forEach { continuation.yield($0) }
+                continuation.finish()
+            }
         }
     }
 
@@ -41,6 +53,22 @@ private final class FakeBackend: EntitlementBackend, @unchecked Sendable {
         if let syncError { throw syncError }
         owned += restorable
         restorable = []
+    }
+
+    func setOwned(_ records: [EntitlementRecord]) {
+        lock.lock(); owned = records; lock.unlock()
+    }
+
+    /// Hold a captured snapshot until the test has delivered newer information.
+    func pauseNextSnapshot(onStarted: @escaping @Sendable () -> Void) {
+        lock.lock(); nextSnapshotStarted = onStarted; lock.unlock()
+    }
+
+    func resumeSnapshot() {
+        lock.lock(); let paused = pausedSnapshot; pausedSnapshot = nil; lock.unlock()
+        guard let (continuation, snapshot) = paused else { return }
+        snapshot.forEach { continuation.yield($0) }
+        continuation.finish()
     }
 
     func deliver(_ record: EntitlementRecord) {
@@ -125,4 +153,151 @@ final class EntitlementLogicTests: XCTestCase {
         await store.start()
         XCTAssertFalse(store.isFullUnlockPurchased)
     }
+    @MainActor
+    func testRevocationUpdateRemovesExistingUnlockAndIsFinished() async {
+        let backend = FakeBackend(owned: [makeRecord()])
+        let store = EntitlementStore(backend: backend)
+        await store.refreshEntitlements()
+        XCTAssertTrue(store.isFullUnlockPurchased)
+
+        let finished = expectation(description: "revocation processed")
+        backend.deliver(makeRecord(revoked: true, onFinish: { finished.fulfill() }))
+        await fulfillment(of: [finished], timeout: 2)
+        XCTAssertFalse(store.isFullUnlockPurchased)
+    }
+
+    @MainActor
+    func testEmptySnapshotRemovesExistingUnlock() async {
+        let backend = FakeBackend(owned: [makeRecord()])
+        let store = EntitlementStore(backend: backend)
+        await store.refreshEntitlements()
+        XCTAssertTrue(store.isFullUnlockPurchased)
+
+        // Apple omits refunded transactions from currentEntitlements.
+        backend.setOwned([])
+        await store.refreshEntitlements()
+        XCTAssertFalse(store.isFullUnlockPurchased)
+    }
+
+    @MainActor
+    func testSnapshotWithOnlyOtherProductsRemovesExistingUnlock() async {
+        let backend = FakeBackend(owned: [makeRecord()])
+        let store = EntitlementStore(backend: backend)
+        await store.refreshEntitlements()
+        XCTAssertTrue(store.isFullUnlockPurchased)
+
+        backend.setOwned([makeRecord("jp.logic.casebook.other")])
+        await store.refreshEntitlements()
+        XCTAssertFalse(store.isFullUnlockPurchased)
+    }
+
+    @MainActor
+    func testOtherProductRevocationDoesNotRemoveExistingUnlock() async {
+        let backend = FakeBackend(owned: [makeRecord()])
+        let store = EntitlementStore(backend: backend)
+        await store.refreshEntitlements()
+        let finished = expectation(description: "other product processed")
+        backend.deliver(makeRecord("jp.logic.casebook.other", revoked: true,
+                                  onFinish: { finished.fulfill() }))
+        await fulfillment(of: [finished], timeout: 2)
+        XCTAssertTrue(store.isFullUnlockPurchased)
+    }
+
+    @MainActor
+    func testRepurchaseAfterRevocationUnlocksAgain() async {
+        let backend = FakeBackend(owned: [makeRecord()])
+        let store = EntitlementStore(backend: backend)
+        await store.refreshEntitlements()
+        let revoked = expectation(description: "revocation processed")
+        backend.deliver(makeRecord(revoked: true, onFinish: { revoked.fulfill() }))
+        await fulfillment(of: [revoked], timeout: 2)
+        XCTAssertFalse(store.isFullUnlockPurchased)
+
+        let purchased = expectation(description: "repurchase processed")
+        backend.deliver(makeRecord(onFinish: { purchased.fulfill() }))
+        await fulfillment(of: [purchased], timeout: 2)
+        XCTAssertTrue(store.isFullUnlockPurchased)
+    }
+
+    @MainActor
+    func testSuccessfulRestoreReconcilesEmptySnapshotAndClearsOldError() async {
+        let backend = FakeBackend(owned: [makeRecord()])
+        let store = EntitlementStore(backend: backend)
+        await store.refreshEntitlements()
+        XCTAssertTrue(store.isFullUnlockPurchased)
+        store.lastError = "Previous failure"
+
+        backend.setOwned([])
+        await store.restorePurchases()
+        XCTAssertFalse(store.isFullUnlockPurchased)
+        XCTAssertNil(store.lastError)
+    }
+
+    @MainActor
+    func testFailedRestorePreservesExistingUnlock() async {
+        let backend = FakeBackend(owned: [makeRecord()])
+        let store = EntitlementStore(backend: backend)
+        await store.refreshEntitlements()
+        backend.syncError = URLError(.notConnectedToInternet)
+        await store.restorePurchases()
+        XCTAssertTrue(store.isFullUnlockPurchased)
+        XCTAssertNotNil(store.lastError)
+    }
+
+    @MainActor
+    func testStaleOwnedSnapshotCannotUndoNewerRevocation() async {
+        let backend = FakeBackend(owned: [makeRecord()])
+        let store = EntitlementStore(backend: backend)
+        await store.refreshEntitlements()
+        let started = expectation(description: "snapshot captured")
+        backend.pauseNextSnapshot(onStarted: { started.fulfill() })
+        let refresh = Task { await store.refreshEntitlements() }
+        await fulfillment(of: [started], timeout: 2)
+        // Holding a snapshot must not temporarily lock a valid owner.
+        XCTAssertTrue(store.isFullUnlockPurchased)
+
+        let revoked = expectation(description: "newer revocation processed")
+        backend.deliver(makeRecord(revoked: true, onFinish: { revoked.fulfill() }))
+        await fulfillment(of: [revoked], timeout: 2)
+        XCTAssertFalse(store.isFullUnlockPurchased)
+        backend.resumeSnapshot()
+        await refresh.value
+        XCTAssertFalse(store.isFullUnlockPurchased)
+    }
+
+    @MainActor
+    func testStaleEmptySnapshotCannotUndoNewerPurchase() async {
+        let backend = FakeBackend()
+        let store = EntitlementStore(backend: backend)
+        let started = expectation(description: "empty snapshot captured")
+        backend.pauseNextSnapshot(onStarted: { started.fulfill() })
+        let refresh = Task { await store.refreshEntitlements() }
+        await fulfillment(of: [started], timeout: 2)
+
+        let purchased = expectation(description: "newer purchase processed")
+        backend.deliver(makeRecord(onFinish: { purchased.fulfill() }))
+        await fulfillment(of: [purchased], timeout: 2)
+        XCTAssertTrue(store.isFullUnlockPurchased)
+        backend.resumeSnapshot()
+        await refresh.value
+        XCTAssertTrue(store.isFullUnlockPurchased)
+    }
+
+    @MainActor
+    func testOlderRefreshCannotOverwriteNewerSnapshot() async {
+        let backend = FakeBackend(owned: [makeRecord()])
+        let store = EntitlementStore(backend: backend)
+        let started = expectation(description: "old snapshot captured")
+        backend.pauseNextSnapshot(onStarted: { started.fulfill() })
+        let older = Task { await store.refreshEntitlements() }
+        await fulfillment(of: [started], timeout: 2)
+
+        backend.setOwned([])
+        await store.refreshEntitlements()
+        XCTAssertFalse(store.isFullUnlockPurchased)
+        backend.resumeSnapshot()
+        await older.value
+        XCTAssertFalse(store.isFullUnlockPurchased)
+    }
+
 }
