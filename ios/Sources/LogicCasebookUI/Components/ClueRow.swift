@@ -169,7 +169,7 @@ private struct OrderingStrip: View {
         switch clue.type {
         case .immediatelyBefore: return "すぐ前（隣）"
         case .offsetBefore: return "\(offset ?? 2)つ前"
-        default: return "どこかで前"
+        default: return "前のどこか"
         }
     }
 }

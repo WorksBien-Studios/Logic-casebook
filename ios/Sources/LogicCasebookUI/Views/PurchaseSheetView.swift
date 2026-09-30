@@ -30,7 +30,7 @@ public struct PurchaseSheetView: View {
                 }
 
                 VStack(spacing: 0) {
-                    promise("無料の30事件に加え、残り970事件が遊べます")
+                    promise("無料の30事件に加えて、残り970事件も遊べます")
                     Divider()
                     promise("サブスクリプションではありません")
                     Divider()
@@ -77,7 +77,7 @@ public struct PurchaseSheetView: View {
                     Text(error).font(.caption).foregroundStyle(Theme.accent)
                 }
 
-                Text("価格はApp Storeから取得した表示です。通信できない場合も無料の事件は遊べます。")
+                Text("価格はApp Storeから取得して表示しています。通信できない場合でも、無料の事件は遊べます。")
                     .font(.caption)
                     .foregroundStyle(Theme.inkSoft)
                     .frame(maxWidth: .infinity)

@@ -6,12 +6,21 @@ import LogicCasebookEngine
 struct MarkGlyph: View {
     let mark: MarkState
     var size: CGFloat = 26
+    /// Legends and help show the empty state as a faint dash so the sample
+    /// isn't a blank box; board cells leave it clear.
+    var blankAsDash = false
 
     var body: some View {
         Group {
             switch mark {
             case .blank:
-                Color.clear
+                if blankAsDash {
+                    Capsule()
+                        .fill(Theme.inkFaint)
+                        .frame(width: size * 0.42, height: size * 0.08)
+                } else {
+                    Color.clear
+                }
             case .confirmed:
                 Circle()
                     .stroke(Theme.accent, lineWidth: size * 0.108)

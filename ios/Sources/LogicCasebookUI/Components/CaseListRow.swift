@@ -8,7 +8,12 @@ struct CaseListRow: View {
     let gameCase: Case
     let progress: CaseProgress?
     let isUnlocked: Bool
+    /// One line per case (number, title, size, status) for the paged library;
+    /// the full row also shows the estimated time in a second line.
+    var compact = false
     let onLockedTap: () -> Void
+
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     var body: some View {
         if isUnlocked {
@@ -29,17 +34,26 @@ struct CaseListRow: View {
                 .frame(width: 36, alignment: .leading)
             VStack(alignment: .leading, spacing: 2) {
                 Text(gameCase.titleJA)
-                    .font(.body)
+                    .font(compact ? .callout.weight(.semibold) : .body)
                     .foregroundStyle(isUnlocked ? Theme.ink : Theme.inkSoft)
                     .lineLimit(1)
-                Text(meta)
-                    .font(.caption)
-                    .foregroundStyle(Theme.inkSoft)
+                if !compact {
+                    Text(meta)
+                        .font(.caption)
+                        .foregroundStyle(Theme.inkSoft)
+                }
             }
             Spacer(minLength: 8)
+            if compact, sizeClass == .regular {
+                Text("\(gameCase.categories.count)×\(gameCase.primaryCategory.values.count)")
+                    .font(.caption)
+                    .monospacedDigit()
+                    .foregroundStyle(Theme.inkFaint)
+            }
             trailing
+                .frame(minWidth: compact ? 30 : 0, alignment: .trailing)
         }
-        .frame(minHeight: 44)
+        .frame(minHeight: compact ? 46 : 44)
         .accessibilityElement(children: .combine)
     }
 

@@ -1,6 +1,6 @@
 # UI mock (HTML, not Swift)
 
-`index.html` is a single self-contained interactive mock of 完全論理事件簿 on iPhone and iPad, in three layouts: iPhone, iPad split view (sidebar, board and clues side by side) and iPad single column (one pane in a readable column, 56pt cells and larger type). Open it in any browser. It plays the 30 free cases from the real bundle (real clues, real hint steps, real solutions), so the board, hints and checks behave as the spec describes. No Swift, no engine wiring. Nothing here was run in Xcode.
+`index.html` is a single self-contained interactive mock of 完全論理事件簿 on iPhone and iPad, in three layouts at real point sizes: iPhone (393×852, 44pt cells), iPad mini one column (744×1133, 660pt readable column, 72pt cells) and iPad two column (1194×834 landscape; the sidebar hides on the board, every pair as a staircase beside a 360pt clue pane, cells fitted to the pane at 40–56pt). Open it in any browser. It plays the 30 free cases from the real bundle (real clues, real hint steps, real solutions), so the board, hints and checks behave as the spec describes. No Swift, no engine wiring. Nothing here was run in Xcode.
 
 Shell: layout follows `lrodeveloperr/ios-18-shell` (`AppShellView` tab bar on iPhone, sidebar on iPad, search-role tab, `appShellSearchQuery`, `AppAsyncStateView`, `AppShellTips`). Sign in with Apple is not used, because the spec has no accounts.
 
@@ -8,7 +8,7 @@ Shell: layout follows `lrodeveloperr/ios-18-shell` (`AppShellView` tab bar on iP
 
 | Engine part | UI | Kind |
 |---|---|---|
-| `Case`, `Difficulty` (library) | Inset-grouped `List`, 4-way segmented level switch, free rows then labelled locked section | Native |
+| `Case`, `Difficulty` (library) | 4-way segmented level switch, a volume pager (10 cases per volume, prev/next plus a picker), then a compact one-line row per case with title, grid size, stamp, lock or in-progress mark. One screen per volume on iPhone and iPad (two columns on iPad landscape) | Native (`List`, `Picker(.menu)`) |
 | `EntitlementStore` | Lock on rows, price link in section header, purchase half-sheet with StoreKit price | Native |
 | `CaseProgress` | Hanko stamps: 済 solved, 完 perfect (double ring), three dots in progress | Custom (`Circle().stroke`) |
 | `CaseCategory` values | Colour-coded chips in briefing; same colours on grid headers and clue names | Custom |
