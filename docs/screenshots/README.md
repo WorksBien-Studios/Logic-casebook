@@ -1,6 +1,6 @@
 # App Store screenshot shell
 
-`index.html` lays out three App Store screenshots (paper background, one headline, full iPhone/iPad device frame, never cropped) with a labelled empty slot for each real capture. Open it in a browser to preview. `?device=ipad` shows the iPad set.
+`index.html` lays out three App Store screenshots (paper background, one headline, the app screen only, no device frame) with a labelled empty slot for each real capture. Open it in a browser to preview. `?device=ipad` shows the iPad set.
 
 ## Audience basis (assumption, not player-tested)
 

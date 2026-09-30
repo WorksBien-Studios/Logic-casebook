@@ -30,33 +30,15 @@ body{background:#2a2622;font-family:var(--sans);color:var(--ink)}
 .ipad .copy{padding-top:calc(var(--u)*120px)}
 .ipad .headline{font-size:calc(var(--u)*78px)}
 .stage{position:relative;z-index:1;flex:1;width:100%;display:flex;justify-content:center;align-items:center}
-/* Whole devices, never cropped. Sizes are in canvas units (--u = canvas width / 1320). The screen
-   keeps Apple's exact screenshot aspect, so a raw simulator capture fills it with no scaling or crop.
-   iPhone: titanium frame, black bezel, Dynamic Island, side buttons.
-   iPad: aluminium frame, thin even bezel, front camera. */
-.iphone{--dw:calc(var(--u)*1080px);--ring:calc(var(--u)*9px);--bz:calc(var(--u)*13px);--sr:calc(var(--u)*130px);--ar:1320/2868}
-.ipad{--dw:calc(var(--u)*964px);--ring:calc(var(--u)*6px);--bz:calc(var(--u)*26px);--sr:calc(var(--u)*34px);--ar:2064/2752}
-.device{position:relative;width:var(--dw);padding:var(--ring);border-radius:calc(var(--sr) + var(--bz) + var(--ring));
-  background:linear-gradient(145deg,#6a665f 0%,#2b2925 38%,#57534c 62%,#26241f 100%);
-  box-shadow:0 calc(var(--u)*30px) calc(var(--u)*90px) rgba(34,29,23,.32),inset 0 0 0 calc(var(--u)*1.5px) rgba(255,255,255,.18)}
-.bezel{position:relative;background:#000;padding:var(--bz);border-radius:calc(var(--sr) + var(--bz))}
+/* Just the screen: no device frame, buttons, island or camera. Sizes are in canvas units
+   (--u = canvas width / 1320). The screen keeps Apple's exact screenshot aspect, so a raw
+   capture fills it with no scaling or crop. A hairline and soft shadow lift the paper-coloured
+   app off the paper background. */
+.iphone{--dw:calc(var(--u)*1040px);--sr:calc(var(--u)*56px);--ar:1320/2868}
+.ipad{--dw:calc(var(--u)*950px);--sr:calc(var(--u)*40px);--ar:2064/2752}
+.device{position:relative;width:var(--dw);border-radius:var(--sr);
+  box-shadow:0 calc(var(--u)*24px) calc(var(--u)*80px) rgba(34,29,23,.22),0 0 0 calc(var(--u)*1.5px) rgba(34,29,23,.10)}
 .screen{position:relative;width:100%;aspect-ratio:var(--ar);overflow:hidden;background:var(--paper2);border-radius:var(--sr)}
-.island{position:absolute;z-index:3;top:calc(var(--u)*26px);left:50%;width:calc(var(--u)*300px);height:calc(var(--u)*88px);
-  margin-left:calc(var(--u)*-150px);background:#000;border-radius:calc(var(--u)*44px)}
-.ipad .island{display:none}
-.ipad .bezel::after{content:"";position:absolute;top:calc(var(--u)*9px);left:50%;width:calc(var(--u)*9px);height:calc(var(--u)*9px);
-  margin-left:calc(var(--u)*-4.5px);border-radius:50%;background:#1b1d26;box-shadow:inset 0 0 0 calc(var(--u)*2px) #2c3040}
-.btn{position:absolute;background:linear-gradient(90deg,#57534c,#2b2925);border-radius:calc(var(--u)*4px)}
-.iphone .btn{width:calc(var(--u)*9px)}
-.iphone .l{left:calc(var(--u)*-7px)} .iphone .r{right:calc(var(--u)*-7px)}
-.iphone .b1{top:calc(var(--u)*520px);height:calc(var(--u)*70px)}
-.iphone .b2{top:calc(var(--u)*680px);height:calc(var(--u)*140px)}
-.iphone .b3{top:calc(var(--u)*850px);height:calc(var(--u)*140px)}
-.iphone .b4{top:calc(var(--u)*760px);height:calc(var(--u)*210px)}
-.ipad .btn{width:calc(var(--u)*7px);right:calc(var(--u)*-5px)}
-.ipad .b1,.ipad .b3{display:none}
-.ipad .b2{top:calc(var(--u)*150px);height:calc(var(--u)*62px)}
-.ipad .b4{top:calc(var(--u)*230px);height:calc(var(--u)*62px)}
 .screen img{display:block;width:100%;height:100%;object-fit:cover}
 .slot{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u)*24px);
   border:calc(var(--u)*6px) dashed var(--border);margin:calc(var(--u)*30px);border-radius:calc(var(--u)*40px);
@@ -94,12 +76,10 @@ function shotEl(s){
   el.innerHTML = `
     <div class="copy"><h1 class="headline">${s.headline}</h1></div>
     <div class="stage"><div class="device">
-      <i class="btn l b1"></i><i class="btn l b2"></i><i class="btn l b3"></i><i class="btn r b4"></i>
-      <div class="bezel"><div class="screen empty">
+      <div class="screen empty">
         <img alt="" src="captures/${devName}/${s.capture}">
-        <i class="island"></i>
         <div class="slot"><b>画面キャプチャ待ち</b><code>captures/${devName}/${s.capture}</code><span>${s.note}</span></div>
-      </div></div></div></div>`;
+      </div></div></div>`;
   const img = el.querySelector("img"), scr = el.querySelector(".screen");
   img.onload = () => scr.classList.remove("empty");
   img.onerror = () => { img.remove(); scr.classList.add("empty"); };

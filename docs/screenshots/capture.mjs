@@ -5,7 +5,8 @@
 // Drives docs/ui-mock/index.html (the HTML mock of the SwiftUI app, playing the real free cases,
 // real clues, real deduction steps) into three player states and screenshots the app screen only,
 // at the exact App Store pixel size, to captures/<device>/<file>.png:
-//   01-library  advanced library, a player partway through the first volume
+//   01-library  (iPhone) advanced library, a player partway through the first volume
+//   01-library  (iPad) expert case 741 board instead: the iPad library page is mostly empty
 //   02-board    case 381 after four real deduction steps: ○ × △ marks placed, clues ticked
 //   03-hint     the same board with the next deduction (step 5) open in the hint sheet
 // Every mark placed is checked against the case's bundled solution (○ and × must be true, △ is a
@@ -50,7 +51,7 @@ const css = (d) => `
   .dev{position:static!important;transform:none!important;padding:0!important;border-radius:0!important;
        box-shadow:none!important;width:auto!important;height:auto!important;background:none!important}
   .scr{width:${d.w}px!important;height:${d.h}px!important;border-radius:0!important}
-  .island{display:none!important}`;
+  .island,.home{display:none!important}`;
 
 const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 for (const name of which) {
@@ -75,15 +76,49 @@ for (const name of which) {
     console.log("captured", name, file);
   };
 
-  // 01: library. Advanced level, first volume (381-390): a player who has closed several cases
-  //     (完 = perfect, 済 = solved), one case in progress, two paid cases still locked.
-  await page.evaluate(() => {
-    S.progress = { 381: "progress", 382: "perfect", 383: "solved", 384: "perfect", 385: "solved", 386: "perfect" };
-    S.tab = "library"; S.sideTier = false; S.stack = []; S.sheet = null;
-    S.tier = "a"; S.vol = 0; S.last = 381;
-    render();
-  });
-  await shoot("01-library.png");
+  if (d.mode === "phone") {
+    // 01: library. Advanced level, first volume (381-390): a player who has closed several cases
+    //     (完 = perfect, 済 = solved), one case in progress, two paid cases still locked.
+    await page.evaluate(() => {
+      S.progress = { 381: "progress", 382: "perfect", 383: "solved", 384: "perfect", 385: "solved", 386: "perfect" };
+      S.tab = "library"; S.sideTier = false; S.stack = []; S.sheet = null;
+      S.tier = "a"; S.vol = 0; S.last = 381;
+      render();
+    });
+    await shoot("01-library.png");
+  } else {
+    // 01 (iPad): the library page is only ten compact rows on a tall iPad, so lead with an expert
+    //     board instead: case 741 (連絡船の乗船記録), four categories, six pairs of grids, after four
+    //     real deduction steps. Every ○ is followed by the × it rules out in its row and column.
+    await page.evaluate(() => {
+      const n = 741;
+      delete S.work[n];
+      const w = W(n);
+      w.marks = {}; w.undo = []; w.checked = new Set();
+      const c = FREE[n], N = c.categories.length, V = c.categories[0].values.length;
+      for (let k = 0; k < 4; k++) {
+        applyStep(n, k, true);
+        c.deductionSteps[k].clueIDs.forEach((id) => w.checked.add(c.clues.findIndex((x) => x.id === id)));
+      }
+      for (let a = 0; a < N; a++) for (let b = a + 1; b < N; b++)
+        for (let i = 0; i < V; i++) for (let j = 0; j < V; j++) {
+          if (w.marks[mk(a, i, b, j)] !== 1) continue;
+          for (let t = 0; t < V; t++) {
+            for (const [p, q] of [[i, t], [t, j]]) {
+              if (w.marks[mk(a, p, b, q)]) continue;
+              if (truth(n, a, p, b, q)) continue;  // only true negatives, never a wrong ×
+              w.marks[mk(a, p, b, q)] = 2;
+            }
+          }
+        }
+      w.undo = [JSON.stringify({})];
+      S.tab = "library"; S.stack = [{ t: "work", n }]; S.pair = [0, 1];
+      S.hintOpen = false; S.banner = null; S.sheet = null; S.tipSeen = true;
+      S.progress = { [n]: "progress" }; S.last = n;
+      render();
+    });
+    await shoot("01-library.png");
+  }
 
   // 02 / 03: case 381 (放送局の番組表), five people x five programmes x five broadcast hours.
   await page.evaluate(() => {
