@@ -539,14 +539,12 @@ function libraryList(){
   const t=S.tier, rows=IDX.filter(d=>d[2]===t), PER=30, nv=Math.ceil(rows.length/PER);
   const v=Math.min(S.vol||0,nv-1), vr=rows.slice(v*PER,(v+1)*PER), free=vr.filter(d=>d[3]).length, paid=vr.length-free;
   const solved=Object.entries(S.progress).filter(([n,s])=>(s==='perfect'||s==='solved')&&info(+n)[2]===t).length;
-  const cols=S.device==='phone'?6:10;
   const chips=Array.from({length:nv},(_,i)=>{const a=rows[i*PER][0],z=rows[Math.min(rows.length,(i+1)*PER)-1][0];return `<button data-act="vol:${i}" aria-pressed="${i===v}">${a}–${z}</button>`}).join('');
   const note=paid&&!S.own?`<div class="sect"><span>${free?`無料 ${free}件 ・ 残り ${paid}件は全編版`:`全編版 ${paid}件`}</span><button data-act="buy">¥1,800 で解放</button></div>`:`<div class="sect"><span>${vr.length}件</span></div>`;
   return `<div class="sumline"><span>${TIER[t][0]} ・ ${rows[0][5]}×${rows[0][6]} ・ 約${rows[0][4]}分〜</span><span>解決 ${solved} / ${rows.length}</span></div>
    <div class="bar"><i style="width:${solved/rows.length*100}%"></i></div>
    <div class="vols" role="tablist" aria-label="巻">${chips}</div>${note}
-   <div class="tiles" style="--tc:${cols}">${vr.map(d=>tileHTML(d[0])).join('')}</div>
-   <div class="tlegend"><span><span class="stamp solved">済</span>解決</span><span><span class="stamp perfect">完</span>完全解決</span><span><span class="dots"><i></i><i></i><i></i></span>途中</span></div><div style="height:24px"></div>`;
+   <div class="group">${vr.map(d=>rowHTML(d[0])).join('')}</div><div style="height:24px"></div>`;
 }
 function libraryScreen(){
   const cont=S.progress[741]==='progress'?741:null, d=cont&&info(cont);
