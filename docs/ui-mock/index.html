@@ -299,10 +299,11 @@ b.e0{color:var(--c0)}b.e1{color:var(--c1)}b.e2{color:var(--c2)}b.e3{color:var(--
 .one .tiles,.one .vols,.one .tlegend{max-width:660px;margin-inline:auto;width:calc(100% - 32px)}.one .vols{padding-inline:0}
 .one .tile{font-size:19px}.pad .tile{font-size:18px}
 .cont.slim{padding:10px 14px;gap:8px;margin-top:6px}.cont.slim small{display:inline;font-size:11.5px;white-space:nowrap}.cont.slim b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pager{display:flex;align-items:center;gap:6px;margin:10px 12px 0}.pager>button .chev{width:10px;height:18px}.pager>button{width:40px;height:40px;border-radius:10px;color:var(--d-acc);display:grid;place-items:center;flex:none}.pager>button:disabled{color:var(--d-faint);opacity:.5}
+.pager{display:flex;align-items:center;gap:6px;margin:10px 12px 0}.pager>button .chev{width:10px;height:18px}.nxt{display:flex;align-items:center;gap:4px}.nxt .chev{width:7px;height:12px}
+.pager>button{width:44px;height:44px;border-radius:10px;color:var(--d-acc);display:grid;place-items:center;flex:none}.pager>button:disabled{color:var(--d-faint);opacity:.5}
 .vsel{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:44px;border-radius:10px;background:var(--d-surf);border:1px solid var(--d-line);font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
 .vsel small{font-size:11px;font-weight:400;color:var(--d-soft);line-height:1.1}.vsel select{position:absolute;inset:0;opacity:0;width:100%;height:100%;font-size:16px}
-.crow{min-height:48px;padding:6px 14px}.crow .ti b{font-size:15.5px;font-weight:600;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.crow .ti{min-width:0;flex:1}
+.crow{min-height:46px;padding:6px 14px}.crow .ti b{font-size:15.5px;font-weight:600;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.crow .ti{min-width:0;flex:1}
 .crow .sz{font-size:12px;color:var(--d-faint);font-variant-numeric:tabular-nums;flex:none}.crow .tr{width:30px;display:flex;justify-content:flex-end;flex:none}
 .phone .crow .sz{display:none}
 .pad .clist{display:grid;grid-template-columns:1fr 1fr;column-gap:0}.pad .clist .crow{border-right:.5px solid var(--d-line)}
@@ -561,9 +562,11 @@ function libraryList(){
   const v=Math.min(S.vol==null?Math.floor(anchor/PER):S.vol,nv-1), vr=rows.slice(v*PER,(v+1)*PER), free=vr.filter(d=>d[3]).length, paid=vr.length-free;
   const solved=Object.entries(S.progress).filter(([n,s])=>(s==='perfect'||s==='solved')&&info(+n)[2]===t).length;
   const lab=i=>`${rows[i*PER][0]}–${rows[Math.min(rows.length,(i+1)*PER)-1][0]}`;
-  const opts=Array.from({length:nv},(_,i)=>`<option value="${i}" ${i===v?'selected':''}>第${i+1}巻 ・ ${lab(i)}</option>`).join('');
+  const opts=Array.from({length:nv},(_,i)=>`<option value="${i}" ${i===v?'selected':''}>${rows.slice(i*PER,(i+1)*PER).every(d=>done(d[0]))?'✓ ':''}第${i+1}巻 ・ ${lab(i)}</option>`).join('');
   const pager=`<div class="pager"><button data-act="vol:${v-1}" ${v?'':'disabled'} aria-label="前の巻" style="transform:scaleX(-1)">${chev}</button><label class="vsel"><select id="volsel" aria-label="巻を選ぶ">${opts}</select><span>第${v+1}巻 ・ ${lab(v)}</span><small>解決 ${solved} / ${rows.length}</small></label><button data-act="vol:${v+1}" ${v<nv-1?'':'disabled'} aria-label="次の巻">${chev}</button></div>`;
-  const note=paid&&!S.own?`<div class="sect" style="margin-top:8px"><span>${free?`無料 ${free}件`:'全編版'}${paid&&free?` ・ 残り ${paid}件は全編版`:''}</span><button data-act="buy">¥1,800 で解放</button></div>`:'';
+  const nx=next>=0&&Math.floor(next/PER)!==v?`<button data-act="vol:${Math.floor(next/PER)}" class="nxt">次の未解決 第${Math.floor(next/PER)+1}巻 ${chev}</button>`:'<span></span>';
+  const buy=paid&&!S.own?`<button data-act="buy">${free?`残り${paid}件は ¥1,800 で解放`:'¥1,800 で解放'}</button>`:'';
+  const note=(nx.length>20||buy)?`<div class="sect" style="margin-top:6px">${nx}${buy}</div>`:'';
   return `${pager}${note}<div class="group clist">${vr.map(d=>crowHTML(d[0])).join('')}</div><div style="height:16px"></div>`;
 }
 function libraryScreen(){
