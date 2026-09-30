@@ -20,3 +20,7 @@ Taken from the locked spec (sections 2, 4, 9) and the audience read in `docs/ui-
 3. Run the export on macOS so Hiragino Mincho ProN is used. The Linux fallback fonts only suit layout checks.
 
 Captions live in the `SHOTS` array in `index.html`. Have a native Japanese speaker read them before submission.
+
+## Final images
+
+`export/iphone/` (1320×2868) and `export/ipad/` (2064×2752) hold the finished, upload-ready PNGs (caption + device + gameplay). They are copies of `out/` from `node render.mjs`, checked for an Apple-accepted size and no alpha channel. Re-run `render.mjs` and copy `out/*` over them after any change.
