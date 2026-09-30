@@ -1,6 +1,6 @@
 # App Store screenshot shell
 
-`index.html` lays out six Japanese App Store screenshots (paper background, 朱 accent, serif headline, device frame) with a labelled empty slot for each real capture. Open it in a browser to preview. `?device=ipad` shows the iPad set.
+`index.html` lays out six App Store screenshot shells (paper background, device frame, no captions) with a labelled empty slot for each real capture. Open it in a browser to preview. `?device=ipad` shows the iPad set.
 
 ## Audience basis (assumption, not player-tested)
 
@@ -21,4 +21,4 @@ Taken from the locked spec (sections 2, 4, 9) and the audience read in `docs/ui-
 2. Export: `node docs/screenshots/render.mjs` writes `out/<device>/<id>.png` at exact App Store size (gitignored). Set `CHROMIUM_PATH` if needed.
 3. Run the export on macOS so Hiragino Mincho ProN is used. The Linux fallback fonts only suit layout checks.
 
-Copy lives in the `SHOTS` array in `index.html`. Have it read by a native Japanese speaker before submission, and confirm the ¥1,800 wording against the StoreKit price.
+The shell is deliberately caption-free. The message column in the table above is planning only and is not rendered.
