@@ -87,16 +87,11 @@ jobs:
         # auto-generated per-product schemes don't include one by their name
         # -- only the umbrella "<PackageName>-Package" scheme runs them.
         #
-        # Two EntitlementStoreTests cases are skipped (see that file):
-        # anything that enumerates Transaction.currentEntitlements hangs/
-        # fails with StoreKitTest's local daemon erroring on its own
-        # transaction-history endpoint ("Error Domain=AMSErrorDomain
-        # Code=301 Invalid Status Code" against http://localhost/inApps/
-        # history). Reproduced identically across the oldest and newest
-        # installed iOS runtimes, before/after erasing the simulator, and on
-        # both the macos-14 and macos-15 runner images -- a GitHub-hosted
-        # runner limitation in StoreKitTest itself, not application or
-        # workflow code.
+        # Purchase/restore/revocation rules run against a fake
+        # EntitlementBackend (EntitlementLogicTests). Live StoreKitTest's
+        # Transaction.currentEntitlements hangs on GitHub-hosted runners
+        # ("AMSErrorDomain Code=301" from its local daemon), so only the
+        # product-load test uses real StoreKit here.
         run: >
           xcodebuild test -scheme LogicCasebook-Package
           -destination "id=${{ steps.sim.outputs.udid }}"

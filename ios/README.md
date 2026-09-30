@@ -41,23 +41,17 @@ checked in for the package itself; the app shell is in `App/` (see "App project"
   bundle and checks every one of the 1,000 cases decodes, is `approved`, and
   independently re-solves to its bundled solution with a consistent
   deduction path.
-- **`Tests/LogicCasebookUITests`** — XCTest suite exercising `EntitlementStore`
-  against a checked-in StoreKit Testing configuration
-  (`Resources/Configuration.storekit`) via `StoreKitTest.SKTestSession` —
-  Apple's supported way to drive real StoreKit 2 APIs in an automated test
-  without an App Store sandbox account. `testProductLoads` passes in CI.
-  The other two tests (a purchase flipping `isFullUnlockPurchased`, and
-  `restorePurchases()` recovering it on a fresh `EntitlementStore`) are
-  currently `XCTSkip`ped: on GitHub Actions runners, anything that
-  enumerates `Transaction.currentEntitlements` hangs or fails against
-  StoreKitTest's own local daemon (`AMSErrorDomain Code=301` against its
-  transaction-history endpoint), reproduced identically across iOS runtime
-  version, simulator freshness, and host OS image (`macos-14`/`macos-15`) —
-  a runner limitation, not a bug in `EntitlementStore` or these tests. See
-  the comment at the top of `EntitlementStoreTests.swift` to re-enable them
-  somewhere that limitation doesn't apply (a real device, a local Mac, or a
-  different CI provider). Until then, purchase/restore is verified only by
-  manual Xcode simulator testing (below).
+- **`Tests/LogicCasebookUITests`** — XCTest suite for `EntitlementStore`.
+  `EntitlementLogicTests` runs the unlock, restore, revocation and
+  wrong-product rules against a fake `EntitlementBackend` (the seam over
+  `Transaction.currentEntitlements`, `Transaction.updates` and
+  `AppStore.sync()`), so it needs no StoreKit daemon. `EntitlementStoreTests`
+  loads the real product from the checked-in StoreKit Testing configuration
+  (`Resources/Configuration.storekit`) via `SKTestSession`. Live
+  `Transaction.currentEntitlements` hangs against StoreKitTest's daemon on
+  GitHub-hosted runners (`AMSErrorDomain Code=301`), which is why the rules
+  are not tested through live StoreKit; the real purchase sheet is verified
+  manually in the simulator or on TestFlight.
 
 ## Building and testing
 
