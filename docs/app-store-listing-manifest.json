@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "mode": "draft",
+  "app": {
+    "app_id": "6817388232",
+    "platform": "ios",
+    "bundle_id": "com.worksbienstudios.logiccasebook",
+    "version": "1.0",
+    "company_name": "WorksBien Studios Inc.",
+    "release_kind": "new",
+    "primary_category": "Games"
+  },
+  "source_control": {
+    "fact_ledger_complete": false,
+    "facts_reconciled": false,
+    "unresolved_conflicts": [
+      "Draft placeholder created for release automation. Complete ASO copy, policy review, screenshots, privacy, and review notes before upload."
+    ]
+  },
+  "authorization": {
+    "live_submission_authorized": false
+  },
+  "human_review": {
+    "attested": false
+  },
+  "locales": [],
+  "screenshots": [],
+  "review": {
+    "contact_complete": false,
+    "notes": ""
+  },
+  "compliance_controls": {
+    "metadata_complete_accurate": { "status": "blocked" },
+    "screenshots_authentic_current": { "status": "blocked" },
+    "reviewer_access": { "status": "blocked" },
+    "legal_urls_live": { "status": "blocked" },
+    "privacy_policy_matches_build": { "status": "blocked" },
+    "app_privacy_answers_match_build_and_sdks": { "status": "blocked" }
+  }
+}
