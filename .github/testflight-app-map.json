@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
-  "state": "awaiting_ios_source_and_credential_route",
-  "repository": "lrodeveloperr/Logic-casebook",
+  "state": "ready",
+  "repository": "WorksBien-Studios/Logic-casebook",
   "bundle_id": "com.worksbienstudios.logiccasebook",
   "team_id": "49SQ3XQ68Q",
   "asc_app_id": "6817388232",
-  "credential_alias": "worksbien-primary",
-  "asc_key_id": "",
-  "asc_issuer_id": "",
+  "credential_alias": "worksbien-org-admin",
+  "asc_key_id": "63PRWU447P",
+  "asc_issuer_id": "9f49640c-f575-42b4-b0c7-8e3194aef419",
   "private_key_secret_name": "ASC_PRIVATE_KEY",
   "runtime_env": {
     "key_id": "ASC_KEY_ID",
