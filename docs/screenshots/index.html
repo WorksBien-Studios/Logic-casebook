@@ -27,8 +27,8 @@ body{background:#2a2622;font-family:var(--sans);color:var(--ink)}
 .copy{position:relative;z-index:1;width:100%;padding:calc(var(--u)*170px) calc(var(--u)*100px) 0;text-align:center}
 .headline{font:700 calc(var(--u)*92px)/1.35 var(--serif);letter-spacing:.02em;line-break:strict;word-break:keep-all}
 .headline em{font-style:normal;color:var(--accent)}
-.ipad .copy{padding-top:calc(var(--u)*140px)}
-.ipad .headline{font-size:calc(var(--u)*92px)}
+.ipad .copy{padding-top:calc(var(--u)*120px)}
+.ipad .headline{font-size:calc(var(--u)*78px)}
 .stage{position:relative;z-index:1;flex:1;width:100%;display:flex;justify-content:center;align-items:flex-end;padding-top:calc(var(--u)*140px)}
 /* Device: a quiet dark bezel, cropped by the bottom edge so the board stays big. */
 .device{--r:calc(var(--u)*150px);width:calc(var(--u)*1160px);height:100%;background:#15120f;
@@ -44,7 +44,9 @@ body{background:#2a2622;font-family:var(--sans);color:var(--ink)}
 .slot code{font:calc(var(--u)*36px) ui-monospace,Menlo,monospace;background:var(--accent-soft);color:var(--accent);padding:calc(var(--u)*8px) calc(var(--u)*20px);border-radius:calc(var(--u)*10px)}
 .screen.empty .slot{display:flex}
 /* iPad: wider, flatter device. */
-.ipad .device{width:calc(var(--u)*1800px);--r:calc(var(--u)*90px)}
+.ipad .device{width:calc(var(--u)*1160px);--r:calc(var(--u)*64px);padding:calc(var(--u)*30px) calc(var(--u)*30px) 0}
+.ipad .screen{border-radius:calc(var(--r) - var(--u)*30px) calc(var(--r) - var(--u)*30px) 0 0}
+.ipad .stage{padding-top:calc(var(--u)*110px)}
 </style>
 </head>
 <body>
