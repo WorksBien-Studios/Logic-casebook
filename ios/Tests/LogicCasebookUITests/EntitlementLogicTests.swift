@@ -49,7 +49,7 @@ private final class FakeBackend: EntitlementBackend, @unchecked Sendable {
     }
 }
 
-private func record(
+private func makeRecord(
     _ id: String = EntitlementStore.fullUnlockProductID,
     revoked: Bool = false,
     onFinish: @escaping @Sendable () -> Void = {}
@@ -68,7 +68,7 @@ final class EntitlementLogicTests: XCTestCase {
     @MainActor
     func testOwnedEntitlementUnlocksAndIsFinished() async {
         let finished = expectation(description: "transaction finished")
-        let store = EntitlementStore(backend: FakeBackend(owned: [record(onFinish: { finished.fulfill() })]))
+        let store = EntitlementStore(backend: FakeBackend(owned: [makeRecord(onFinish: { finished.fulfill() })]))
         await store.start()
         XCTAssertTrue(store.isFullUnlockPurchased)
         await fulfillment(of: [finished], timeout: 2)
@@ -82,7 +82,7 @@ final class EntitlementLogicTests: XCTestCase {
         XCTAssertFalse(store.isFullUnlockPurchased)
 
         // Same path an Ask-to-Buy approval or another-device purchase takes.
-        backend.deliver(record())
+        backend.deliver(makeRecord())
         for _ in 0..<50 where !store.isFullUnlockPurchased {
             try await Task.sleep(nanoseconds: 20_000_000)
         }
@@ -91,7 +91,7 @@ final class EntitlementLogicTests: XCTestCase {
 
     @MainActor
     func testRestorePurchasesRecoversEntitlementOnAFreshStore() async {
-        let backend = FakeBackend(restorable: [record()])
+        let backend = FakeBackend(restorable: [makeRecord()])
         let store = EntitlementStore(backend: backend)
         await store.start()
         XCTAssertFalse(store.isFullUnlockPurchased)
@@ -104,7 +104,7 @@ final class EntitlementLogicTests: XCTestCase {
 
     @MainActor
     func testRestoreFailureSurfacesErrorAndStaysLocked() async {
-        let backend = FakeBackend(restorable: [record()])
+        let backend = FakeBackend(restorable: [makeRecord()])
         backend.syncError = URLError(.notConnectedToInternet)
         let store = EntitlementStore(backend: backend)
         await store.restorePurchases()
@@ -114,14 +114,14 @@ final class EntitlementLogicTests: XCTestCase {
 
     @MainActor
     func testRevokedEntitlementDoesNotUnlock() async {
-        let store = EntitlementStore(backend: FakeBackend(owned: [record(revoked: true)]))
+        let store = EntitlementStore(backend: FakeBackend(owned: [makeRecord(revoked: true)]))
         await store.start()
         XCTAssertFalse(store.isFullUnlockPurchased)
     }
 
     @MainActor
     func testOtherProductDoesNotUnlock() async {
-        let store = EntitlementStore(backend: FakeBackend(owned: [record("jp.logic.casebook.other")]))
+        let store = EntitlementStore(backend: FakeBackend(owned: [makeRecord("jp.logic.casebook.other")]))
         await store.start()
         XCTAssertFalse(store.isFullUnlockPurchased)
     }
