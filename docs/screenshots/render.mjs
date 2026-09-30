@@ -11,7 +11,7 @@ import path from "node:path";
 
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const SIZES = { iphone: [1320, 2868], ipad: [2064, 2752] };
-const IDS = ["01-board","02-library","03-marks","04-hint","05-price","06-complete"];
+const IDS = ["01-library","02-board","03-hint"];
 const devices = process.argv[2] ? [process.argv[2]] : Object.keys(SIZES);
 
 const launch = process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {};

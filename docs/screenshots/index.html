@@ -24,6 +24,11 @@ body{background:#2a2622;font-family:var(--sans);color:var(--ink)}
 .shot::before{content:"";position:absolute;inset:0;pointer-events:none;
   background:repeating-linear-gradient(0deg,transparent 0 calc(var(--u)*46px),rgba(168,64,46,.045) calc(var(--u)*46px) calc(var(--u)*47px))}
 
+.copy{position:relative;z-index:1;width:100%;padding:calc(var(--u)*170px) calc(var(--u)*100px) 0;text-align:center}
+.headline{font:700 calc(var(--u)*92px)/1.35 var(--serif);letter-spacing:.02em;line-break:strict;word-break:keep-all}
+.headline em{font-style:normal;color:var(--accent)}
+.ipad .copy{padding-top:calc(var(--u)*140px)}
+.ipad .headline{font-size:calc(var(--u)*92px)}
 .stage{position:relative;z-index:1;flex:1;width:100%;display:flex;justify-content:center;align-items:flex-end;padding-top:calc(var(--u)*140px)}
 /* Device: a quiet dark bezel, cropped by the bottom edge so the board stays big. */
 .device{--r:calc(var(--u)*150px);width:calc(var(--u)*1160px);height:100%;background:#15120f;
@@ -45,14 +50,14 @@ body{background:#2a2622;font-family:var(--sans);color:var(--ink)}
 <body>
 <div id="root"></div>
 <script>
-/* One entry per App Store screenshot, in store order. Shell only: no captions. */
+/* One entry per App Store screenshot, in store order. One headline per shot. */
 const SHOTS = [
-  { id:"01-board", capture:"01-board.png", note:"Workspace on a Standard case, several ○ × placed, one clue checked." },
-  { id:"02-library", capture:"02-library.png", note:"Library with four difficulty tabs, hanko stamps (済/完), a locked row." },
-  { id:"03-marks", capture:"03-marks.png", note:"Close on a pair grid with all three marks, tate column headers visible." },
-  { id:"04-hint", capture:"04-hint.png", note:"Hint half-sheet over the board: clue, logic sentence, justified mark." },
-  { id:"05-price", capture:"05-purchase.png", note:"Purchase half-sheet with the StoreKit price, over the library." },
-  { id:"06-complete", capture:"06-complete.png", note:"Completion screen: 完 stamp, narrowing bars, hints used." }
+  { id:"01-library", capture:"01-library.png", headline:"全1,000事件の<br>本格ロジックパズル",
+    note:"Library with four difficulty tabs, hanko stamps (済/完), a locked row." },
+  { id:"02-board", capture:"02-board.png", headline:"推測なし。<br>論理だけで<em>必ず</em>解ける",
+    note:"Workspace on a Standard case, several ○ × placed, one clue checked." },
+  { id:"03-hint", capture:"03-hint.png", headline:"ヒントは答えではなく、<br><em>次の一手</em>",
+    note:"Hint half-sheet over the board: clue, logic sentence, justified mark." }
 ];
 const DEVICES = {
   iphone:{ w:1320, h:2868, cls:"", label:"iPhone 6.9\" (1320×2868)" },
@@ -68,6 +73,7 @@ function shotEl(s){
   el.style.setProperty("--w", dev.w); el.style.setProperty("--h", dev.h);
   el.id = s.id;
   el.innerHTML = `
+    <div class="copy"><h1 class="headline">${s.headline}</h1></div>
     <div class="stage"><div class="device"><div class="screen empty">
       <img alt="" src="captures/${devName}/${s.capture}">
       <div class="slot"><b>画面キャプチャ待ち</b><code>captures/${devName}/${s.capture}</code><span>${s.note}</span></div>
