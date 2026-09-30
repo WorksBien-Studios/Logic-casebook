@@ -77,6 +77,8 @@ public final class EntitlementStore: ObservableObject {
 
     private let backend: EntitlementBackend
     private var updateListenerTask: Task<Void, Never>?
+    private var entitlementRevision = 0
+    private var refreshSequence = 0
 
     public convenience init() {
         self.init(backend: LiveEntitlementBackend())
@@ -115,12 +117,30 @@ public final class EntitlementStore: ObservableObject {
     }
 
     public func refreshEntitlements() async {
+        refreshSequence += 1
+        let sequence = refreshSequence
+        let revision = entitlementRevision
+        var hasFullUnlock = false
+
+        // This is a complete snapshot: refunded/revoked purchases are absent.
+        // Publish once at the end so valid owners do not briefly become locked.
         for await record in backend.currentEntitlements() {
-            await handle(record)
+            if record.productID == Self.fullUnlockProductID, !record.isRevoked {
+                hasFullUnlock = true
+            }
+            await record.finish()
         }
+
+        // Actor reentrancy allows a purchase/update or a newer refresh while
+        // this sequence is suspended. Never overwrite that newer information.
+        guard !Task.isCancelled,
+              sequence == refreshSequence,
+              revision == entitlementRevision else { return }
+        isFullUnlockPurchased = hasFullUnlock
     }
 
     public func purchaseFullUnlock() async {
+        lastError = nil
         guard let product = fullUnlockProduct else {
             lastError = "商品情報を取得できませんでした"
             return
@@ -142,6 +162,7 @@ public final class EntitlementStore: ObservableObject {
     }
 
     public func restorePurchases() async {
+        lastError = nil
         do {
             try await backend.sync()
             await refreshEntitlements()
@@ -151,8 +172,9 @@ public final class EntitlementStore: ObservableObject {
     }
 
     private func handle(_ record: EntitlementRecord) async {
-        if record.productID == Self.fullUnlockProductID, !record.isRevoked {
-            isFullUnlockPurchased = true
+        if record.productID == Self.fullUnlockProductID {
+            entitlementRevision += 1
+            isFullUnlockPurchased = !record.isRevoked
         }
         await record.finish()
     }
