@@ -5,9 +5,9 @@
 // Drives docs/ui-mock/index.html (the HTML mock of the SwiftUI app, playing the real free cases,
 // real clues, real deduction steps) into three player states and screenshots the app screen only,
 // at the exact App Store pixel size, to captures/<device>/<file>.png:
-//   01-library  expert case 741 board, mid-solve (the library page is short and mostly empty)
-//   02-board    case 381 after four real deduction steps: ○ × △ marks placed, clues ticked
-//   03-hint     the same board with the next deduction (step 5) open in the hint sheet
+//   01-expert-board  expert case 741 board, mid-solve (the library page is short and mostly empty)
+//   02-logic-board   case 381 after four real deduction steps: ○ × △ marks placed, clues ticked
+//   03-hint          the same board with the next deduction (step 5) open in the hint sheet
 // Every mark placed is checked against the case's bundled solution (○ and × must be true, △ is a
 // candidate), so the board never shows a wrong deduction.
 import { chromium } from "playwright";
@@ -109,7 +109,7 @@ for (const name of which) {
     S.progress = { [n]: "progress" }; S.last = n;
     render();
   });
-  await shoot("01-library.png");
+  await shoot("01-expert-board.png");
 
   // 02 / 03: case 381 (放送局の番組表), five people x five programmes x five broadcast hours.
   await page.evaluate(() => {
@@ -150,7 +150,7 @@ for (const name of which) {
     S.progress[n] = "progress"; S.last = n;
     render();
   });
-  await shoot("02-board.png");
+  await shoot("02-logic-board.png");
 
   await page.evaluate(() => { S.hintOpen = true; render(); });
   await shoot("03-hint.png");

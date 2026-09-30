@@ -1,7 +1,8 @@
 // Export every screenshot as an exact-size PNG:
 //   node docs/screenshots/render.mjs            (iPhone + iPad)
 //   node docs/screenshots/render.mjs iphone
-// Output: docs/screenshots/out/<device>/<id>.png. Requires `playwright`.
+// Output: docs/screenshots/app-store-upload/<device>/<id>.png, the ONLY folder to upload to App Store
+// Connect. Requires `playwright`.
 // For the final export run on macOS so Hiragino Mincho ProN is used; the Linux
 // fallback font is only good enough to check layout.
 import { chromium } from "playwright";
@@ -11,7 +12,7 @@ import path from "node:path";
 
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const SIZES = { iphone: [1320, 2868], ipad: [2064, 2752] };
-const IDS = ["01-library","02-board","03-hint"];
+const IDS = ["01-expert-board","02-logic-board","03-hint"];
 // App Store Connect portrait sizes: iPhone 6.9" and iPad 13". Anything else is rejected.
 const APPLE = {
   iphone: ["1320x2868", "1290x2796", "1260x2736"],
@@ -32,14 +33,14 @@ const launch = process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIU
 const browser = await chromium.launch(launch);
 for (const d of devices) {
   const [w, h] = SIZES[d];
-  mkdirSync(path.join(dir, "out", d), { recursive: true });
+  mkdirSync(path.join(dir, "app-store-upload", d), { recursive: true });
   const page = await browser.newPage({ viewport: { width: w, height: h } });
   for (const id of IDS) {
     await page.goto(`${pathToFileURL(path.join(dir, "index.html"))}?device=${d}&shot=${id}`);
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(150);
-    await page.screenshot({ path: path.join(dir, "out", d, `${id}.png`) });
-    check(d, path.join(dir, "out", d, `${id}.png`));
+    await page.screenshot({ path: path.join(dir, "app-store-upload", d, `${id}.png`) });
+    check(d, path.join(dir, "app-store-upload", d, `${id}.png`));
   }
 }
 await browser.close();
