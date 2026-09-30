@@ -555,7 +555,10 @@ function crowHTML(n){
 }
 function libraryList(){
   const t=S.tier, rows=IDX.filter(d=>d[2]===t), PER=10, nv=Math.ceil(rows.length/PER);
-  const v=Math.min(S.vol||0,nv-1), vr=rows.slice(v*PER,(v+1)*PER), free=vr.filter(d=>d[3]).length, paid=vr.length-free;
+  const done=n=>{const q=S.progress[n];return q==='perfect'||q==='solved'};
+  const next=rows.findIndex(d=>(d[3]||S.own)&&!done(d[0])); // first open case not yet solved
+  const lastIx=rows.findIndex(d=>d[0]===(S.last||741)), anchor=lastIx>=0?lastIx:Math.max(0,next); // last played case, else first open unsolved
+  const v=Math.min(S.vol==null?Math.floor(anchor/PER):S.vol,nv-1), vr=rows.slice(v*PER,(v+1)*PER), free=vr.filter(d=>d[3]).length, paid=vr.length-free;
   const solved=Object.entries(S.progress).filter(([n,s])=>(s==='perfect'||s==='solved')&&info(+n)[2]===t).length;
   const lab=i=>`${rows[i*PER][0]}–${rows[Math.min(rows.length,(i+1)*PER)-1][0]}`;
   const opts=Array.from({length:nv},(_,i)=>`<option value="${i}" ${i===v?'selected':''}>第${i+1}巻 ・ ${lab(i)}</option>`).join('');
@@ -809,10 +812,10 @@ const ACT={
   theme:v=>{const r=document.documentElement; if(v==='auto') r.removeAttribute('data-theme'); else r.dataset.theme=v; document.querySelectorAll('[data-act^="theme:"]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.act==='theme:'+v)); r.dataset.dark=(v==='dark'||(v==='auto'&&matchMedia('(prefers-color-scheme:dark)').matches))?'1':'0'; store.set('lc-theme',v);},
   own:v=>{S.own=v==='1';document.querySelectorAll('[data-act^="own:"]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.act==='own:'+v));},
   tab:v=>{S.tab=v;S.sideTier=false;S.stack=[];},
-  sidetier:v=>{S.vol=0;S.tab='library';S.sideTier=true;S.tier=v;S.stack=[];},
-  tier:v=>{S.tier=v;S.vol=0;},
+  sidetier:v=>{S.vol=null;S.tab='library';S.sideTier=true;S.tier=v;S.stack=[];},
+  tier:v=>{S.tier=v;S.vol=null;},
   vol:v=>{S.vol=Math.max(0,+v);},
-  open:v=>{openCase(+v);return 1;},
+  open:v=>{S.last=+v;openCase(+v);return 1;},
   back:()=>{S.stack.pop();S.hintOpen=false;S.banner=null;},
   start:()=>{const n=topScreen().n;S.stack=[{t:'work',n}];S.pair=[0,1];W(n);},
   briefsheet:()=>{S.sheet='brief';},
