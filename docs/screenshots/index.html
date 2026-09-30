@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Logic Casebook Screenshot Shell</title>
+<style>
+/* Tokens mirror ios/Sources/LogicCasebookUI/Theme.swift (paper, ink, 朱 accent). */
+:root{
+  --paper:#F7F4EE; --paper2:#FBF9F4; --border:#E4DBC9;
+  --ink:#221D17; --ink-soft:#6E6357; --accent:#A8402E; --accent-soft:#F3DED7;
+  --serif:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP","IPAMincho",serif;
+  --sans:"Hiragino Sans","Yu Gothic","Noto Sans JP","IPAGothic",sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+body{background:#2a2622;font-family:var(--sans);color:var(--ink)}
+/* Gallery view: scaled-down previews. Single view (?shot=n): exact pixel size. */
+.gallery{display:flex;flex-wrap:wrap;gap:24px;padding:24px;align-items:flex-start}
+.preview{width:calc(var(--w)*var(--s));height:calc(var(--h)*var(--s));overflow:hidden;border-radius:6px}
+.preview .shot{transform:scale(var(--s));transform-origin:0 0}
+
+.shot{--u:calc(var(--w)/1320);position:relative;width:calc(var(--w)*1px);height:calc(var(--h)*1px);
+  background:var(--paper);overflow:hidden;display:flex;flex-direction:column;align-items:center}
+.shot::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent 0 calc(var(--u)*46px),rgba(168,64,46,.045) calc(var(--u)*46px) calc(var(--u)*47px))}
+.copy{position:relative;z-index:1;width:100%;padding:calc(var(--u)*150px) calc(var(--u)*100px) 0;text-align:left}
+.kicker{display:inline-block;font:600 calc(var(--u)*44px)/1 var(--sans);letter-spacing:.12em;color:var(--accent);
+  border:calc(var(--u)*4px) solid var(--accent);border-radius:calc(var(--u)*10px);padding:calc(var(--u)*14px) calc(var(--u)*24px)}
+.headline{text-wrap:balance;word-break:keep-all;line-break:strict;margin-top:calc(var(--u)*46px);font:700 calc(var(--u)*104px)/1.22 var(--serif);letter-spacing:.02em}
+.headline em{font-style:normal;color:var(--accent)}
+.sub{text-wrap:pretty;line-break:strict;margin-top:calc(var(--u)*34px);font:400 calc(var(--u)*52px)/1.5 var(--sans);color:var(--ink-soft)}
+
+.stage{position:relative;z-index:1;flex:1;width:100%;display:flex;justify-content:center;align-items:flex-end;margin-top:calc(var(--u)*90px)}
+/* Device: a quiet dark bezel, cropped by the bottom edge so the board stays big. */
+.device{--r:calc(var(--u)*150px);width:calc(var(--u)*1080px);height:100%;background:#15120f;
+  border-radius:var(--r) var(--r) 0 0;padding:calc(var(--u)*26px) calc(var(--u)*26px) 0;
+  box-shadow:0 calc(var(--u)*-6px) calc(var(--u)*90px) rgba(34,29,23,.28)}
+.screen{position:relative;width:100%;height:100%;overflow:hidden;background:var(--paper2);
+  border-radius:calc(var(--r) - var(--u)*26px) calc(var(--r) - var(--u)*26px) 0 0}
+.screen img{width:100%;height:100%;object-fit:cover;object-position:top}
+.slot{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u)*24px);
+  border:calc(var(--u)*6px) dashed var(--border);margin:calc(var(--u)*30px);border-radius:calc(var(--u)*40px);
+  font:500 calc(var(--u)*44px)/1.5 var(--sans);color:var(--ink-soft);text-align:center;padding:calc(var(--u)*40px)}
+.slot b{font:700 calc(var(--u)*60px) var(--serif);color:var(--ink)}
+.slot code{font:calc(var(--u)*36px) ui-monospace,Menlo,monospace;background:var(--accent-soft);color:var(--accent);padding:calc(var(--u)*8px) calc(var(--u)*20px);border-radius:calc(var(--u)*10px)}
+.screen.empty .slot{display:flex}
+/* iPad: wider, flatter device. */
+.ipad .device{width:calc(var(--u)*1800px);--r:calc(var(--u)*90px)}
+.ipad .copy{padding:calc(var(--u)*130px) calc(var(--u)*140px) 0}
+.ipad .headline{font-size:calc(var(--u)*104px)}
+/* Hanko seal, bottom right, on shots that carry a promise. */
+.seal{position:absolute;z-index:2;right:calc(var(--u)*150px);top:calc(var(--u)*-85px);width:calc(var(--u)*170px);height:calc(var(--u)*170px);
+  border:calc(var(--u)*8px) solid var(--accent);border-radius:50%;color:var(--accent);display:grid;place-items:center;
+  font:700 calc(var(--u)*84px) var(--serif);transform:rotate(-8deg);opacity:.9}
+.seal::after{content:"";position:absolute;inset:calc(var(--u)*10px);border:calc(var(--u)*3px) solid var(--accent);border-radius:50%}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+/* One entry per App Store screenshot, in store order. Copy is Japanese-first and
+   drawn from the locked spec: no guessing, real difficulty, ○×△ notation,
+   one honest price, no ads, offline. Nothing here promises what the spec does not. */
+const SHOTS = [
+  { id:"01-board", kicker:"推測ゼロ", seal:"論",
+    headline:"すべての事件は、<em>推理だけ</em>で解ける。",
+    sub:"手がかりだけで一つの答えにたどり着く、本格ロジックパズル。",
+    capture:"01-board.png", note:"Workspace on a Standard case, several ○ × placed, one clue checked." },
+  { id:"02-library", kicker:"全1,000事件",
+    headline:"初級から上級まで、<em>最初から</em>挑める。",
+    sub:"入門・標準・上級・達人。解く順番の制限はありません。",
+    capture:"02-library.png", note:"Library with four difficulty tabs, hanko stamps (済/完), a locked row." },
+  { id:"03-marks", kicker:"○ × △",
+    headline:"紙とえんぴつの感覚で、<em>書き込む</em>。",
+    sub:"確定・除外・候補の三つの印。元に戻す・やり直すも自由。",
+    capture:"03-marks.png", note:"Close on a pair grid with all three marks, tate column headers visible." },
+  { id:"04-hint", kicker:"次の一手",
+    headline:"ヒントは、答えでなく<em>理由</em>を。",
+    sub:"どの手がかりから何が言えるのかを、一手ずつ。",
+    capture:"04-hint.png", note:"Hint half-sheet over the board: clue, logic sentence, justified mark." },
+  { id:"05-price", kicker:"一度きりの購入", seal:"無",
+    headline:"30事件は無料。<em>広告なし</em>、買い切り。",
+    sub:"¥1,800で残り970事件が解放。サブスクなし、オフラインで遊べます。",
+    capture:"05-purchase.png", note:"Purchase half-sheet with the StoreKit price, over the library." },
+  { id:"06-complete", kicker:"事件解決",
+    headline:"解き終えたら、<em>推理の道筋</em>を振り返る。",
+    sub:"時間は参考記録のみ。急かされることのない、静かな達成感。",
+    capture:"06-complete.png", note:"Completion screen: 完 stamp, narrowing bars, hints used." }
+];
+const DEVICES = {
+  iphone:{ w:1320, h:2868, cls:"", label:"iPhone 6.9\" (1320×2868)" },
+  ipad:  { w:2064, h:2752, cls:"ipad", label:"iPad 13\" (2064×2752)" }
+};
+const q = new URLSearchParams(location.search);
+const dev = DEVICES[q.get("device")] || DEVICES.iphone;
+const devName = q.get("device") === "ipad" ? "ipad" : "iphone";
+
+function shotEl(s){
+  const el = document.createElement("div");
+  el.className = "shot " + dev.cls;
+  el.style.setProperty("--w", dev.w); el.style.setProperty("--h", dev.h);
+  el.id = s.id;
+  el.innerHTML = `
+    <div class="copy"><span class="kicker">${s.kicker}</span>
+      <h1 class="headline">${s.headline}</h1><p class="sub">${s.sub}</p></div>
+    <div class="stage">${s.seal ? `<div class="seal">${s.seal}</div>` : ""}<div class="device"><div class="screen empty">
+      <img alt="" src="captures/${devName}/${s.capture}">
+      <div class="slot"><b>画面キャプチャ待ち</b><code>captures/${devName}/${s.capture}</code><span>${s.note}</span></div>
+    </div></div></div>`;
+  const img = el.querySelector("img"), scr = el.querySelector(".screen");
+  img.onload = () => scr.classList.remove("empty");
+  img.onerror = () => { img.remove(); scr.classList.add("empty"); };
+  return el;
+}
+const root = document.getElementById("root");
+const only = q.get("shot");
+if (only){ // exact-size render target for the export script
+  document.body.style.background = "none";
+  root.appendChild(shotEl(SHOTS.find(s => s.id === only)));
+} else {
+  root.className = "gallery";
+  const scale = Math.min(0.28, 1100 / (dev.w * 3.4));
+  SHOTS.forEach(s => {
+    const p = document.createElement("div");
+    p.className = "preview"; p.style.setProperty("--s", scale);
+    p.style.setProperty("--w", dev.w + "px"); p.style.setProperty("--h", dev.h + "px");
+    p.appendChild(shotEl(s)); root.appendChild(p);
+  });
+}
+</script>
+</body>
+</html>
