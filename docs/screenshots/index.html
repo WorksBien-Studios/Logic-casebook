@@ -71,8 +71,8 @@ body{background:#2a2622;font-family:var(--sans);color:var(--ink)}
 <script>
 /* One entry per App Store screenshot, in store order. One headline per shot. */
 const SHOTS = [
-  { id:"01-library", capture:"01-library.png", headline:"全1,000事件の<br>本格ロジックパズル",
-    note:"Library with four difficulty tabs, hanko stamps (済/完), a locked row." },
+  { id:"01-library", capture:{ iphone:"01-library.png", ipad:"01-expert.png" }, headline:"全1,000事件の<br>本格ロジックパズル",
+    note:{ iphone:"Library with four difficulty tabs, hanko stamps (済/完), a locked row.", ipad:"Expert board (case 741), four categories, mid-solve." } },
   { id:"02-board", capture:"02-board.png", headline:"推測なし。<br>論理だけで<em>必ず</em>解ける",
     note:"Workspace on a Standard case, several ○ × placed, one clue checked." },
   { id:"03-hint", capture:"03-hint.png", headline:"ヒントは答えではなく、<br><em>次の一手</em>",
@@ -86,7 +86,9 @@ const q = new URLSearchParams(location.search);
 const dev = DEVICES[q.get("device")] || DEVICES.iphone;
 const devName = q.get("device") === "ipad" ? "ipad" : "iphone";
 
-function shotEl(s){
+const pick = (v) => (typeof v === "string" ? v : v[devName]);
+function shotEl(s0){
+  const s = { ...s0, capture: pick(s0.capture), note: pick(s0.note) };
   const el = document.createElement("div");
   el.className = "shot " + dev.cls;
   el.style.setProperty("--w", dev.w); el.style.setProperty("--h", dev.h);

@@ -8,7 +8,7 @@ Taken from the locked spec (sections 2, 4, 9) and the audience read in `docs/ui-
 
 | # | Caption | Capture file |
 |---|---|---|
-| 1 | 全1,000事件の本格ロジックパズル | `01-library.png` |
+| 1 | 全1,000事件の本格ロジックパズル | iPhone `01-library.png`; iPad `01-expert.png` (a full expert board, because the iPad library page is mostly empty) |
 | 2 | 推測なし。論理だけで必ず解ける | `02-board.png` |
 | 3 | ヒントは答えではなく、次の一手 | `03-hint.png` |
 
