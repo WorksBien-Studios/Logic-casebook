@@ -152,4 +152,5 @@ jobs:
           app=$(find ~/Library/Developer/Xcode/DerivedData -path '*Release-iphoneos/LogicCasebook.app' -maxdepth 6 -type d | head -1)
           test -f "$app/PrivacyInfo.xcprivacy"
           test -f "$app/Assets.car"
-          /usr/libexec/PlistBuddy -c 'Print :CFBundleIconName' "$app/Info.plist"
+          # The icon lives in the compiled asset catalog; Xcode does not always echo its name into Info.plist.
+          xcrun assetutil --info "$app/Assets.car" | grep -q 'AppIcon'
