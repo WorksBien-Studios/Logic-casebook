@@ -1,0 +1,70 @@
+name: Logic Casebook App Store pricing
+
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "Write to App Store Connect. Leave false for a read-only dry run."
+        type: boolean
+        default: false
+      confirmation:
+        description: "Required when apply is true: SET LOGIC CASEBOOK PRICING"
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: app-store-pricing
+  cancel-in-progress: false
+
+jobs:
+  pricing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Confirm write request
+        if: ${{ inputs.apply }}
+        run: |
+          if [ "${{ inputs.confirmation }}" != "SET LOGIC CASEBOOK PRICING" ]; then
+            echo "Confirmation text does not match." >&2
+            exit 1
+          fi
+
+      - name: Load app map
+        run: |
+          set -euo pipefail
+          map=.github/testflight-app-map.json
+          test "$(jq -r .state "$map")" = "ready"
+          {
+            echo "ASC_APP_ID=$(jq -r .asc_app_id "$map")"
+            echo "IOS_BUNDLE_ID=$(jq -r .bundle_id "$map")"
+            echo "ASC_EXPECTED_KEY_ID=$(jq -r .asc_key_id "$map")"
+          } >> "$GITHUB_ENV"
+
+      - name: Verify credential route
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+        run: |
+          test "$ASC_KEY_ID" = "$ASC_EXPECTED_KEY_ID" || { echo "Key ID does not match the app map." >&2; exit 1; }
+
+      - name: Reconcile pricing
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+          APPLY: ${{ inputs.apply }}
+          IAP_PRODUCT_ID: jp.logic.casebook.fullunlock
+          IAP_PRICE: "1800"
+          IAP_REFERENCE_NAME: Full Unlock (Non-Consumable)
+          IAP_DISPLAY_NAME: すべてのケースを解放
+          IAP_DESCRIPTION: 970件の追加ケースを永久に解放します。広告・サブスクリプションはありません。
+        run: |
+          set -euo pipefail
+          key="$RUNNER_TEMP/AuthKey.p8"
+          umask 077
+          printf '%s' "$ASC_PRIVATE_KEY" > "$key"
+          trap 'rm -f "$key"' EXIT
+          ASC_KEY_PATH="$key" ruby scripts/asc_pricing.rb
