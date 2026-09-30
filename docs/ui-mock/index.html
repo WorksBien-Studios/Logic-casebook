@@ -95,13 +95,13 @@ header.top p{margin:4px 0 0;color:var(--mut);font-size:.85rem;max-width:60ch}
 .one .tabbar{padding-bottom:10px}
 .one .nav .t{font-size:19px}
 .nav{flex:none;height:44px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 8px;background:var(--d-bar);backdrop-filter:blur(16px)}
-.nav .t{font-weight:700;font-size:17px;text-align:center;white-space:nowrap}
+.nav .t{font-weight:600;font-size:17px;text-align:center;white-space:nowrap}
 .nav .t small{display:block;font-weight:400;font-size:11px;color:var(--d-faint);line-height:1.1}
 .nav .l{justify-self:start;color:var(--d-acc);display:flex;align-items:center;gap:2px;font-size:17px;padding:8px}
 .nav .r{justify-self:end;color:var(--d-acc);padding:8px;display:flex;gap:6px}
 .scroll{flex:1;overflow:auto;min-height:0;scrollbar-width:none}
 .scroll::-webkit-scrollbar{display:none}
-.large{font-family:var(--serif);font-size:34px;font-weight:700;padding:6px 20px 4px;line-height:1.2}
+.large{font-family:var(--sans);font-size:34px;font-weight:700;padding:6px 20px 4px;line-height:1.2}
 .tabbar{flex:none;height:83px;padding:8px 8px 0;display:flex;justify-content:space-around;background:var(--d-bar);backdrop-filter:blur(16px);border-top:.5px solid var(--d-line)}
 .tabbar button{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10.5px;color:var(--d-faint);width:90px;height:50px;font-weight:500}
 .tabbar button[aria-current=true]{color:var(--d-acc)}
@@ -187,7 +187,7 @@ header.top p{margin:4px 0 0;color:var(--mut);font-size:.85rem;max-width:60ch}
 .cells{display:grid;grid-template-columns:repeat(var(--n),var(--cs));border-left:1px solid var(--d-line);border-top:1px solid var(--d-line)}
 .cell{width:var(--cs);height:var(--cs);border-right:1px solid var(--d-line);border-bottom:1px solid var(--d-line);position:relative;display:grid;place-items:center;-webkit-user-select:none;user-select:none;touch-action:manipulation}
 .cell svg{width:26px;height:26px;pointer-events:none}
-.cell.dim{background:repeating-linear-gradient(135deg,transparent 0 5px,var(--d-alt) 5px 7px)}
+.cell.dim{background:color-mix(in srgb,var(--d-line) 35%,transparent)}
 .cell:active{background:var(--d-acc-s)}
 .m1{color:var(--d-acc)}.m2{color:var(--d-faint)}.m3{color:var(--d-amb)}
 .pop{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);display:flex;background:var(--d-ink);border-radius:12px;padding:4px;gap:2px;z-index:20;box-shadow:0 8px 22px var(--d-shadow)}
@@ -336,6 +336,27 @@ details.aud summary{cursor:pointer;font-weight:700;font-size:.9rem}
 .two ul{margin:0;padding-left:1.1em;font-size:.82rem;color:var(--mut)}
 .two li{margin-bottom:3px}
 .basis{font-size:.75rem;color:var(--mut);margin:10px 0 0}
+
+/* Fidelity to SwiftUI (see LogicWorkspaceView): icon-only bottom bar, prominent checkmark capsule,
+   bottom-sheet hint that covers the bar, tinted .bordered and filled .borderedProminent buttons. */
+.toolbar{gap:4px;padding:0 14px 34px;height:83px;align-items:flex-start;padding-top:3px}
+.toolbar button{min-width:44px;width:44px;height:44px;flex-direction:row;font-size:0;font-weight:400}
+.toolbar button .ic{width:24px;height:24px}
+.toolbar .prim{width:54px;height:34px;min-width:54px;margin-top:5px;border-radius:17px;padding:0}
+.toolbar .prim .ic{width:20px;height:20px}
+.nav .r button .ic{width:26px;height:26px}
+.hint{left:0;right:0;bottom:0;height:400px;overflow:auto;border-radius:38px 38px 0 0;padding:10px 20px 34px;background:var(--d-bg);box-shadow:0 -1px 0 var(--d-line),0 -10px 40px rgba(0,0,0,.14)}
+.hint .grab{margin:0 auto 12px}
+.hint h4{margin:6px 0 12px;font-size:13px;font-weight:700;letter-spacing:0}
+.hint .clue{margin:0 0 12px;background:var(--d-surf)}
+.hint .ex{font-size:16px;line-height:1.55;margin:0 0 12px}
+.hint .facts{margin:0 0 12px}
+.hint .facts span{padding:3px 10px}
+.hint .acts{gap:10px}
+.hint .acts .btn{height:50px;padding:0;border:0;border-radius:14px;font-size:17px;font-weight:500;color:var(--d-acc);background:color-mix(in srgb,var(--d-acc) 15%,transparent)}
+.hint .acts .btn.pri{color:#fff;background:var(--d-acc)}
+.dark-prim .hint .acts .btn.pri{color:#1a1310}
+.pad .hint{bottom:calc(var(--tb,70px) + 4px);height:auto;border-radius:22px;padding:8px 16px 16px}
 </style>
 
 <div class="wrap">
@@ -375,7 +396,7 @@ const S = {device:'phone', tab:'library', tier:'b', stack:[], sheet:null, own:fa
 
 /* ---------- icons ---------- */
 const P = {
-  book:'M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5C4.7 19 4 18.3 4 17.5zM20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5-.7 1.5-1.5z',
+  book:'M3 4h4.2v16H3zM8.8 4H13v16H8.8zM14.9 5.4l3.9-.8 2.8 13.8-3.9.8z',
   search:'M10.5 4a6.5 6.5 0 1 0 4 11.6l4.5 4.5 1.4-1.4-4.5-4.5A6.5 6.5 0 0 0 10.5 4zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9z',
   help:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zm0 2a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm-.1 2.6c-1.6 0-2.7 1-2.8 2.5h1.7c.1-.6.5-1 1.1-1 .7 0 1.1.4 1.1 1 0 1.3-2 1.3-2 3.1v.3h1.7v-.2c0-1.1 2-1.2 2-3.2 0-1.5-1.2-2.5-2.8-2.5zM11.1 15v1.8h1.8V15z',
   lock:'M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1zm2 0h6V8a3 3 0 0 0-6 0z',
@@ -386,6 +407,14 @@ const P = {
   check:'M9.5 17.5 4 12l1.4-1.4 4.1 4.1 9.1-9.1L20 7.0z',
   side:'M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm5 2H5v10h4z'
 };
+const SIC={
+  undo:'<path d="M9 4.6 4.6 9 9 13.4M4.6 9H15a4.9 4.9 0 0 1 0 9.8h-4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>',
+  redo:'<path d="M15 4.6 19.4 9 15 13.4M19.4 9H9a4.9 4.9 0 0 0 0 9.8h4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>',
+  bulb:'<path d="M9.2 17.2h5.6M10.2 20.2h3.6M12 2.8a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.3 1.1 2.1v.5h5v-.5c0-.8.4-1.5 1.1-2.1A6 6 0 0 0 12 2.8z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>',
+  check:'<path d="M5.2 12.6l4.5 4.5L18.8 7.2" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>',
+  info:'<circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 11v5.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><circle cx="12" cy="7.9" r="1.15" fill="currentColor"/>'
+};
+const sic=(n,px=24)=>`<svg class="ic" viewBox="0 0 24 24" width="${px}" height="${px}" aria-hidden="true">${SIC[n]}</svg>`;
 const ic = (n,extra='') => `<svg class="ic" viewBox="0 0 24 24" fill="currentColor" ${extra}><path d="${P[n]}"/></svg>`;
 const chev = '<svg class="chev" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1l6 6-6 6"/></svg>';
 const back = '<svg width="12" height="20" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2 2 10l8 8"/></svg>';
@@ -458,7 +487,7 @@ function strip(n,cl){
 function clueRow(n,cl,idx,opts={}){
   const w=W(n), on=w.checked.has(idx)&&!opts.plain;
   return `<button class="clue ${on?'on':''} ${opts.hl?'hl':''}" ${opts.plain?'':`data-act="clue:${idx}" aria-pressed="${on}"`}>
-    <span class="cb">${ic('check','style="width:16px;height:16px"')}</span>
+    ${opts.plain?'':`<span class="cb">${ic('check','style="width:16px;height:16px"')}</span>`}
     <span style="min-width:0"><span class="kind">手がかり ${idx+1}<i>${KIND[cl.type]}</i></span>
     <span class="tx" style="display:block">${clueHTML(n,cl.textJA)}</span>${strip(n,cl)}</span></button>`;
 }
@@ -513,7 +542,7 @@ function minimap(n){
 }
 
 /* ---------- screens ---------- */
-const status=()=>`<div class="status"><span>9:41</span><i><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/><rect x="24" y="4" width="2" height="4" rx="1" fill="currentColor" opacity=".5"/></svg></i></div>`;
+const status=()=>S.device==='pad'?`<div class="status"><span>9:41<span style="font-weight:500;margin-left:10px">9月30日(水)</span></span><i><svg width="17" height="12" viewBox="0 0 17 12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M1.4 4.2a10 10 0 0 1 14.2 0M3.8 6.9a6.6 6.6 0 0 1 9.4 0"/><circle cx="8.5" cy="10" r="1.2" fill="currentColor" stroke="none"/></svg><span style="font-weight:600;font-size:13px">100%</span><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="19" height="8" rx="2" fill="currentColor"/><rect x="24" y="4" width="2" height="4" rx="1" fill="currentColor" opacity=".5"/></svg></i></div>`:`<div class="status"><span>9:41</span><i><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/><rect x="24" y="4" width="2" height="4" rx="1" fill="currentColor" opacity=".5"/></svg></i></div>`;
 const nav=(o={})=>`<div class="nav"><div class="l">${o.back?`<button class="l" data-act="back" style="padding:8px 4px 8px 4px;display:flex;gap:4px;align-items:center">${back}<span>${o.back}</span></button>`:''}</div><div class="t">${o.title||''}${o.sub?`<small>${o.sub}</small>`:''}</div><div class="r">${o.right||''}</div></div>`;
 function tabbar(){
   const t=[['library','事件簿','book'],['search','検索','search'],['help','ヘルプ','help']];
@@ -607,16 +636,16 @@ function workScreen(n){
   const c=FREE[n], w=W(n), dm=dims(n), d=info(n), pad=S.device==='pad';
   const [a,b]=S.pair;
   const cls=`style="--cs:${dm.cs}px;--rh:${dm.rh}px;--chh:${dm.chh}px"`;
-  const g=pad?`<div style="flex:1;min-width:0;display:flex;flex-direction:column"><div class="scroll" style="padding:14px 18px;--cs:${dm.cs}px;--rh:${dm.rh}px;--chh:${dm.chh}px"><div class="ghead"><div class="gtitle"><b>${esc(c.titleJA)}</b><div class="legend">${[1,2,3].map(k=>`<span>${mark(k)}${['確定','除外','候補'][k-1]}</span>`).join('')}<span>タップで切替 ・ 長押しで直接選択</span></div></div></div>${staircase(n)}</div>${toolbar(n)}</div>`
+  const g=pad?`<div style="flex:1;min-width:0;display:flex;flex-direction:column"><div class="scroll" style="padding:14px 18px;--cs:${dm.cs}px;--rh:${dm.rh}px;--chh:${dm.chh}px"><div class="legend" style="margin:0 0 12px">${[1,2,3].map(k=>`<span>${mark(k)}${['確定','除外','候補'][k-1]}</span>`).join('')}</div>${staircase(n)}</div></div>`
    :`<div class="gridcard" ${cls}><div class="ghead">${minimap(n)}<div class="gtitle"><b>${esc(c.categories[a].nameJA)} × ${esc(c.categories[b].nameJA)}</b><div class="legend">${[1,2,3].map(k=>`<span>${mark(k)}${['確定','除外','候補'][k-1]}</span>`).join('')}</div></div></div>${pairBlock(n,a,b)}${!S.tipSeen?'<div class="tip"><span style="flex:1">マスを長押しすると、○ × △ を直接選べます。</span><button data-act="tipclose">閉じる</button></div>':''}</div>`;
   const clues=`<div class="clues"${pad?' style="width:360px;flex:none;border-left:1px solid var(--d-line);padding-top:14px"':''}><div class="qline">問い：${esc(c.questionJA)}</div><h5><span>手がかり（タップで確認済み）</span><span>${w.checked.size}/${c.clues.length}</span></h5>${c.clues.map((cl,i)=>clueRow(n,cl,i)).join('')}</div>`;
-  const right=`<button data-act="briefsheet" aria-label="概要">${ic('info')}</button>`;
-  const inner=pad?`<div style="display:flex;flex:1;min-height:0">${g}${clues}</div>`:`${g}${clues}${toolbar(n)}`;
-  return `${nav({back:'事件簿',title:esc(c.titleJA.replace(/（.*）/,'')),sub:'自動保存済み',right})}${inner}${overlays(n)}`;
+  const right=`<button data-act="briefsheet" aria-label="概要" style="display:flex">${sic('info',26)}</button>`;
+  const inner=pad?`<div style="display:flex;flex:1;min-height:0">${g}${clues}</div>${toolbar(n)}`:`${g}${clues}${toolbar(n)}`;
+  return `${nav({back:'戻る',title:esc(c.titleJA.replace(/（.*）/,'')),right})}${inner}${overlays(n)}`;
 }
 function toolbar(n){
   const w=W(n);
-  return `<div class="toolbar"><button data-act="undo" ${w.undo.length?'':'disabled'}>${ic('undo')}<span>元に戻す</span></button><button data-act="redo" ${w.redo.length?'':'disabled'}>${ic('redo')}<span>やり直す</span></button><button data-act="hint">${ic('bulb')}<span>ヒント</span></button><span class="sp"></span><button class="prim" data-act="check">${ic('check','style="width:20px;height:20px"')}解答を確認</button></div>`;
+  return `<div class="toolbar"><button data-act="undo" aria-label="元に戻す" ${w.undo.length?'':'disabled'}>${sic('undo')}</button><button data-act="redo" aria-label="やり直す" ${w.redo.length?'':'disabled'}>${sic('redo')}</button><button data-act="hint" aria-label="ヒント">${sic('bulb')}</button><span class="sp"></span><button class="prim" data-act="check" aria-label="解答を確認">${sic('check',20)}</button></div>`;
 }
 function overlays(n){
   let h='';
@@ -626,7 +655,7 @@ function overlays(n){
     else { const st=c.deductionSteps[k];
       h+=`<div class="hint"><div class="grab"></div><h4>次の一手 ・ ${k+1}/${c.deductionSteps.length}</h4>
       ${st.clueIDs.map(id=>{const i=c.clues.findIndex(x=>x.id===id);return clueRow(n,c.clues[i],i,{plain:true})}).join('')}
-      <div class="ex">${clueHTML(n,st.explanationJA.replace(/^手がかり[\d・、]+を使うと、/,''))}</div>
+      <div class="ex">${clueHTML(n,st.explanationJA)}</div>
       <div class="facts">${st.deducedFacts.map(f=>`<span>${esc(nameOf(n,f.left)[0])} ＝ ${esc(nameOf(n,f.right)[0])}</span>`).join('')}</div>
       <div class="acts"><button class="btn" data-act="hintclose">反映せず戻る</button><button class="btn pri" data-act="hintapply">盤面に反映</button></div></div>`; }
   }

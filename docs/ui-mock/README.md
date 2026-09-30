@@ -41,3 +41,4 @@ Does not appeal: ads or ad-like upsells, XP/streaks/energy/confetti, mascots and
 - Only the 30 free cases have board data. Opening a paid case after "Unlocked" shows a notice.
 - Library lists show the first 10 rows per section; a real `List` shows all.
 - Checked in headless Chromium at phone and desktop widths, light and dark. Not checked on a device, in the iOS simulator, with VoiceOver or at larger Dynamic Type.
+- Workspace details checked against `LogicWorkspaceView` / `ClueRow` / `PairGrid`: icon-only bottom bar with a lone ✓ capsule, no autosave subtitle, 戻る back label, full-width hint sheet with no clue checkboxes, flat ruled-out cell tint. SF Symbols are drawn as close approximations, not the real glyphs.
