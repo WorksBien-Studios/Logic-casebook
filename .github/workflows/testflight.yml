@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   testflight:
-    uses: WorksBien-Studios/.github/.github/workflows/ios-testflight.yml@d7874aef0f95e6fe04defcca26d0a101b7cc3243
+    uses: WorksBien-Studios/.github/.github/workflows/ios-testflight.yml@main
     with:
       validated_sha: ${{ github.sha }}
     secrets:
