@@ -51,7 +51,7 @@ const css = (d) => `
   .dev{position:static!important;transform:none!important;padding:0!important;border-radius:0!important;
        box-shadow:none!important;width:auto!important;height:auto!important;background:none!important}
   .scr{width:${d.w}px!important;height:${d.h}px!important;border-radius:0!important}
-  .island,.home{display:none!important}`;
+  .island{display:none!important}`;
 
 const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 for (const name of which) {
