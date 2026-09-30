@@ -271,8 +271,21 @@ b.e0{color:var(--c0)}b.e1{color:var(--c1)}b.e2{color:var(--c2)}b.e3{color:var(--
 .step .nb{height:5px;border-radius:3px;background:var(--d-line);overflow:hidden}.step .nb i{display:block;height:100%;background:var(--d-acc)}
 /* tutorial */
 .tut{flex:1;display:flex;flex-direction:column;padding:0 24px 20px;gap:18px;justify-content:center;align-items:stretch;text-align:center}
-.tut h2{font-family:var(--serif);font-size:26px;margin:0;line-height:1.35}
+.tut h2{text-wrap:balance;font-family:var(--serif);font-size:26px;margin:0;line-height:1.35}
 .tut p{margin:0;font-size:15.5px;line-height:1.8;color:var(--d-soft)}
+.mini{display:grid;grid-template-columns:auto repeat(3,46px);margin:0 auto;font-size:12.5px;color:var(--d-soft);align-items:center;text-align:center}
+.mini .rl{text-align:right;padding-right:8px;color:var(--d-ink);font-weight:700;font-size:13px}
+.mini .cl{padding-bottom:6px;color:var(--d-ink);font-weight:700;font-size:13px}
+.mini .mc{width:46px;height:46px;background:var(--d-surf);border-right:1px solid var(--d-line);border-bottom:1px solid var(--d-line)}
+.mini .mc.f{border-top:1px solid var(--d-line)}.mini .mc.l{border-left:1px solid var(--d-line)}
+.clueq{margin:0 auto;padding:10px 14px;border-radius:12px;background:var(--d-surf);border-left:3px solid var(--d-acc);text-align:left;font-size:15px;color:var(--d-ink);line-height:1.6}
+.fact{display:flex;justify-content:center;gap:10px}.fact div{flex:1;max-width:120px;padding:12px 6px;border-radius:12px;background:var(--d-surf);border:1px solid var(--d-line);font-size:12px;color:var(--d-soft)}.fact b{display:block;font-family:var(--serif);font-size:22px;color:var(--d-acc);line-height:1.2}
+.pad .tut h2{font-size:32px}.pad .tut p{font-size:18px}.one .tut h2{font-size:34px}.one .tut p{font-size:19px}
+.one .tut .clueq{font-size:17px}.pad .tut .clueq{font-size:16.5px}.one .mini,.pad .mini{grid-template-columns:auto repeat(3,64px)}.one .mini .mc,.pad .mini .mc{width:64px;height:64px}
+.pad .brief,.pad .done{max-width:680px;margin-inline:auto;width:100%}
+.pad .brief h2{font-size:32px}.pad .brief p{font-size:17.5px}
+.pad .bottomcta .cta,.pad .done .cta{max-width:420px;align-self:center}
+.pad .banner,.pad .hint{left:50%;right:auto;transform:translateX(-50%);width:min(calc(100% - 24px),600px)}
 .dots2{display:flex;gap:7px;justify-content:center}.dots2 i{width:7px;height:7px;border-radius:50%;background:var(--d-line)}.dots2 i.on{background:var(--d-acc)}
 .big{width:96px;height:96px;margin:0 auto;border:1.5px solid var(--d-line);border-radius:18px;background:var(--d-surf);display:grid;place-items:center}.big svg{width:64px;height:64px}
 .four{display:flex;justify-content:center;gap:10px}.four div{width:60px;font-size:11.5px;color:var(--d-soft)}.four span{display:grid;place-items:center;height:52px;border:1px solid var(--d-line);border-radius:12px;background:var(--d-surf);margin-bottom:4px}.four svg{width:30px;height:30px}
@@ -597,13 +610,13 @@ function purchaseSheet(){
 function briefSheet(n){ return `<div class="scrim" data-act="sheetclose"></div><div class="sheet" style="padding-inline:0"><div class="grab"></div>${briefScreen(n,true)}<div style="padding:0 16px"><button class="cta" style="margin:0;width:100%" data-act="sheetclose">盤面に戻る</button></div></div>`; }
 function tutorialScreen(){
   const pages=[
-   ['小さな事件で、ルールを確かめましょう','手がかりだけを頼りに、人・物・時刻などの正しい組み合わせを見つけます。推測は必要ありません。全部で1分ほどです。',`<div class="four">${['凛','葵','千尋'].map((x,i)=>`<div><span style="font-weight:700;font-size:16px;color:var(--d-ink)">${x}</span></div>`).join('')}</div>`],
+   ['小さな事件で、ルールを確かめましょう','手がかりだけを頼りに、人・物・時刻などの正しい組み合わせを見つけます。推測は必要ありません。全部で1分ほどです。',`<div class="clueq"><small style="display:block;font-size:11.5px;color:var(--d-acc);font-weight:700;letter-spacing:.06em">手がかり</small>「凛」の傘は、「葵」の傘より先に返されました。</div><div class="mini"><span></span>${['傘','鍵','帽子'].map(x=>`<span class="cl">${x}</span>`).join('')}${['凛','葵','千尋'].map((r,i)=>`<span class="rl">${r}</span>${[0,1,2].map(j=>`<span class="mc${i===0?' f':''}${j===0?' l':''}"></span>`).join('')}`).join('')}</div><div style="font-size:13px;color:var(--d-soft)">人と物の組み合わせを、マス目で整理します。</div>`],
    ['マスは4つの状態を切り替えます','タップするたびに 未入力 → ○ → × → △ の順に変わります。試してみてください。',`<button class="big" data-act="tutcell" aria-label="練習マス">${mark(S.tutCell)||'<span style="color:var(--d-faint);font-size:13px">タップ</span>'}</button><div style="font-size:14px;font-weight:700;color:var(--d-acc)">${['未入力','確定 ○','除外 ×','候補 △'][S.tutCell]}</div><div class="four">${[1,2,3].map(k=>`<div><span>${mark(k)}</span>${['確定','除外','候補'][k-1]}</div>`).join('')}</div>`],
    ['読んだ手がかりは、チェックして整理','手がかりをタップすると確認済みになります。間違えたら「元に戻す」、行き詰まったら「ヒント」。ヒントは次の一手だけを教えます。',`<div class="four">${[['undo','元に戻す'],['redo','やり直す'],['bulb','ヒント']].map(([i,l])=>`<div><span style="color:var(--d-acc)">${ic(i)}</span>${l}</div>`).join('')}</div>`],
-   ['準備ができました','無料で30事件を遊べます。広告はなく、タイマーも制限もありません。いつでもヘルプから、この説明を見返せます。','']
+   ['準備ができました','無料で30事件を遊べます。広告はなく、タイマーも制限もありません。いつでもヘルプから、この説明を見返せます。',`<div class="fact"><div><b>30</b>無料の事件</div><div><b>0</b>広告</div><div><b>1,800円</b>買い切り</div></div>`]
   ];
   const p=pages[S.tut], last=S.tut===3;
-  return `<button class="skip" data-act="tutskip">スキップ</button><div class="page" style="padding-top:${S.device==='pad'?28:54}px"><div class="tut" style="${S.device==='pad'?'max-width:560px;margin:0 auto;width:100%':''}"><div class="dots2">${pages.map((_,i)=>`<i class="${i===S.tut?'on':''}"></i>`).join('')}</div><h2>${p[0]}</h2><p>${p[1]}</p>${p[2]}</div><div class="bottomcta" style="background:none;border:0"><button class="cta" style="${S.device==='pad'?'max-width:420px;align-self:center':''}" data-act="tutnext">${last?'事件簿をひらく':'次へ'}</button></div></div>`;
+  return `<button class="skip" data-act="tutskip">スキップ</button><div class="page" style="padding-top:${S.device==='phone'?54:28}px"><div class="tut" style="${S.device!=='phone'?'max-width:600px;margin:0 auto;width:100%':''}"><div class="dots2">${pages.map((_,i)=>`<i class="${i===S.tut?'on':''}"></i>`).join('')}</div><h2>${p[0]}</h2><p>${p[1]}</p>${p[2]}</div><div class="bottomcta" style="background:none;border:0"><button class="cta" style="${S.device!=='phone'?'max-width:420px;align-self:center':''}" data-act="tutnext">${last?'事件簿をひらく':'次へ'}</button></div></div>`;
 }
 
 /* ---------- compose ---------- */
