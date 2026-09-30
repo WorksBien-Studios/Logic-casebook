@@ -124,3 +124,37 @@ jobs:
 
       - name: xcodebuild -scheme LogicCasebookUI (generic iOS destination)
         run: xcodebuild build -scheme LogicCasebookUI -destination "generic/platform=iOS"
+
+  app-build:
+    # Builds the distributable app project (ios/App/LogicCasebook.xcodeproj,
+    # the scheme the TestFlight workflow archives) for a generic iOS device,
+    # unsigned. Catches project-file, asset-catalog, Info.plist and
+    # privacy-manifest problems before a paid archive run does.
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select newest available Xcode (the app targets iOS 18)
+        run: |
+          latest=$(ls -d /Applications/Xcode*.app 2>/dev/null | sort -V | tail -1)
+          if [ -n "$latest" ]; then
+            echo "Selecting $latest"
+            sudo xcode-select -s "$latest/Contents/Developer"
+          fi
+          xcodebuild -version
+
+      - name: xcodebuild -scheme LogicCasebook (generic iOS, unsigned)
+        run: >
+          xcodebuild build
+          -project ios/App/LogicCasebook.xcodeproj
+          -scheme LogicCasebook
+          -configuration Release
+          -destination "generic/platform=iOS"
+          CODE_SIGNING_ALLOWED=NO
+
+      - name: Assert the built app carries the privacy manifest and icon
+        run: |
+          app=$(find ~/Library/Developer/Xcode/DerivedData -path '*Release-iphoneos/LogicCasebook.app' -maxdepth 6 -type d | head -1)
+          test -f "$app/PrivacyInfo.xcprivacy"
+          test -f "$app/Assets.car"
+          /usr/libexec/PlistBuddy -c 'Print :CFBundleIconName' "$app/Info.plist"
