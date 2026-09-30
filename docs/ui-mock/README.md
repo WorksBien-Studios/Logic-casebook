@@ -8,7 +8,7 @@ Shell: layout follows `lrodeveloperr/ios-18-shell` (`AppShellView` tab bar on iP
 
 | Engine part | UI | Kind |
 |---|---|---|
-| `Case`, `Difficulty` (library) | Inset-grouped `List`, 4-way segmented level switch, free rows then labelled locked section | Native |
+| `Case`, `Difficulty` (library) | 4-way segmented level switch, volume chips (30 cases each), numbered tile grid with stamp, lock and in-progress marks; one screen per volume on iPad, about one on iPhone. Titles show in the briefing and in Search | Native (`LazyVGrid`, `ScrollView(.horizontal)`) |
 | `EntitlementStore` | Lock on rows, price link in section header, purchase half-sheet with StoreKit price | Native |
 | `CaseProgress` | Hanko stamps: 済 solved, 完 perfect (double ring), three dots in progress | Custom (`Circle().stroke`) |
 | `CaseCategory` values | Colour-coded chips in briefing; same colours on grid headers and clue names | Custom |
